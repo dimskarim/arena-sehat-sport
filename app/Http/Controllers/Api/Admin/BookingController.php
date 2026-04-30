@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
@@ -12,14 +13,16 @@ use Exception;
 class BookingController extends Controller
 {
     use ApiResponse;
-    
+
     protected $service;
 
-    public function __construct(BookingService $service) {
+    public function __construct(BookingService $service)
+    {
         $this->service = $service;
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         try {
             $items = $this->service->getAll($request->query('per_page', 10));
             return BookingResource::collection($items)->additional(['status' => 'Success']);
@@ -28,7 +31,8 @@ class BookingController extends Controller
         }
     }
 
-    public function store(BookingRequest $request) {
+    public function store(BookingRequest $request)
+    {
         try {
             $item = $this->service->create($request->validated(), $request->file('dummy'));
             return $this->successResponse(new BookingResource($item), 'Booking created successfully', 201);
@@ -37,7 +41,8 @@ class BookingController extends Controller
         }
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         try {
             $item = $this->service->getById($id);
             return $this->successResponse(new BookingResource($item));
@@ -46,7 +51,8 @@ class BookingController extends Controller
         }
     }
 
-    public function update(BookingRequest $request, $id) {
+    public function update(BookingRequest $request, $id)
+    {
         try {
             $item = $this->service->update($id, $request->validated(), $request->file('dummy'));
             return $this->successResponse(new BookingResource($item), 'Booking updated successfully');
@@ -55,7 +61,8 @@ class BookingController extends Controller
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             $this->service->delete($id);
             return $this->successResponse(null, 'Booking deleted successfully');

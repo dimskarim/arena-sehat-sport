@@ -57,7 +57,11 @@ c. Contoh flow request dari client sampai database
 Buat dengan standar backend engineer (production-ready), bukan sekadar contoh sederhana.
 
 
-
+1. Controller: mengurus penerimaan HTTP Request dan pengembalian HTTP Response.
+2. Service: Menangani murni business logic (upload file, proses perhitungan, query kompleks, dll).
+3. Form Request: Memisahkan logika validasi input dan pengecekan otorisasi (Form Request Class).
+4. API Resource: Memformat (transform) struktur data dari Model agar lebih rapi saat diubah ke JSON.
+5. Error Handling & Pagination: Diterapkan secara rapi di tingkat Service dan direspons seragam di Controller.
 
 
 
