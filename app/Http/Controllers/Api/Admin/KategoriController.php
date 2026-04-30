@@ -1,45 +1,66 @@
 <?php
-
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Kategori;
+use App\Services\KategoriService;
+use App\Http\Requests\Admin\KategoriRequest;
+use App\Http\Resources\KategoriResource;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Exception;
 
 class KategoriController extends Controller
 {
-    public function index()
-    {
-        return response()->json(Kategori::all());
+    use ApiResponse;
+    
+    protected $service;
+
+    public function __construct(KategoriService $service) {
+        $this->service = $service;
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->all();
-        // Here you would add validation
-        $item = Kategori::create($data);
-        return response()->json($item, 201);
+    public function index(Request $request) {
+        try {
+            $items = $this->service->getAll($request->query('per_page', 10));
+            return KategoriResource::collection($items)->additional(['status' => 'Success']);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
-    public function show($id)
-    {
-        $item = Kategori::findOrFail($id);
-        return response()->json($item);
+    public function store(KategoriRequest $request) {
+        try {
+            $item = $this->service->create($request->validated(), $request->file('dummy'));
+            return $this->successResponse(new KategoriResource($item), 'Kategori created successfully', 201);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
-    public function update(Request $request, $id)
-    {
-        $item = Kategori::findOrFail($id);
-        $data = $request->all();
-        // Here you would add validation
-        $item->update($data);
-        return response()->json($item);
+    public function show($id) {
+        try {
+            $item = $this->service->getById($id);
+            return $this->successResponse(new KategoriResource($item));
+        } catch (Exception $e) {
+            return $this->errorResponse('Kategori not found', 404);
+        }
     }
 
-    public function destroy($id)
-    {
-        $item = Kategori::findOrFail($id);
-        $item->delete();
-        return response()->json(null, 204);
+    public function update(KategoriRequest $request, $id) {
+        try {
+            $item = $this->service->update($id, $request->validated(), $request->file('dummy'));
+            return $this->successResponse(new KategoriResource($item), 'Kategori updated successfully');
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function destroy($id) {
+        try {
+            $this->service->delete($id);
+            return $this->successResponse(null, 'Kategori deleted successfully');
+        } catch (Exception $e) {
+            return $this->errorResponse('Failed to delete Kategori', 500);
+        }
     }
 }

@@ -7,7 +7,7 @@ return new class extends Migration {
         Schema::create('notifikasis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('details_booking_id')->constrained('detail_bookings')->onDelete('cascade');
+            $table->foreignId('details_booking_id')->constrained('details_bookings')->onDelete('cascade');
             $table->string('deskripsi')->nullable();
             $table->text('pesan');
             $table->timestamps();

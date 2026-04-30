@@ -1,45 +1,66 @@
 <?php
-
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Services\UserService;
+use App\Http\Requests\Admin\UserRequest;
+use App\Http\Resources\UserResource;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Exception;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        return response()->json(User::all());
+    use ApiResponse;
+    
+    protected $service;
+
+    public function __construct(UserService $service) {
+        $this->service = $service;
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->all();
-        // Here you would add validation
-        $item = User::create($data);
-        return response()->json($item, 201);
+    public function index(Request $request) {
+        try {
+            $items = $this->service->getAll($request->query('per_page', 10));
+            return UserResource::collection($items)->additional(['status' => 'Success']);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
-    public function show($id)
-    {
-        $item = User::findOrFail($id);
-        return response()->json($item);
+    public function store(UserRequest $request) {
+        try {
+            $item = $this->service->create($request->validated(), $request->file('foto_profile'));
+            return $this->successResponse(new UserResource($item), 'User created successfully', 201);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
-    public function update(Request $request, $id)
-    {
-        $item = User::findOrFail($id);
-        $data = $request->all();
-        // Here you would add validation
-        $item->update($data);
-        return response()->json($item);
+    public function show($id) {
+        try {
+            $item = $this->service->getById($id);
+            return $this->successResponse(new UserResource($item));
+        } catch (Exception $e) {
+            return $this->errorResponse('User not found', 404);
+        }
     }
 
-    public function destroy($id)
-    {
-        $item = User::findOrFail($id);
-        $item->delete();
-        return response()->json(null, 204);
+    public function update(UserRequest $request, $id) {
+        try {
+            $item = $this->service->update($id, $request->validated(), $request->file('foto_profile'));
+            return $this->successResponse(new UserResource($item), 'User updated successfully');
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function destroy($id) {
+        try {
+            $this->service->delete($id);
+            return $this->successResponse(null, 'User deleted successfully');
+        } catch (Exception $e) {
+            return $this->errorResponse('Failed to delete User', 500);
+        }
     }
 }

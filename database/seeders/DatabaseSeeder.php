@@ -104,13 +104,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 9. Detail Booking
-        $detail1 = \App\Models\DetailBooking::create([
+        $detail1 = \App\Models\DetailsBooking::create([
             'booking_id' => $booking->id,
             'slot_waktu_id' => $slot1->id,
             'harga' => 150000,
             'status' => 'booked',
         ]);
-        $detail2 = \App\Models\DetailBooking::create([
+        $detail2 = \App\Models\DetailsBooking::create([
             'booking_id' => $booking->id,
             'slot_waktu_id' => $slot2->id,
             'harga' => 150000,

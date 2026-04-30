@@ -1,45 +1,66 @@
 <?php
-
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Booking;
+use App\Services\BookingService;
+use App\Http\Requests\Admin\BookingRequest;
+use App\Http\Resources\BookingResource;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Exception;
 
 class BookingController extends Controller
 {
-    public function index()
-    {
-        return response()->json(Booking::all());
+    use ApiResponse;
+    
+    protected $service;
+
+    public function __construct(BookingService $service) {
+        $this->service = $service;
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->all();
-        // Here you would add validation
-        $item = Booking::create($data);
-        return response()->json($item, 201);
+    public function index(Request $request) {
+        try {
+            $items = $this->service->getAll($request->query('per_page', 10));
+            return BookingResource::collection($items)->additional(['status' => 'Success']);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
-    public function show($id)
-    {
-        $item = Booking::findOrFail($id);
-        return response()->json($item);
+    public function store(BookingRequest $request) {
+        try {
+            $item = $this->service->create($request->validated(), $request->file('dummy'));
+            return $this->successResponse(new BookingResource($item), 'Booking created successfully', 201);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
     }
 
-    public function update(Request $request, $id)
-    {
-        $item = Booking::findOrFail($id);
-        $data = $request->all();
-        // Here you would add validation
-        $item->update($data);
-        return response()->json($item);
+    public function show($id) {
+        try {
+            $item = $this->service->getById($id);
+            return $this->successResponse(new BookingResource($item));
+        } catch (Exception $e) {
+            return $this->errorResponse('Booking not found', 404);
+        }
     }
 
-    public function destroy($id)
-    {
-        $item = Booking::findOrFail($id);
-        $item->delete();
-        return response()->json(null, 204);
+    public function update(BookingRequest $request, $id) {
+        try {
+            $item = $this->service->update($id, $request->validated(), $request->file('dummy'));
+            return $this->successResponse(new BookingResource($item), 'Booking updated successfully');
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 500);
+        }
+    }
+
+    public function destroy($id) {
+        try {
+            $this->service->delete($id);
+            return $this->successResponse(null, 'Booking deleted successfully');
+        } catch (Exception $e) {
+            return $this->errorResponse('Failed to delete Booking', 500);
+        }
     }
 }

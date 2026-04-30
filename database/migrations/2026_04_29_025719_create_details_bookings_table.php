@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void {
-        Schema::create('detail_bookings', function (Blueprint $table) {
+        Schema::create('details_bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade');
             $table->foreignId('slot_waktu_id')->constrained('slot_waktus')->onDelete('cascade');
@@ -14,6 +14,6 @@ return new class extends Migration {
         });
     }
     public function down(): void {
-        Schema::dropIfExists('detail_bookings');
+        Schema::dropIfExists('details_bookings');
     }
 };
