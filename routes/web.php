@@ -18,15 +18,23 @@ Route::get('/', function () {
     return redirect()->route('admin.dashboard');
 });
 
+use App\Http\Controllers\Admin\AuthController;
+
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('kategoris', KategoriController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('lapangans', LapanganController::class);
-    Route::resource('gambar-lapangans', GambarLapanganController::class);
-    Route::resource('payments', PaymentController::class);
-    Route::resource('notifications', NotificationController::class);
-    Route::resource('bookings', BookingController::class);
-    Route::resource('slot-waktus', SlotWaktuController::class);
-    Route::resource('oprational-waktus', OprationalWaktuController::class);
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::middleware('admin.web')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('kategoris', KategoriController::class);
+        Route::resource('users', UserController::class);
+        Route::resource('lapangans', LapanganController::class);
+        Route::resource('gambar-lapangans', GambarLapanganController::class);
+        Route::resource('payments', PaymentController::class);
+        Route::resource('notifications', NotificationController::class);
+        Route::resource('bookings', BookingController::class);
+        Route::resource('slot-waktus', SlotWaktuController::class);
+        Route::resource('oprational-waktus', OprationalWaktuController::class);
+    });
 });

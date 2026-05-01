@@ -1,31 +1,41 @@
 <?php
+
 namespace App\Services;
+
 use App\Models\OprationalWaktu;
 
-class OprationalWaktuService {
-    public function getAll($perPage = 10) {
-        return OprationalWaktu::paginate($perPage);
+class OprationalWaktuService
+{
+    public function getAll($lapanganId = null, $perPage = 10)
+    {
+        $query = OprationalWaktu::with('lapangan');
+
+        if ($lapanganId) {
+            $query->where('lapangan_id', $lapanganId);
+        }
+
+        return $query->latest()->paginate($perPage);
     }
-    public function create(array $data, $file = null) {
-        
-        if (isset($data['password'])) $data['password'] = bcrypt($data['password']);
+
+    public function create(array $data)
+    {
         return OprationalWaktu::create($data);
     }
-    public function getById($id) {
-        return OprationalWaktu::findOrFail($id);
+
+    public function getById($id)
+    {
+        return OprationalWaktu::with('lapangan')->findOrFail($id);
     }
-    public function update($id, array $data, $file = null) {
+
+    public function update($id, array $data)
+    {
         $item = OprationalWaktu::findOrFail($id);
-        
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }
         $item->update($data);
-        return $item;
+        return $item->fresh();
     }
-    public function delete($id) {
+
+    public function delete($id)
+    {
         $item = OprationalWaktu::findOrFail($id);
         $item->delete();
         return true;

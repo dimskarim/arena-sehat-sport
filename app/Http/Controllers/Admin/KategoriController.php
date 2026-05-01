@@ -19,7 +19,7 @@ class KategoriController extends Controller
 
     public function index(Request $request)
     {
-        $items = $this->service->getAll($request->query('per_page', 10));
+        $items = $this->service->getAll($request->query('search'), $request->query('per_page', 10));
         return view('admin.kategori.index', compact('items'), ['title' => 'Kategori']);
     }
 

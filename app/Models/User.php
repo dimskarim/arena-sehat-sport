@@ -41,4 +41,40 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relations
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function notifikasis()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
+
+    // Helpers
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    // Scopes
+    public function scopeSearch($query, $term)
+    {
+        if ($term) {
+            $query->where(function ($q) use ($term) {
+                $q->where('name', 'like', '%' . $term . '%')
+                  ->orWhere('email', 'like', '%' . $term . '%')
+                  ->orWhere('phone', 'like', '%' . $term . '%');
+            });
+        }
+    }
+
+    public function scopeFilterRole($query, $role)
+    {
+        if ($role) {
+            $query->where('role', $role);
+        }
+    }
 }

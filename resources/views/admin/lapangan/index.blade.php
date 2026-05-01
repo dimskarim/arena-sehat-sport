@@ -43,10 +43,18 @@
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p class="text-black dark:text-white">{{ $item->id }}</p>
                     </td>
-                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->nama ?? '-' }}</p></td>
-                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->kategori_id ?? '-' }}</p></td>
-                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->harga_sewa_siang ?? '-' }}</p></td>
-                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->harga_sewa_malam ?? '-' }}</p></td>
+                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p class="text-black dark:text-white">{{ $item->name ?? '-' }}</p>
+                    </td>
+                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p class="text-black dark:text-white">{{ $item->kategori->name ?? '-' }}</p>
+                    </td>
+                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p class="text-black dark:text-white">{{ $item->harga ?? '-' }}</p>
+                    </td>
+                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p class="text-black dark:text-white">{{ $item->harga_sewa_malam ?? '-' }}</p>
+                    </td>
 
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <div class="flex items-center space-x-3.5">
@@ -67,10 +75,10 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="mt-4">
         @if(method_exists($items, 'links'))
-            {{ $items->links() }}
+        {{ $items->links() }}
         @endif
     </div>
 </div>

@@ -14,7 +14,7 @@ dengan ada fitur pada user :
 - booking lapangan
 - pembayaran
 - notifikasi
-- hisotory booking
+- history booking
 
 fitur pada admin adalah :
 - manage user
@@ -26,6 +26,9 @@ fitur pada admin adalah :
 - manage kategori
 - manage jadwal
 - manage jam oprational
+
+
+BACKEND
 
 Buat desain arsitektur backend yang clean dan scalable dengan ketentuan:
 
@@ -65,4 +68,23 @@ Buat dengan standar backend engineer (production-ready), bukan sekadar contoh se
 
 
 
+FRONT END
 
+tailwind css + laravel
+
+ada 2 mode : 
+- Light
+- Dark
+
+pemilihan mode ada di header
+
+color palette
+- Primary : #D32F2F
+- Secondary : #FFCDD2
+- Tertiary : #00799c
+- neutral : #212121
+
+font type
+- Headline : Lexend Bold
+- Body : Inter
+- label : Inter

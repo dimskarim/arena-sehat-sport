@@ -62,7 +62,7 @@
                         <p class="text-black dark:text-white">{{ $item->id }}</p>
                     </td>
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                        <p class="text-black dark:text-white">{{ $item->nama ?? $item->nama_kategori ?? '-' }}</p>
+                        <p class="text-black dark:text-white">{{ $item->name }}</p>
                     </td>
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <div class="flex items-center space-x-3.5">
@@ -87,7 +87,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="mt-4">
         {{ $items->links() }}
     </div>

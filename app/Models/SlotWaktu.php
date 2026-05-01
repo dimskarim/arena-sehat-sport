@@ -10,4 +10,14 @@ class SlotWaktu extends Model
     use HasFactory;
 
     protected $fillable = ['lapangan_id', 'waktu_mulai', 'waktu_selesai'];
+
+    public function lapangan()
+    {
+        return $this->belongsTo(Lapangan::class);
+    }
+
+    public function detailsBookings()
+    {
+        return $this->hasMany(DetailsBooking::class);
+    }
 }

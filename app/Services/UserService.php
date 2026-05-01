@@ -1,39 +1,75 @@
 <?php
-namespace App\Services;
-use App\Models\User;
 
-class UserService {
-    public function getAll($perPage = 10) {
-        return User::paginate($perPage);
+namespace App\Services;
+
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+
+class UserService
+{
+    public function getAll($search = null, $role = null, $perPage = 10)
+    {
+        return User::search($search)
+            ->filterRole($role)
+            ->latest()
+            ->paginate($perPage);
     }
-    public function create(array $data, $file = null) {
-        
-            if ($file) {
-                $data['foto_profile'] = \Illuminate\Support\Facades\Storage::url($file->store('public/users'));
-            }
-        if (isset($data['password'])) $data['password'] = bcrypt($data['password']);
+
+    public function create(array $data, $file = null)
+    {
+        if ($file) {
+            $path = $file->store('public/users');
+            $data['foto_profile'] = Storage::url($path);
+        }
+
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+
         return User::create($data);
     }
-    public function getById($id) {
-        return User::findOrFail($id);
+
+    public function getById($id)
+    {
+        return User::with(['bookings'])->findOrFail($id);
     }
-    public function update($id, array $data, $file = null) {
-        $item = User::findOrFail($id);
-        
-            if ($file) {
-                $data['foto_profile'] = \Illuminate\Support\Facades\Storage::url($file->store('public/users'));
+
+    public function update($id, array $data, $file = null)
+    {
+        $user = User::findOrFail($id);
+
+        if ($file) {
+            // Delete old file if exists
+            if ($user->foto_profile) {
+                $oldPath = str_replace('/storage', 'public', $user->foto_profile);
+                Storage::delete($oldPath);
             }
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
+            $path = $file->store('public/users');
+            $data['foto_profile'] = Storage::url($path);
+        }
+
+        if (isset($data['password']) && !empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
         }
-        $item->update($data);
-        return $item;
+
+        $user->update($data);
+        return $user->fresh();
     }
-    public function delete($id) {
-        $item = User::findOrFail($id);
-        $item->delete();
+
+    public function delete($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Delete photo if exists
+        if ($user->foto_profile) {
+            $oldPath = str_replace('/storage', 'public', $user->foto_profile);
+            Storage::delete($oldPath);
+        }
+
+        $user->delete();
         return true;
     }
 }

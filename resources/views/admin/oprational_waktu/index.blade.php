@@ -29,6 +29,7 @@
             <thead>
                 <tr class="bg-gray-2 text-left dark:bg-meta-4">
                     <th class="min-w-[50px] py-4 px-4 font-medium text-black dark:text-white">ID</th>
+                    <th class="py-4 px-4 font-medium text-black dark:text-white">Lapangan</th>
                     <th class="py-4 px-4 font-medium text-black dark:text-white">Hari</th>
                     <th class="py-4 px-4 font-medium text-black dark:text-white">Buka</th>
                     <th class="py-4 px-4 font-medium text-black dark:text-white">Tutup</th>
@@ -42,6 +43,7 @@
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p class="text-black dark:text-white">{{ $item->id }}</p>
                     </td>
+                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ optional($item->lapangan)->name ?? '-' }}</p></td>
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->hari ?? '-' }}</p></td>
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->waktu_buka ?? '-' }}</p></td>
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->waktu_tutup ?? '-' }}</p></td>

@@ -41,8 +41,12 @@
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p class="text-black dark:text-white">{{ $item->id }}</p>
                     </td>
-                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->lapangan_id ?? '-' }}</p></td>
-                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark"><p class="text-black dark:text-white">{{ $item->gambar ?? '-' }}</p></td>
+                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p class="text-black dark:text-white">{{ $item->lapangan->name ?? '-' }}</p>
+                    </td>
+                    <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p class="text-black dark:text-white">{{ $item->gambar_file ?? '-' }}</p>
+                    </td>
 
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <div class="flex items-center space-x-3.5">
@@ -63,10 +67,10 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="mt-4">
         @if(method_exists($items, 'links'))
-            {{ $items->links() }}
+        {{ $items->links() }}
         @endif
     </div>
 </div>

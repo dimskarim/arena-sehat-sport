@@ -15,9 +15,16 @@ class CheckAdminRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!in_array($request->user()->role ?? null, ['admin', 1]) && !in_array($request->user()->role_id ?? null, ['admin', 1])) {
-            return response()->json(['message' => 'Unauthorized. Admin access required.'], 403);
+        $user = $request->user();
+
+        if (!$user || $user->role !== 'admin') {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Unauthorized. Akses admin diperlukan.',
+                'data' => null,
+            ], 403);
         }
+
         return $next($request);
     }
 }
