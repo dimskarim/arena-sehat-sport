@@ -42,7 +42,7 @@ class UserController extends Controller
     {
         try {
             $item = $this->service->getById($id);
-            return view('admin.user.edit', compact('item'), ['title' => 'Edit User']);
+            return view('admin.user.detail', compact('item'), ['title' => 'Edit User']);
         } catch (Exception $e) {
             return redirect()->route('admin.users.index')->with('error', 'Data tidak ditemukan.');
         }

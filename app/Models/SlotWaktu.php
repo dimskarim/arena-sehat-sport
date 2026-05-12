@@ -9,7 +9,7 @@ class SlotWaktu extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['lapangan_id', 'waktu_mulai', 'waktu_selesai'];
+    protected $fillable = ['lapangan_id', 'waktu_mulai', 'waktu_selesai', 'status'];
 
     public function lapangan()
     {

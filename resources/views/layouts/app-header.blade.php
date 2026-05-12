@@ -50,8 +50,8 @@
 
             <!-- Logo (mobile only) -->
             <a href="/" class="xl:hidden">
-                <img class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" />
-                <img class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" />
+                <p class="dark:hidden">Arena Sehat</p>
+                <p class="hidden dark:bloc">Arena Sehat</p>
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->

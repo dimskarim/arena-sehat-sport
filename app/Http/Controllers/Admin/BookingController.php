@@ -46,7 +46,7 @@ class BookingController extends Controller
             $item = $this->service->getById($id);
             $users = \App\Models\User::all();
             $lapangans = \App\Models\Lapangan::all();
-            return view('admin.booking.edit', compact('item', 'users', 'lapangans'), ['title' => 'Edit History Booking']);
+            return view('admin.booking.detail', compact('item', 'users', 'lapangans'), ['title' => 'Edit History Booking']);
         } catch (Exception $e) {
             return redirect()->route('admin.bookings.index')->with('error', 'Data tidak ditemukan.');
         }

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\SlotWaktuController;
 use App\Http\Controllers\Admin\OprationalWaktuController;
+use App\Http\Controllers\Admin\TimeController;
 
 Route::get('/', function () {
     return redirect()->route('admin.dashboard');
@@ -36,5 +37,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('bookings', BookingController::class);
         Route::resource('slot-waktus', SlotWaktuController::class);
         Route::resource('oprational-waktus', OprationalWaktuController::class);
+        Route::get('/time', [TimeController::class, 'index'])->name('time.index');
     });
 });

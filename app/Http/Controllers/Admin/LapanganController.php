@@ -44,7 +44,7 @@ class LapanganController extends Controller
         try {
             $item = $this->service->getLapanganById($id);
             $kategoris = \App\Models\Kategori::all();
-            return view('admin.lapangan.edit', compact('item', 'kategoris'), ['title' => 'Edit Lapangan']);
+            return view('admin.lapangan.detail', compact('item', 'kategoris'), ['title' => 'Edit Lapangan']);
         } catch (Exception $e) {
             return redirect()->route('admin.lapangans.index')->with('error', 'Data tidak ditemukan.');
         }
