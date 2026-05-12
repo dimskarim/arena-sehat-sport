@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
@@ -12,55 +13,64 @@ use Exception;
 class GambarLapanganController extends Controller
 {
     use ApiResponse;
-    
+
     protected $service;
 
-    public function __construct(GambarLapanganService $service) {
+    public function __construct(GambarLapanganService $service)
+    {
         $this->service = $service;
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         try {
-            $items = $this->service->getAll($request->query('per_page', 10));
+            $items = $this->service->getAll(
+                $request->query('lapangan_id'),
+                $request->query('per_page', 10)
+            );
             return GambarLapanganResource::collection($items)->additional(['status' => 'Success']);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
 
-    public function store(GambarLapanganRequest $request) {
+    public function store(GambarLapanganRequest $request)
+    {
         try {
             $item = $this->service->create($request->validated(), $request->file('gambar_file'));
-            return $this->successResponse(new GambarLapanganResource($item), 'GambarLapangan created successfully', 201);
+            return $this->successResponse(new GambarLapanganResource($item), 'Foto lapangan berhasil ditambahkan', 201);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         try {
             $item = $this->service->getById($id);
             return $this->successResponse(new GambarLapanganResource($item));
         } catch (Exception $e) {
-            return $this->errorResponse('GambarLapangan not found', 404);
+            return $this->errorResponse('Foto lapangan tidak ditemukan', 404);
         }
     }
 
-    public function update(GambarLapanganRequest $request, $id) {
+    public function update(GambarLapanganRequest $request, $id)
+    {
         try {
             $item = $this->service->update($id, $request->validated(), $request->file('gambar_file'));
-            return $this->successResponse(new GambarLapanganResource($item), 'GambarLapangan updated successfully');
+            return $this->successResponse(new GambarLapanganResource($item), 'Foto lapangan berhasil diperbarui');
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             $this->service->delete($id);
-            return $this->successResponse(null, 'GambarLapangan deleted successfully');
+            return $this->successResponse(null, 'Foto lapangan berhasil dihapus');
         } catch (Exception $e) {
-            return $this->errorResponse('Failed to delete GambarLapangan', 500);
+            return $this->errorResponse('Gagal menghapus foto lapangan', 500);
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
@@ -12,55 +13,64 @@ use Exception;
 class SlotWaktuController extends Controller
 {
     use ApiResponse;
-    
+
     protected $service;
 
-    public function __construct(SlotWaktuService $service) {
+    public function __construct(SlotWaktuService $service)
+    {
         $this->service = $service;
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         try {
-            $items = $this->service->getAll($request->query('per_page', 10));
+            $items = $this->service->getAll(
+                $request->query('lapangan_id'),
+                $request->query('per_page', 10)
+            );
             return SlotWaktuResource::collection($items)->additional(['status' => 'Success']);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
 
-    public function store(SlotWaktuRequest $request) {
+    public function store(SlotWaktuRequest $request)
+    {
         try {
-            $item = $this->service->create($request->validated(), $request->file('dummy'));
-            return $this->successResponse(new SlotWaktuResource($item), 'SlotWaktu created successfully', 201);
+            $item = $this->service->create($request->validated());
+            return $this->successResponse(new SlotWaktuResource($item), 'Jadwal berhasil ditambahkan', 201);
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         try {
             $item = $this->service->getById($id);
             return $this->successResponse(new SlotWaktuResource($item));
         } catch (Exception $e) {
-            return $this->errorResponse('SlotWaktu not found', 404);
+            return $this->errorResponse('Jadwal tidak ditemukan', 404);
         }
     }
 
-    public function update(SlotWaktuRequest $request, $id) {
+    public function update(SlotWaktuRequest $request, $id)
+    {
         try {
-            $item = $this->service->update($id, $request->validated(), $request->file('dummy'));
-            return $this->successResponse(new SlotWaktuResource($item), 'SlotWaktu updated successfully');
+            $item = $this->service->update($id, $request->validated());
+            return $this->successResponse(new SlotWaktuResource($item), 'Jadwal berhasil diperbarui');
         } catch (Exception $e) {
             return $this->errorResponse($e->getMessage(), 500);
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             $this->service->delete($id);
-            return $this->successResponse(null, 'SlotWaktu deleted successfully');
+            return $this->successResponse(null, 'Jadwal berhasil dihapus');
         } catch (Exception $e) {
-            return $this->errorResponse('Failed to delete SlotWaktu', 500);
+            return $this->errorResponse('Gagal menghapus Jadwal', 500);
         }
     }
 }

@@ -10,4 +10,46 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'lapangan_id', 'tanggal_booking', 'total_harga', 'status'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function lapangan()
+    {
+        return $this->belongsTo(Lapangan::class);
+    }
+
+    public function detailsBookings()
+    {
+        return $this->hasMany(DetailsBooking::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    // Scopes for filtering
+    public function scopeFilterStatus($query, $status)
+    {
+        if ($status) {
+            $query->where('status', $status);
+        }
+    }
+
+    public function scopeFilterUser($query, $userId)
+    {
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+    }
+
+    public function scopeFilterDate($query, $date)
+    {
+        if ($date) {
+            $query->whereDate('tanggal_booking', $date);
+        }
+    }
 }

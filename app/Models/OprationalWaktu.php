@@ -9,5 +9,10 @@ class OprationalWaktu extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['lapangan_id', 'waktu_buka', 'waktu_tutup'];
+    protected $fillable = ['lapangan_id', 'hari', 'waktu_buka', 'waktu_tutup'];
+
+    public function lapangan()
+    {
+        return $this->belongsTo(Lapangan::class);
+    }
 }
