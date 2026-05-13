@@ -13,19 +13,19 @@ class MenuHelper
                 'path' => '/admin',
             ],
             [
-                'icon' => 'user-profile',
-                'name' => 'Users',
-                'path' => '/admin/users',
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Kategori',
-                'path' => '/admin/kategoris',
+                'icon' => 'calendar',
+                'name' => 'Bookings',
+                'path' => '/admin/bookings',
             ],
             [
                 'icon' => 'forms',
                 'name' => 'Lapangan',
                 'path' => '/admin/lapangans',
+            ],
+            [
+                'icon' => 'time',
+                'name' => 'Manajemen Waktu',
+                'path' => '/admin/time',
             ],
             [
                 'icon' => 'forms',
@@ -39,14 +39,14 @@ class MenuHelper
     {
         return [
             [
-                'icon' => 'time',
-                'name' => 'Manajemen Waktu',
-                'path' => '/admin/time',
+                'icon' => 'user-profile',
+                'name' => 'Users',
+                'path' => '/admin/users',
             ],
             [
-                'icon' => 'ecommerce',
-                'name' => 'Bookings',
-                'path' => '/admin/bookings',
+                'icon' => 'forms',
+                'name' => 'Kategori',
+                'path' => '/admin/kategoris',
             ],
             [
                 'icon' => 'ecommerce',

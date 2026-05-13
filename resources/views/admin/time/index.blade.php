@@ -92,7 +92,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
-                        @forelse($oprationalWaktus as $opw)
+                        @forelse($waktuOperasionals as $opw)
                         <tr class="hover:bg-slate-50/60 transition-colors group">
                             <td class="px-4 py-3 text-sm font-semibold text-slate-800">
                                 {{ optional($opw->lapangan)->name ?? '-' }}
@@ -135,9 +135,9 @@
                     </tbody>
                 </table>
             </div>
-            @if(method_exists($oprationalWaktus, 'links'))
+            @if(method_exists($waktuOperasionals, 'links'))
             <div class="px-4 py-3 bg-slate-50 border-t border-slate-100">
-                {{ $oprationalWaktus->links() }}
+                {{ $waktuOperasionals->links() }}
             </div>
             @endif
         </div>
@@ -252,7 +252,7 @@
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-500">Nonaktif</span>
                         @endif
                     </div>
-                    <p class="text-xs text-slate-400 mb-3 truncate">{{ optional($slot->lapangan)->name ?? '-' }}</p>
+                    <p class="text-xs text-slate-400 mb-3 truncate">{{ optional(optional($slot->waktuOperasional)->lapangan)->name ?? '-' }}</p>
                     <div class="flex items-center justify-between pt-2 border-t border-slate-100">
                         <div class="flex items-center gap-1">
                             <a href="{{ route('admin.slot-waktus.edit', $slot->id) }}"
@@ -310,7 +310,7 @@
                 <tbody class="divide-y divide-slate-50">
                     @forelse($slotWaktus as $slot)
                         <td class="px-5 py-3 text-xs text-slate-400 font-mono">SLT-{{ str_pad($slot->id, 4, '0', STR_PAD_LEFT) }}</td>
-                        <td class="px-5 py-3 text-sm font-semibold text-slate-800">{{ optional($slot->lapangan)->name ?? '-' }}</td>
+                        <td class="px-5 py-3 text-sm font-semibold text-slate-800">{{ optional(optional($slot->waktuOperasional)->lapangan)->name ?? '-' }}</td>
                         <td class="px-5 py-3">
                             <span class="text-xs text-slate-400">—</span>
                         </td>

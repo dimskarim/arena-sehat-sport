@@ -13,11 +13,8 @@ class Lapangan extends Model {
     public function gambarLapangans() {
         return $this->hasMany(GambarLapangan::class);
     }
-    public function slotWaktus() {
-        return $this->hasMany(SlotWaktu::class);
-    }
-    public function oprationalWaktus() {
-        return $this->hasMany(OprationalWaktu::class);
+    public function waktuOperasionals() {
+        return $this->hasMany(WaktuOperasional::class);
     }
 
     // Scope for filtering & search

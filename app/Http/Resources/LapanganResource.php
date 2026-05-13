@@ -25,7 +25,7 @@ class LapanganResource extends JsonResource
             'gambar_utama' => $this->whenLoaded('gambarLapangans', fn() => $this->gambarLapangans->first()?->gambar_file),
             'gambar_lapangans' => GambarLapanganResource::collection($this->whenLoaded('gambarLapangans')),
             'slot_waktus' => SlotWaktuResource::collection($this->whenLoaded('slotWaktus')),
-            'oprational_waktus' => OprationalWaktuResource::collection($this->whenLoaded('oprationalWaktus')),
+            'waktu_operasionals' => OprationalWaktuResource::collection($this->whenLoaded('waktuOperasionals')),
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
         ];
