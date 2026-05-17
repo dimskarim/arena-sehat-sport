@@ -29,8 +29,8 @@ class BookingResource extends JsonResource
             'tanggal_booking' => $this->tanggal_booking,
             'total_harga' => $this->total_harga,
             'status' => $this->status,
-            'details_bookings' => $this->whenLoaded('detailsBookings', function () {
-                return $this->detailsBookings->map(function ($detail) {
+            'booking_details' => $this->whenLoaded('bookingDetails', function () {
+                return $this->bookingDetails->map(function ($detail) {
                     return [
                         'id' => $detail->id,
                         'slot_waktu' => $detail->slotWaktu ? [

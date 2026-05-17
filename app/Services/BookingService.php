@@ -8,7 +8,7 @@ class BookingService
 {
     public function getAll($status = null, $userId = null, $date = null, $perPage = 10)
     {
-        return Booking::with(['user', 'lapangan', 'detailsBookings.slotWaktu', 'payment'])
+        return Booking::with(['user', 'lapangan', 'bookingDetails.slotWaktu', 'payment'])
             ->filterStatus($status)
             ->filterUser($userId)
             ->filterDate($date)
@@ -24,7 +24,7 @@ class BookingService
 
     public function getById($id)
     {
-        return Booking::with(['user', 'lapangan', 'detailsBookings.slotWaktu', 'payment'])->findOrFail($id);
+        return Booking::with(['user', 'lapangan', 'bookingDetails.slotWaktu', 'payment'])->findOrFail($id);
     }
 
     public function update($id, array $data)

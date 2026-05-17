@@ -15,7 +15,7 @@ class NotifikasiRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'details_booking_id' => 'required|exists:details_bookings,id',
+            'booking_id' => 'required|exists:bookings,id',
             'deskripsi' => 'nullable|string|max:255',
             'pesan' => 'required|string',
         ];

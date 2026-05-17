@@ -26,14 +26,14 @@
                 @error('user_id') <span class="text-meta-1 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="mb-4.5">
-                <label class="mb-2.5 block text-black dark:text-white">Detail Booking <span class="text-meta-1">*</span></label>
-                <select name="details_booking_id" required class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input">
-                    <option value="">Pilih Detail Booking</option>
-                    @foreach($detailsBookings as $db)
-                        <option value="{{ $db->id }}" {{ old('details_booking_id') == $db->id ? 'selected' : '' }}>Booking #{{ $db->booking_id }} - {{ $db->status }}</option>
+                <label class="mb-2.5 block text-black dark:text-white">Booking <span class="text-meta-1">*</span></label>
+                <select name="booking_id" required class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input">
+                    <option value="">Pilih Booking</option>
+                    @foreach($bookings as $booking)
+                        <option value="{{ $booking->id }}" {{ old('booking_id') == $booking->id ? 'selected' : '' }}>Booking #{{ $booking->id }} - {{ $booking->status }}</option>
                     @endforeach
                 </select>
-                @error('details_booking_id') <span class="text-meta-1 text-sm">{{ $message }}</span> @enderror
+                @error('booking_id') <span class="text-meta-1 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="mb-4.5">
                 <label class="mb-2.5 block text-black dark:text-white">Deskripsi</label>

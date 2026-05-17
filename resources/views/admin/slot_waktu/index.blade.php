@@ -3,12 +3,12 @@
 @section('content')
 <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <h2 class="text-title-md2 font-bold text-black dark:text-white">
-        Data Slot Waktu
+        Manajemen Slot Waktu
     </h2>
 
     <nav>
         <a href="{{ route('admin.slot-waktus.create') }}" class="inline-flex items-center justify-center rounded-md bg-brand-500 py-2 px-6 text-center font-medium text-white hover:bg-opacity-90">
-            Tambah Data
+            Tambah Slot Baru
         </a>
     </nav>
 </div>
@@ -29,9 +29,9 @@
             <thead>
                 <tr class="bg-gray-2 text-left dark:bg-meta-4">
                     <th class="min-w-[50px] py-4 px-4 font-medium text-black dark:text-white">ID</th>
-                    <th class="py-4 px-4 font-medium text-black dark:text-white">Lapangan</th>
-                    <th class="py-4 px-4 font-medium text-black dark:text-white">Mulai</th>
-                    <th class="py-4 px-4 font-medium text-black dark:text-white">Selesai</th>
+                    <th class="py-4 px-4 font-medium text-black dark:text-white">Venue Lapangan</th>
+                    <th class="py-4 px-4 font-medium text-black dark:text-white">Jam Mulai</th>
+                    <th class="py-4 px-4 font-medium text-black dark:text-white">Jam Selesai</th>
 
                     <th class="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Aksi</th>
                 </tr>
@@ -54,8 +54,8 @@
 
                     <td class="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <div class="flex items-center space-x-3.5">
-                            <a href="{{ route('admin.slot-waktus.edit', $item->id) }}" class="hover:text-brand-500">Edit</a>
-                            <form action="{{ route('admin.slot-waktus.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus?');">
+                            <a href="{{ route('admin.slot-waktus.edit', $item->id) }}" class="hover:text-brand-500">Ubah</a>
+                            <form action="{{ route('admin.slot-waktus.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus slot ini?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="hover:text-danger text-red-500">Hapus</button>
@@ -65,7 +65,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="10" class="text-center py-5 text-gray-500">Belum ada data.</td>
+                    <td colspan="10" class="text-center py-5 text-gray-500">Belum ada slot waktu yang tersedia.</td>
                 </tr>
                 @endforelse
             </tbody>

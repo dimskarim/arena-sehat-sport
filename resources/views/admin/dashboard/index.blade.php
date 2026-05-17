@@ -4,9 +4,9 @@
 
 {{-- Page Header --}}
 <div class="mb-8">
-    <h1 class="font-lexend font-bold text-3xl text-gray-900 dark:text-white">Dashboard Overview</h1>
+    <h1 class="font-lexend font-bold text-3xl text-gray-900 dark:text-white">Halaman Dashboard</h1>
     <p class="mt-1.5 text-base text-gray-500 dark:text-gray-400 font-inter">
-        Welcome back, Admin. Here's what's happening with Arena Sehat Sport today.
+        Selamat datang kembali, Admin! Berikut adalah ringkasan aktivitas Arena Sehat Sport hari ini.
     </p>
 </div>
 
@@ -78,9 +78,9 @@
     {{-- Monthly Revenue Chart --}}
     <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="font-lexend font-bold text-xl text-gray-900 dark:text-white">Monthly Revenue</h2>
+            <h2 class="font-lexend font-bold text-xl text-gray-900 dark:text-white">Pendapatan Bulanan</h2>
             <div class="flex items-center gap-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-1.5">
-                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 font-inter">Year {{ date('Y') }}</span>
+                <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 font-inter">Tahun {{ date('Y') }}</span>
             </div>
         </div>
 
@@ -91,14 +91,14 @@
         ['h' => 45, 'label' => 'FEB', 'val' => 'Rp6m', 'peak' => false],
         ['h' => 40, 'label' => 'MAR', 'val' => 'Rp5.5m', 'peak' => false],
         ['h' => 60, 'label' => 'APR', 'val' => 'Rp8m', 'peak' => false],
-        ['h' => 55, 'label' => 'MAY', 'val' => 'Rp7.5m', 'peak' => false],
-        ['h' => 75, 'label' => 'JUN', 'val' => 'Rp10m', 'peak' => false],
-        ['h' => 85, 'label' => 'JUL', 'val' => 'Rp11m', 'peak' => false],
-        ['h' => 95, 'label' => 'AUG', 'val' => 'Rp12.4m','peak' => true ],
-        ['h' => 70, 'label' => 'SEP', 'val' => 'Rp9.5m', 'peak' => false],
-        ['h' => 65, 'label' => 'OCT', 'val' => 'Rp8.8m', 'peak' => false],
-        ['h' => 50, 'label' => 'NOV', 'val' => 'Rp6.8m', 'peak' => false],
-        ['h' => 55, 'label' => 'DEC', 'val' => 'Rp7.4m', 'peak' => false],
+        ['h' => 55, 'label' => 'MAY', 'val' => 'Rp7.5m', 'peak' => true],
+        ['h' => 1, 'label' => 'JUN', 'val' => 'Rp0m', 'peak' => false],
+        ['h' => 1, 'label' => 'JUL', 'val' => 'Rp0m', 'peak' => false],
+        ['h' => 1, 'label' => 'AUG', 'val' => 'Rp0m','peak' => false ],
+        ['h' => 1, 'label' => 'SEP', 'val' => 'Rp0m', 'peak' => false],
+        ['h' => 1, 'label' => 'OCT', 'val' => 'Rp0m', 'peak' => false],
+        ['h' => 1, 'label' => 'NOV', 'val' => 'Rp0m', 'peak' => false],
+        ['h' => 1, 'label' => 'DEC', 'val' => 'Rp0m', 'peak' => false],
         ];
         @endphp
 
@@ -132,17 +132,17 @@
     {{-- Popular Venues --}}
     <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm flex flex-col">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="font-lexend font-bold text-xl text-gray-900 dark:text-white">Popular Venues</h2>
-            <a href="{{ route('admin.lapangans.index') }}" class="text-sm font-semibold text-[#D32F2F] hover:underline font-inter">View All</a>
+            <h2 class="font-lexend font-bold text-xl text-gray-900 dark:text-white">Venue Terpopuler</h2>
+            <a href="{{ route('admin.lapangans.index') }}" class="text-sm font-semibold text-[#D32F2F] hover:underline font-inter">Lihat Semua</a>
         </div>
 
         <div class="space-y-4 flex-1">
             @php
             $popularVenues = [
-            ['name' => 'Elite Arena Center', 'bookings' => '842 Bookings', 'revenue' => 'Rp 12.450', 'img' => 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=80&h=80&fit=crop'],
-            ['name' => 'Skyline Tennis Club', 'bookings' => '651 Bookings', 'revenue' => 'Rp 9.820', 'img' => 'https://images.unsplash.com/photo-1622279457486-62dcc4a631d6?w=80&h=80&fit=crop'],
-            ['name' => 'Victory Field Turf', 'bookings' => '598 Bookings', 'revenue' => 'Rp 8.100', 'img' => 'https://images.unsplash.com/photo-1518605368461-1e1e38ce7058?w=80&h=80&fit=crop'],
-            ['name' => 'Olympus Training Hub','bookings' => '412 Bookings', 'revenue' => 'Rp 5.240', 'img' => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=80&h=80&fit=crop'],
+            ['name' => 'Elite Arena Center', 'bookings' => '842 Reservasi', 'revenue' => 'Rp 12.450', 'img' => 'https://placehold.co/40x40/f3f4f6/a1a1aa?text=Img'],
+            ['name' => 'Skyline Tennis Club', 'bookings' => '651 Reservasi', 'revenue' => 'Rp 9.820', 'img' => 'https://placehold.co/40x40/e2e8f0/64748b?text=Img'],
+            ['name' => 'Victory Field Turf', 'bookings' => '598 Reservasi', 'revenue' => 'Rp 8.100', 'img' => 'https://placehold.co/40x40/fce7f3/db2777?text=Img'],
+            ['name' => 'Olympus Training Hub','bookings' => '412 Reservasi', 'revenue' => 'Rp 5.240', 'img' => 'https://placehold.co/40x40/fef3c7/d97706?text=Img'],
             ];
             @endphp
 
@@ -167,10 +167,10 @@
 
     {{-- Table Top Bar --}}
     <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
-        <h2 class="font-lexend font-bold text-xl text-gray-900 dark:text-white">Recent Bookings</h2>
+        <h2 class="font-lexend font-bold text-xl text-gray-900 dark:text-white">Reservasi Terbaru</h2>
         <div class="flex items-center gap-2">
             <a href="{{ route('admin.bookings.index') }}" class="flex items-center gap-1.5 text-xs font-semibold text-[#D32F2F] bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 px-3 py-2 rounded-lg transition-colors font-inter">
-                View All Bookings
+                Lihat Semua Reservasi
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
@@ -183,10 +183,10 @@
         <table class="w-full">
             <thead>
                 <tr class="bg-gray-50 dark:bg-gray-700/40 border-b border-gray-100 dark:border-gray-700">
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Customer</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Pelanggan</th>
                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Venue</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Date & Time</th>
-                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Amount</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Tanggal & Waktu</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Jumlah</th>
                     <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider font-inter">Status</th>
                 </tr>
             </thead>
@@ -241,7 +241,7 @@
                 @empty
                 <tr>
                     <td colspan="5" class="px-6 py-12 text-center text-sm text-gray-400 font-inter">
-                        Belum ada data booking terbaru.
+                        Belum ada data reservasi terbaru.
                     </td>
                 </tr>
                 @endforelse

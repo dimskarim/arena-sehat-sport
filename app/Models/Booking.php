@@ -21,14 +21,19 @@ class Booking extends Model
         return $this->belongsTo(Lapangan::class);
     }
 
-    public function detailsBookings()
+    public function bookingDetails()
     {
-        return $this->hasMany(DetailsBooking::class);
+        return $this->hasMany(BookingDetail::class);
     }
 
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function notifikasis()
+    {
+        return $this->hasMany(Notifikasi::class);
     }
 
     // Scopes for filtering

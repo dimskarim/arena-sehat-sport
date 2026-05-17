@@ -11,16 +11,16 @@ class Notifikasi extends Model
 
     protected $table = 'notifikasis';
 
-    protected $fillable = ['user_id', 'details_booking_id', 'deskripsi', 'pesan'];
+    protected $fillable = ['user_id', 'booking_id', 'deskripsi', 'pesan'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function detailsBooking()
+    public function booking()
     {
-        return $this->belongsTo(DetailsBooking::class, 'details_booking_id');
+        return $this->belongsTo(Booking::class);
     }
 
     // Scopes

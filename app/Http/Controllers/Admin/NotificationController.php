@@ -26,8 +26,8 @@ class NotificationController extends Controller
     public function create()
     {
         $users = \App\Models\User::all();
-        $detailsBookings = \App\Models\DetailsBooking::with('booking')->get();
-        return view('admin.notification.create', compact('users', 'detailsBookings'), ['title' => 'Tambah Notifikasi']);
+        $bookings = \App\Models\Booking::all();
+        return view('admin.notification.create', compact('users', 'bookings'), ['title' => 'Tambah Notifikasi']);
     }
 
     public function store(NotifikasiRequest $request)
@@ -45,8 +45,8 @@ class NotificationController extends Controller
         try {
             $item = $this->service->getById($id);
             $users = \App\Models\User::all();
-            $detailsBookings = \App\Models\DetailsBooking::with('booking')->get();
-            return view('admin.notification.edit', compact('item', 'users', 'detailsBookings'), ['title' => 'Edit Notifikasi']);
+            $bookings = \App\Models\Booking::all();
+            return view('admin.notification.edit', compact('item', 'users', 'bookings'), ['title' => 'Edit Notifikasi']);
         } catch (Exception $e) {
             return redirect()->route('admin.notifications.index')->with('error', 'Data tidak ditemukan.');
         }
