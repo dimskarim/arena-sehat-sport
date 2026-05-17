@@ -53,7 +53,7 @@ class LapanganController extends Controller
     public function update(LapanganRequest $request, $id)
     {
         try {
-            $this->service->updateLapangan($id, $request->validated());
+            $this->service->updateLapangan($id, $request->validated(), $request->file('gambar'));
             return redirect()->route('admin.lapangans.index')->with('success', 'Lapangan berhasil diperbarui.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();

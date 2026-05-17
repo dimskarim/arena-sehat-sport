@@ -18,7 +18,7 @@ class TimeController extends Controller
         $opQuery = WaktuOperasional::with('lapangan')->latest();
         if ($request->lapangan_id) $opQuery->where('lapangan_id', $request->lapangan_id);
         if ($request->hari)        $opQuery->where('hari', $request->hari);
-        $waktuOperasionals = $opQuery->paginate(8)->withQueryString();
+        $oprationalWaktus = $opQuery->paginate(8)->withQueryString();
 
         // Slot Waktu (all) — used for stats summary + cards grid
         $slotQuery = SlotWaktu::with('waktuOperasional.lapangan')->latest();
@@ -38,7 +38,7 @@ class TimeController extends Controller
         }
         $slotWaktus = $slotQuery2->paginate(12)->withQueryString();
 
-        return view('admin.time.index', compact('lapangans', 'waktuOperasionals', 'slotAll', 'slotWaktus'))
+        return view('admin.time.index', compact('lapangans', 'oprationalWaktus', 'slotAll', 'slotWaktus'))
             ->with('title', 'Manajemen Operasional Waktu');
     }
 }

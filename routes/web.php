@@ -15,10 +15,18 @@ use App\Http\Controllers\Admin\SlotWaktuController;
 use App\Http\Controllers\Admin\OprationalWaktuController;
 use App\Http\Controllers\Admin\TimeController;
 
-Route::get('/', function () {
-    return redirect()->route('admin.dashboard');
-});
+use App\Http\Controllers\FrontController;
 
+Route::get('/', [FrontController::class, 'index'])->name('home');
+Route::get('/lapangan', [FrontController::class, 'lapanganIndex'])->name('lapangan.index');
+Route::get('/lapangan/{id}', [FrontController::class, 'lapanganShow'])->name('lapangan.show');
+Route::get('/booking/create', [FrontController::class, 'bookingCreate'])->name('booking.create');
+Route::get('/booking/payment', [FrontController::class, 'bookingPayment'])->name('booking.payment');
+Route::get('/booking/riwayat', [FrontController::class, 'bookingRiwayat'])->name('booking.riwayat');
+Route::get('/profile', [FrontController::class, 'profile'])->name('profile.index');
+Route::get('/login', [FrontController::class, 'login'])->name('front.login');
+Route::get('/register', [FrontController::class, 'register'])->name('front.register');
+Route::get('/support', [FrontController::class, 'support'])->name('support');
 use App\Http\Controllers\Admin\AuthController;
 
 Route::prefix('admin')->name('admin.')->group(function () {

@@ -3,7 +3,7 @@
 @section('content')
 <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <h2 class="text-title-md2 font-bold text-black dark:text-white">
-        Tambah Slot Waktu
+        Tambah Slot Waktu Baru
     </h2>
 
     <nav>
@@ -16,9 +16,9 @@
         @csrf
         <div class="p-6.5">
             <div class="mb-4.5">
-                <label class="mb-2.5 block text-black dark:text-white">Lapangan <span class="text-meta-1">*</span></label>
+                <label class="mb-2.5 block text-black dark:text-white">Venue Lapangan <span class="text-meta-1">*</span></label>
                 <select name="lapangan_id" required class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input">
-                    <option value="">Pilih Lapangan</option>
+                    <option value="">Pilih Venue</option>
                     @foreach($lapangans as $lap)
                         <option value="{{ $lap->id }}" {{ old('lapangan_id') == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
                     @endforeach
@@ -26,17 +26,17 @@
                 @error('lapangan_id') <span class="text-meta-1 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="mb-4.5">
-                <label class="mb-2.5 block text-black dark:text-white">Waktu Mulai <span class="text-meta-1">*</span></label>
+                <label class="mb-2.5 block text-black dark:text-white">Jam Mulai <span class="text-meta-1">*</span></label>
                 <input type="time" name="waktu_mulai" value="{{ old('waktu_mulai') }}" required class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input" />
                 @error('waktu_mulai') <span class="text-meta-1 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="mb-4.5">
-                <label class="mb-2.5 block text-black dark:text-white">Waktu Selesai <span class="text-meta-1">*</span></label>
+                <label class="mb-2.5 block text-black dark:text-white">Jam Selesai <span class="text-meta-1">*</span></label>
                 <input type="time" name="waktu_selesai" value="{{ old('waktu_selesai') }}" required class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary dark:border-form-strokedark dark:bg-form-input" />
                 @error('waktu_selesai') <span class="text-meta-1 text-sm">{{ $message }}</span> @enderror
             </div>
 
-            <button type="submit" class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">Simpan</button>
+            <button type="submit" class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray">Simpan Slot</button>
         </div>
     </form>
 </div>

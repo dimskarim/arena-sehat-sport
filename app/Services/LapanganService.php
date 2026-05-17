@@ -45,13 +45,33 @@ class LapanganService
 
     public function getLapanganById($id)
     {
-        return Lapangan::with(['kategori', 'gambarLapangans', 'slotWaktus', 'oprationalWaktus'])->findOrFail($id);
+        return Lapangan::with(['kategori', 'gambarLapangans'])->findOrFail($id);
     }
 
-    public function updateLapangan($id, array $data)
+    public function updateLapangan($id, array $data, $gambarFile = null)
     {
         $lapangan = Lapangan::findOrFail($id);
+        
+        if (isset($data['gambar'])) {
+            unset($data['gambar']);
+        }
+
         $lapangan->update($data);
+
+        if ($gambarFile) {
+            foreach ($lapangan->gambarLapangans as $gambar) {
+                $path = str_replace('/storage', 'public', $gambar->gambar_file);
+                Storage::delete($path);
+                $gambar->delete();
+            }
+
+            $path = $gambarFile->store('public/lapangans');
+            GambarLapangan::create([
+                'lapangan_id' => $lapangan->id,
+                'gambar_file' => Storage::url($path)
+            ]);
+        }
+
         return $lapangan->fresh()->load(['kategori', 'gambarLapangans']);
     }
 
