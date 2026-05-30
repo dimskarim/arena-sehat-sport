@@ -38,6 +38,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('kategoris', KategoriController::class);
         Route::resource('users', UserController::class);
+        Route::patch('users/{id}/suspend', [UserController::class, 'suspend'])->name('users.suspend');
+        Route::patch('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::resource('lapangans', LapanganController::class);
         Route::resource('gambar-lapangans', GambarLapanganController::class);
         Route::resource('payments', PaymentController::class);

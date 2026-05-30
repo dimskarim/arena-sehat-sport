@@ -123,7 +123,7 @@
                                 {{ substr($opw->waktu_tutup ?? '--:--', 0, 5) }}
                             </td>
                             <td class="px-4 py-3 text-right">
-                                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="flex items-center justify-end gap-1">
                                     <a href="{{ route('admin.oprational-waktus.edit', $opw->id) }}"
                                         class="p-1.5 text-slate-400 hover:text-[#af101a] hover:bg-red-50 rounded-lg transition-all" title="Edit">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -376,7 +376,7 @@
                                 @endif
                             </td>
                             <td class="px-5 py-3 text-right">
-                                <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="flex items-center justify-end gap-1">
                                     <a href="{{ route('admin.slot-waktus.edit', $slot->id) }}"
                                         class="p-2 text-slate-400 hover:text-[#af101a] hover:bg-red-50 rounded-lg transition-all" title="Edit">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

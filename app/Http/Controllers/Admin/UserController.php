@@ -67,4 +67,31 @@ class UserController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
+    public function suspend($id)
+    {
+        try {
+            $user = \App\Models\User::findOrFail($id);
+            $newStatus = ($user->status === 'suspended') ? 'aktif' : 'suspended';
+            $user->update(['status' => $newStatus]);
+            $label = $newStatus === 'suspended' ? 'ditangguhkan' : 'diaktifkan kembali';
+            return redirect()->route('admin.users.edit', $id)->with('success', "Akun pengguna berhasil {$label}.");
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function resetPassword($id)
+    {
+        try {
+            $user = \App\Models\User::findOrFail($id);
+            // Default password logic: "arena123"
+            $user->update([
+                'password' => \Illuminate\Support\Facades\Hash::make('arena123')
+            ]);
+            return redirect()->route('admin.users.edit', $id)->with('success', "Kata sandi berhasil diatur ulang menjadi 'arena123'.");
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
 }

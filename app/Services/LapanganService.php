@@ -28,11 +28,14 @@ class LapanganService
 
             // File Upload logic
             if ($gambarFile) {
-                $path = $gambarFile->store('public/lapangans');
-                GambarLapangan::create([
-                    'lapangan_id' => $lapangan->id,
-                    'gambar_file' => Storage::url($path)
-                ]);
+                $files = is_array($gambarFile) ? $gambarFile : [$gambarFile];
+                foreach ($files as $file) {
+                    $path = $file->store('public/lapangans');
+                    GambarLapangan::create([
+                        'lapangan_id' => $lapangan->id,
+                        'gambar_file' => Storage::url($path)
+                    ]);
+                }
             }
 
             DB::commit();
@@ -65,11 +68,14 @@ class LapanganService
                 $gambar->delete();
             }
 
-            $path = $gambarFile->store('public/lapangans');
-            GambarLapangan::create([
-                'lapangan_id' => $lapangan->id,
-                'gambar_file' => Storage::url($path)
-            ]);
+            $files = is_array($gambarFile) ? $gambarFile : [$gambarFile];
+            foreach ($files as $file) {
+                $path = $file->store('public/lapangans');
+                GambarLapangan::create([
+                    'lapangan_id' => $lapangan->id,
+                    'gambar_file' => Storage::url($path)
+                ]);
+            }
         }
 
         return $lapangan->fresh()->load(['kategori', 'gambarLapangans']);

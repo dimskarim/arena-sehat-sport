@@ -6,12 +6,13 @@ use App\Models\Booking;
 
 class BookingService
 {
-    public function getAll($status = null, $userId = null, $date = null, $perPage = 10)
+    public function getAll($status = null, $userId = null, $dateFrom = null, $perPage = 10, $dateTo = null)
     {
         return Booking::with(['user', 'lapangan', 'bookingDetails.slotWaktu', 'payment'])
             ->filterStatus($status)
             ->filterUser($userId)
-            ->filterDate($date)
+            ->filterDate($dateFrom)
+            ->when($dateTo, fn($q) => $q->whereDate('tanggal_booking', '<=', $dateTo))
             ->latest()
             ->paginate($perPage);
     }

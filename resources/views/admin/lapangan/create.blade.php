@@ -46,6 +46,12 @@
     </div>
     @endif
 
+    @if(session('error'))
+    <div class="mb-6 flex w-full border-l-4 border-red-500 bg-red-50 px-6 py-4 shadow-sm rounded-r-xl">
+        <p class="text-red-800 font-bold text-sm">{{ session('error') }}</p>
+    </div>
+    @endif
+
     {{-- Form --}}
     <form id="lapanganCreateForm" action="{{ route('admin.lapangans.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -174,30 +180,18 @@
                     </div>
                     <div class="p-6 space-y-4">
                         {{-- Image Preview --}}
-                        <div id="imagePreview" class="hidden h-40 w-full rounded-xl overflow-hidden border border-slate-100">
-                            <img id="previewImg" src="https://placehold.co/800x600/f3f4f6/a1a1aa?text=Img" alt="Preview" class="w-full h-full object-cover" />
+                        <div id="imagePreview" class="hidden grid-cols-2 sm:grid-cols-3 gap-3 w-full p-2">
                         </div>
                         {{-- Upload Area --}}
                         <label for="gambarInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed {{ $errors->has('gambar') ? 'border-red-400 bg-red-50/30' : 'border-slate-200' }} rounded-xl cursor-pointer hover:border-red-300 hover:bg-red-50/30 transition-all group">
                             <svg class="text-4xl text-red-400 group-hover:scale-110 transition-transform inline-block align-middle w-10 h-10" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                             </svg>
-                            <p class="text-xs font-semibold text-slate-500 mt-1.5">Klik atau seret untuk unggah foto</p>
+                            <p class="text-xs font-semibold text-slate-500 mt-1.5">Klik atau seret untuk unggah foto (Bisa pilih banyak)</p>
                             <p class="text-[10px] text-slate-400 mt-0.5">PNG, JPG hingga 5MB</p>
                         </label>
-                        <input type="file" id="gambarInput" name="gambar" required class="hidden" accept="image/*"
-                            onchange="previewImage(event)" />
-                        <div id="fileNameBadge" class="hidden items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg border border-slate-200">
-                            <svg class="text-slate-400 text-base inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                            </svg>
-                            <span id="fileNameText" class="text-xs text-slate-600 font-medium truncate flex-1"></span>
-                            <button type="button" onclick="clearImage()" class="text-slate-400 hover:text-red-600 transition-colors">
-                                <svg class="text-base inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
+                        <input type="file" id="gambarInput" name="gambar[]" multiple required class="hidden" accept="image/*"
+                            onchange="previewImages(event)" />
                         @error('gambar') <p class="text-red-600 text-xs flex items-center gap-1"><svg class="text-sm inline-block align-middle" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                             </svg>{{ $message }}</p> @enderror
@@ -245,33 +239,76 @@
 </div>
 
 <script>
-    function previewImage(event) {
-        const file = event.target.files[0];
-        if (!file) return;
+    let selectedFiles = [];
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const preview = document.getElementById('imagePreview');
-            const img = document.getElementById('previewImg');
-            const badge = document.getElementById('fileNameBadge');
-            const nameText = document.getElementById('fileNameText');
+    function previewImages(event) {
+        const newFiles = Array.from(event.target.files);
+        if (!newFiles.length) return;
 
-            img.src = e.target.result;
-            preview.classList.remove('hidden');
-            badge.classList.remove('hidden');
-            badge.classList.add('flex');
-            nameText.textContent = file.name;
-        };
-        reader.readAsDataURL(file);
+        // Append new files instead of replacing
+        newFiles.forEach(file => {
+            // Check if file already exists to prevent duplicates (by name and size)
+            const exists = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+            if (!exists) {
+                selectedFiles.push(file);
+            }
+        });
+        
+        // Ensure input files are correctly stored in DataTransfer to keep state consistent
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        document.getElementById('gambarInput').files = dataTransfer.files;
+
+        renderPreviews();
     }
 
-    function clearImage() {
-        document.getElementById('gambarInput').value = '';
-        document.getElementById('imagePreview').classList.add('hidden');
-        const badge = document.getElementById('fileNameBadge');
-        badge.classList.add('hidden');
-        badge.classList.remove('flex');
-        document.getElementById('previewImg').src = '';
+    function renderPreviews() {
+        const previewContainer = document.getElementById('imagePreview');
+        previewContainer.innerHTML = '';
+        
+        if (selectedFiles.length === 0) {
+            previewContainer.classList.add('hidden');
+            previewContainer.classList.remove('grid');
+            document.getElementById('gambarInput').value = '';
+            return;
+        }
+
+        previewContainer.classList.remove('hidden');
+        previewContainer.classList.add('grid');
+
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'relative group aspect-video rounded-lg overflow-hidden border border-slate-200 shadow-sm';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-full h-full object-cover';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.onclick = () => removeFile(index);
+                deleteBtn.className = 'absolute top-2 right-2 bg-white/90 hover:bg-red-500 hover:text-white text-slate-700 p-1.5 rounded-md opacity-0 group-hover:opacity-100 transition-all shadow-sm';
+                deleteBtn.innerHTML = '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
+                
+                div.appendChild(img);
+                div.appendChild(deleteBtn);
+                previewContainer.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        
+        // Update input files
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        document.getElementById('gambarInput').files = dataTransfer.files;
+        
+        renderPreviews();
     }
 </script>
 @endsection

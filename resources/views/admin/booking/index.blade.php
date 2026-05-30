@@ -75,14 +75,23 @@
     <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm overflow-hidden mb-8">
         <form method="GET" action="{{ route('admin.bookings.index') }}" class="p-6 border-b border-[#e4beba]">
             <div class="flex flex-col lg:flex-row lg:items-center gap-4">
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="relative">
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block">Tanggal Reservasi</label>
+                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block">Dari Tanggal</label>
                         <div class="relative">
                             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                             </svg>
-                            <input name="date" value="{{ request('date') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all" type="date" />
+                            <input name="date_from" value="{{ request('date_from') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all" type="date" />
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block">Sampai Tanggal</label>
+                        <div class="relative">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                            </svg>
+                            <input name="date_to" value="{{ request('date_to') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all" type="date" />
                         </div>
                     </div>
                     <div>
@@ -90,6 +99,7 @@
                         <select name="status" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer">
                             <option value="">Semua Status</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="menunggu_verifikasi" {{ request('status') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
                             <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                             <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                             <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
@@ -102,10 +112,13 @@
                         </select>
                     </div>
                 </div>
-                <div class="lg:pt-6">
-                    <button type="submit" class="w-full lg:w-auto px-8 py-2.5 bg-[#1b1c1c] text-[#fcf9f8] rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95">
+                <div class="lg:pt-6 flex gap-2">
+                    <button type="submit" class="px-6 py-2.5 bg-[#1b1c1c] text-[#fcf9f8] rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95 whitespace-nowrap">
                         Terapkan Filter
                     </button>
+                    <a href="{{ route('admin.bookings.index') }}" class="px-4 py-2.5 bg-white border border-[#e4beba] text-[#5b403d] rounded-xl font-semibold text-sm hover:bg-[#f6f3f2] transition-colors whitespace-nowrap">
+                        Reset
+                    </a>
                 </div>
             </div>
         </form>
@@ -210,20 +223,70 @@
         </div>
     </div>
 
-    <!-- Promotion / Action Section (Bento Bottom) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <div class="bg-zinc-900 text-white p-8 rounded-2xl items-center">
+    <!-- Laporan Keuangan Section -->
+    <div class="mt-8">
+        <div class="flex items-center justify-between mb-5">
             <div>
-                <h4 class="text-xl font-bold mb-2">Laporan Otomatis</h4>
-                <p class="text-sm text-zinc-400">Buat laporan mingguan mengenai pendapatan dan tingkat hunian secara otomatis untuk mitra venue.</p>
-                <button class="mt-6 px-6 py-2 bg-white text-zinc-900 rounded-xl font-bold text-sm hover:bg-zinc-200 transition-colors">Atur Jadwal Laporan</button>
+                <h2 class="font-['Lexend'] text-2xl font-bold text-[#1b1c1c]">Laporan Keuangan</h2>
+                <p class="text-sm text-[#5b403d] mt-1">Rekapitulasi pendapatan dari semua pesanan yang berhasil
+                    @if(request('date_from') || request('date_to'))
+                        <span class="font-semibold text-[#af101a]">pada rentang tanggal yang dipilih</span>
+                    @endif
+                </p>
             </div>
+            <a href="{{ route('admin.payments.index') }}" class="flex items-center gap-2 text-sm font-bold text-[#af101a] hover:underline">
+                Verifikasi Pembayaran
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
         </div>
-        <div class="bg-[#fdcbd0] text-[#795358] p-8 rounded-2xl items-center">
-            <div>
-                <h4 class="text-xl font-bold mb-2">Kapasitas Lapangan</h4>
-                <p class="text-sm opacity-80">Pantau ketersediaan lapangan secara langsung dan maksimalkan strategi harga di jam sibuk.</p>
-                <button class="mt-6 px-6 py-2 bg-[#795358] text-white rounded-xl font-bold text-sm hover:opacity-90 transition-colors">Cek Ketersediaan</button>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {{-- Gross Income --}}
+            <div class="md:col-span-2 bg-gradient-to-br from-[#1b1c1c] to-zinc-700 text-white p-8 rounded-2xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-xs font-bold opacity-60 uppercase tracking-widest">Total Pendapatan Kotor (Gross Income)</p>
+                    <h3 class="text-4xl font-black mt-3 font-['Lexend']">
+                        Rp {{ number_format($summaryStats['gross_income'] ?? 0, 0, ',', '.') }}
+                    </h3>
+                    <p class="text-sm opacity-70 mt-4">Dari {{ $summaryStats['total_confirmed'] ?? 0 }} reservasi yang berhasil dikonfirmasi</p>
+                    <div class="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/10">
+                        <div>
+                            <p class="text-xs opacity-50 uppercase tracking-wider">Pending</p>
+                            <p class="text-lg font-bold mt-1">{{ $summaryStats['total_pending'] ?? 0 }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs opacity-50 uppercase tracking-wider">Selesai</p>
+                            <p class="text-lg font-bold mt-1 text-green-400">{{ $summaryStats['total_confirmed'] ?? 0 }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs opacity-50 uppercase tracking-wider">Dibatalkan</p>
+                            <p class="text-lg font-bold mt-1 text-red-400">{{ $summaryStats['total_cancelled'] ?? 0 }}</p>
+                        </div>
+                    </div>
+                </div>
+                <svg class="absolute -right-6 -bottom-6 w-48 h-48 opacity-5" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+
+            {{-- Quick Actions --}}
+            <div class="space-y-4">
+                <div class="bg-white border border-[#e4beba] rounded-2xl p-6 flex flex-col justify-between h-full">
+                    <div>
+                        <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-1">Filter Laporan</h4>
+                        <p class="text-sm text-[#5b403d] mb-4">Gunakan filter tanggal di atas untuk melihat laporan per rentang waktu atau jenis lapangan.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="{{ route('admin.bookings.index', ['date_from' => now()->startOfMonth()->format('Y-m-d'), 'date_to' => now()->format('Y-m-d')]) }}"
+                            class="block text-center px-4 py-2.5 bg-[#d32f2f] text-white rounded-xl text-sm font-bold hover:opacity-90 transition-opacity">
+                            Laporan Bulan Ini
+                        </a>
+                        <a href="{{ route('admin.bookings.index', ['status' => 'completed']) }}"
+                            class="block text-center px-4 py-2.5 bg-white border border-[#e4beba] text-[#1b1c1c] rounded-xl text-sm font-semibold hover:bg-[#f6f3f2] transition-colors">
+                            Semua Reservasi Selesai
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

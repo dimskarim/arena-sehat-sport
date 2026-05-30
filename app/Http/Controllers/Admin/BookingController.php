@@ -19,8 +19,28 @@ class BookingController extends Controller
 
     public function index(Request $request)
     {
-        $items = $this->service->getAll($request->query('status'), $request->query('user_id'), $request->query('date'), $request->query('per_page', 10));
-        return view('admin.booking.index', compact('items'), ['title' => 'History Booking']);
+        $items = $this->service->getAll(
+            $request->query('status'),
+            $request->query('user_id'),
+            $request->query('date_from') ?? $request->query('date'),
+            $request->query('per_page', 10),
+            $request->query('date_to')
+        );
+
+        // Summary stats (across all matching records, not just current page)
+        $statsQuery = \App\Models\Booking::query();
+        if ($request->status) $statsQuery->where('status', $request->status);
+        if ($request->date_from) $statsQuery->whereDate('tanggal_booking', '>=', $request->date_from);
+        if ($request->date_to)   $statsQuery->whereDate('tanggal_booking', '<=', $request->date_to);
+
+        $summaryStats = [
+            'gross_income'     => (clone $statsQuery)->whereIn('status', ['confirmed', 'completed', 'paid'])->sum('total_harga'),
+            'total_confirmed'  => (clone $statsQuery)->whereIn('status', ['confirmed', 'completed', 'paid'])->count(),
+            'total_pending'    => (clone $statsQuery)->where('status', 'pending')->count(),
+            'total_cancelled'  => (clone $statsQuery)->whereIn('status', ['cancelled', 'canceled'])->count(),
+        ];
+
+        return view('admin.booking.index', compact('items', 'summaryStats'), ['title' => 'History Booking']);
     }
 
     public function create()

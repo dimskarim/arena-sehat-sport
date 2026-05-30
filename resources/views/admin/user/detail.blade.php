@@ -28,7 +28,7 @@
             </a>
             <button type="submit" form="userEditForm"
                 class="flex items-center gap-2 px-6 py-2.5 bg-[#af101a] text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-red-900/20 active:scale-95">
-                <svg class="text-lg inline-block align-middle" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <svg class="text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />
                 </svg>
                 Simpan Perubahan
@@ -45,7 +45,8 @@
             <div class="bg-white p-8 rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-[#e4beba] flex flex-col items-center text-center">
                 <div class="relative mb-5">
                     @if($item->foto_profile)
-                    <img src="https://ui-avatars.com/api/?name=User&background=FFCDD2&color=D32F2F" alt="{{ $item->name }}"
+                    @php $imgUrl = str_starts_with($item->foto_profile, 'http') ? $item->foto_profile : asset($item->foto_profile); @endphp
+                    <img src="{{ $imgUrl }}" alt="{{ $item->name }}"
                         class="w-36 h-36 rounded-2xl object-cover border-4 border-white shadow-lg" />
                     @else
                     <div class="w-36 h-36 rounded-2xl bg-[#d32f2f] flex items-center justify-center border-4 border-white shadow-lg">
@@ -68,7 +69,11 @@
                     @else
                     <span class="px-3 py-1 bg-[#fdcbd0] text-[#795358] rounded-full text-xs font-bold uppercase tracking-wider">Anggota</span>
                     @endif
+                    @if(strtolower($item->status) === 'aktif')
                     <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold uppercase tracking-wider">Aktif</span>
+                    @else
+                    <span class="px-3 py-1 bg-red-100 text-[#ba1a1a] rounded-full text-xs font-bold uppercase tracking-wider">Ditangguhkan</span>
+                    @endif
                 </div>
 
                 <p class="text-[#5b403d] text-xs leading-relaxed mb-5">
@@ -91,30 +96,40 @@
             <div class="bg-white p-6 rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-[#e4beba]">
                 <h4 class="text-xs font-black text-[#1b1c1c] uppercase tracking-widest mb-4 border-b border-[#e4beba] pb-3">Aksi Cepat</h4>
                 <div class="space-y-3">
-                    <button type="button"
-                        class="w-full flex items-center justify-between p-3 rounded-lg border border-[#e4beba] hover:bg-[#f6f3f2] transition-colors group">
-                        <div class="flex items-center gap-3">
-                            <svg class="text-[#5b403d] group-hover:text-[#af101a] text-xl inline-block align-middle w-5 h-5 transition-all duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                    <form action="{{ route('admin.users.reset-password', $item->id) }}" method="POST"
+                        class="w-full" onsubmit="return confirm('Anda yakin ingin mereset kata sandi pengguna ini menjadi \'arena123\'?');">
+                        @csrf @method('PATCH')
+                        <button type="submit"
+                            class="w-full flex items-center justify-between p-3 rounded-lg border border-[#e4beba] hover:bg-[#f6f3f2] transition-colors group">
+                            <div class="flex items-center gap-3">
+                                <svg class="text-[#5b403d] group-hover:text-[#af101a] text-xl inline-block align-middle w-5 h-5 transition-all duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                                </svg>
+                                <span class="text-sm font-semibold text-[#1b1c1c] transition-all duration-300 group-hover:translate-x-1">Atur Ulang Kata Sandi</span>
+                            </div>
+                            <svg class="text-sm text-[#8f6f6c] inline-block align-middle w-5 h-5 transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#af101a]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                             </svg>
-                            <span class="text-sm font-semibold text-[#1b1c1c] transition-all duration-300 group-hover:translate-x-1">Atur Ulang Kata Sandi</span>
-                        </div>
-                        <svg class="text-sm text-[#8f6f6c] inline-block align-middle w-5 h-5 transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#af101a]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </button>
-                    <button type="button"
-                        class="w-full flex items-center justify-between p-3 rounded-lg border border-[#e4beba] hover:bg-[#f6f3f2] transition-colors group">
-                        <div class="flex items-center gap-3">
-                            <svg class="text-[#5b403d] group-hover:text-[#af101a] text-xl inline-block align-middle w-5 h-5 transition-all duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </button>
+                    </form>
+                    <form action="{{ route('admin.users.suspend', $item->id) }}" method="POST"
+                        class="w-full" onsubmit="return confirm('{{ $item->status === 'suspended' ? 'Aktifkan kembali akun ini?' : 'Tangguhkan akun pengguna ini?' }}');">
+                        @csrf @method('PATCH')
+                        <button type="submit"
+                            class="w-full flex items-center justify-between p-3 rounded-lg border {{ $item->status === 'suspended' ? 'border-green-200 bg-green-50/30 hover:bg-green-50/60' : 'border-[#e4beba] hover:bg-[#f6f3f2]' }} transition-colors group">
+                            <div class="flex items-center gap-3">
+                                <svg class="{{ $item->status === 'suspended' ? 'text-green-600' : 'text-[#5b403d] group-hover:text-[#af101a]' }} w-5 h-5 transition-all duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                </svg>
+                                <span class="text-sm font-semibold {{ $item->status === 'suspended' ? 'text-green-700' : 'text-[#1b1c1c]' }} transition-all duration-300 group-hover:translate-x-1">
+                                    {{ $item->status === 'suspended' ? 'Aktifkan Kembali Akun' : 'Tangguhkan / Suspend Akun' }}
+                                </span>
+                            </div>
+                            <svg class="w-5 h-5 text-[#8f6f6c] transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#af101a]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                             </svg>
-                            <span class="text-sm font-semibold text-[#1b1c1c] transition-all duration-300 group-hover:translate-x-1">Nonaktifkan Akun</span>
-                        </div>
-                        <svg class="text-sm text-[#8f6f6c] inline-block align-middle w-5 h-5 transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#af101a]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                        </svg>
-                    </button>
+                        </button>
+                    </form>
                     <button type="button" onclick="openDeleteModal()"
                         class="w-full flex items-center justify-between p-3 rounded-lg border border-[#ffdad6] bg-[#ffdad6]/30 hover:bg-[#ffdad6]/60 transition-colors group">
                         <div class="flex items-center gap-3">
@@ -398,5 +413,27 @@
             confirmDeleteBtn.innerHTML = originalBtnText;
         }
     }
+
+    // Avatar preview logic
+    document.getElementById('avatarInput').addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgElements = document.querySelectorAll('.col-span-12.lg\\:col-span-4 img');
+                if (imgElements.length > 0) {
+                    imgElements[0].src = e.target.result;
+                } else {
+                    const fallbackDiv = document.querySelector('.w-36.h-36.bg-\\[\\#d32f2f\\]');
+                    if (fallbackDiv) {
+                        const newImg = document.createElement('img');
+                        newImg.src = e.target.result;
+                        newImg.className = 'w-36 h-36 rounded-2xl object-cover border-4 border-white shadow-lg';
+                        fallbackDiv.replaceWith(newImg);
+                    }
+                }
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
 </script>
 @endsection

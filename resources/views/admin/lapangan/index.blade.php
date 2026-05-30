@@ -115,8 +115,15 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-4">
                                 <div class="h-12 w-16 rounded-lg bg-slate-100 overflow-hidden shrink-0">
-                                    @if($item->gambar)
-                                    <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->name }}" class="w-full h-full object-cover" />
+                                    @php 
+                                        $firstImage = $item->gambarLapangans->first(); 
+                                        $imgUrl = null;
+                                        if($firstImage) {
+                                            $imgUrl = str_starts_with($firstImage->gambar_file, 'http') ? $firstImage->gambar_file : asset($firstImage->gambar_file);
+                                        }
+                                    @endphp
+                                    @if($imgUrl)
+                                    <img src="{{ $imgUrl }}" alt="{{ $item->name }}" class="w-full h-full object-cover" />
                                     @else
                                     <div class="w-full h-full flex items-center justify-center text-slate-400">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +181,7 @@
 
                         {{-- Actions --}}
                         <td class="px-6 py-4 text-right">
-                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="flex items-center justify-end gap-2">
                                 <a href="{{ route('admin.lapangans.edit', $item->id) }}" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all" title="Edit">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

@@ -26,12 +26,7 @@ class MenuHelper
                 'icon' => 'time',
                 'name' => 'Manajemen Waktu',
                 'path' => '/admin/time',
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Gambar Lapangan',
-                'path' => '/admin/gambar-lapangans',
-            ],
+            ]
         ];
     }
 

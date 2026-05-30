@@ -19,7 +19,8 @@ class LapanganRequest extends FormRequest
             'deskripsi' => 'nullable|string',
             'harga' => 'required|integer|min:0',
             'status' => 'required|in:tersedia,tidak tersedia',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'gambar' => 'nullable|array',
+            'gambar.*' => 'image|mimes:jpeg,png,jpg|max:5120',
         ];
     }
 
@@ -34,8 +35,9 @@ class LapanganRequest extends FormRequest
             'harga.min' => 'Harga tidak boleh negatif',
             'status.required' => 'Status wajib dipilih',
             'status.in' => 'Status harus tersedia atau tidak tersedia',
-            'gambar.image' => 'File harus berupa gambar',
-            'gambar.max' => 'Ukuran file maksimal 2MB',
+            'gambar.array' => 'Format gambar tidak valid',
+            'gambar.*.image' => 'File harus berupa gambar',
+            'gambar.*.max' => 'Ukuran file maksimal 5MB',
         ];
     }
 }

@@ -32,6 +32,25 @@
         </div>
     </div>
 
+    @if($errors->any())
+    <div class="mb-6 flex w-full border-l-4 border-red-500 bg-red-50 px-6 py-4 shadow-sm rounded-r-xl">
+        <div>
+            <p class="text-red-800 font-bold text-sm mb-1">Mohon perbaiki kesalahan berikut:</p>
+            <ul class="list-disc list-inside text-red-700 text-xs space-y-0.5">
+                @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="mb-6 flex w-full border-l-4 border-red-500 bg-red-50 px-6 py-4 shadow-sm rounded-r-xl">
+        <p class="text-red-800 font-bold text-sm">{{ session('error') }}</p>
+    </div>
+    @endif
+
     {{-- Form --}}
     <form id="lapanganForm" action="{{ route('admin.lapangans.update', $item->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -112,13 +131,18 @@
                     </div>
                     <div class="p-6 space-y-4">
                         {{-- Preview gambar lama --}}
-                        @php $gambarUrl = $item->gambarLapangans->first()->gambar_file ?? null; @endphp
-                        @if($gambarUrl)
-                        <div class="h-36 w-full rounded-xl overflow-hidden border border-slate-100">
-                            <img src="{{ asset($gambarUrl) }}" alt="Current Image" class="w-full h-full object-cover" />
+                        @if($item->gambarLapangans->count() > 0)
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full p-2">
+                            @foreach($item->gambarLapangans as $gambar)
+                            @php $imgUrl = str_starts_with($gambar->gambar_file, 'http') ? $gambar->gambar_file : asset($gambar->gambar_file); @endphp
+                            <div class="relative group aspect-video rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+                                <img src="{{ $imgUrl }}" alt="Current Image" class="w-full h-full object-cover" />
+                            </div>
+                            @endforeach
                         </div>
+                        <p class="text-xs text-slate-500 mt-2">* Mengunggah foto baru akan menggantikan semua foto lama.</p>
                         @else
-                        <div class="h-36 w-full rounded-xl border border-slate-100 flex items-center justify-center bg-slate-50 text-slate-400">
+                        <div class="h-36 w-full rounded-xl border border-slate-100 flex items-center justify-center bg-slate-50 text-slate-400 mb-4">
                             <span class="text-xs font-semibold">Belum ada gambar</span>
                         </div>
                         @endif
@@ -127,9 +151,9 @@
                             <svg class="text-3xl text-red-400 group-hover:scale-110 transition-transform inline-block align-middle w-10 h-10" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                             </svg>
-                            <p class="text-xs font-semibold text-slate-500 mt-1">Klik atau seret untuk unggah foto baru</p>
+                            <p class="text-xs font-semibold text-slate-500 mt-1">Klik atau seret untuk unggah foto baru (Bisa pilih banyak)</p>
                             <p class="text-[10px] text-slate-400">PNG, JPG hingga 5MB</p>
-                            <input type="file" name="gambar" class="hidden" accept="image/*" />
+                            <input type="file" name="gambar[]" multiple class="hidden" accept="image/*" />
                         </label>
                         @error('gambar') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -270,6 +294,88 @@
             confirmDeleteBtn.disabled = false;
             confirmDeleteBtn.innerHTML = originalBtnText;
         }
+    }
+
+    // Multiple file preview logic for edit page
+    let selectedFiles = [];
+    const fileInput = document.querySelector('input[name="gambar[]"]');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
+            if (!newFiles.length) return;
+
+            // Append new files
+            newFiles.forEach(file => {
+                const exists = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+                if (!exists) {
+                    selectedFiles.push(file);
+                }
+            });
+
+            // Update input files
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            fileInput.files = dataTransfer.files;
+
+            renderPreviews();
+        });
+    }
+
+    function renderPreviews() {
+        const emptyBlock = document.querySelector('.bg-slate-50.text-slate-400.mb-4');
+        if (emptyBlock) emptyBlock.style.display = 'none';
+
+        // Find or create the grid container
+        let gridContainer = document.getElementById('newImagePreview');
+        if (!gridContainer) {
+            gridContainer = document.createElement('div');
+            gridContainer.id = 'newImagePreview';
+            gridContainer.className = 'grid grid-cols-2 sm:grid-cols-3 gap-3 w-full p-2 mb-2';
+            const uploadLabel = document.querySelector('label[class*="border-dashed"]');
+            uploadLabel.parentNode.insertBefore(gridContainer, uploadLabel);
+        }
+
+        gridContainer.innerHTML = '';
+
+        if (selectedFiles.length === 0 && emptyBlock) {
+            emptyBlock.style.display = 'flex';
+        }
+
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'relative group aspect-video rounded-lg overflow-hidden border border-red-200 shadow-sm opacity-90';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-full h-full object-cover grayscale-0 transition-all';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.onclick = () => removeFile(index);
+                deleteBtn.className = 'absolute top-1 right-1 bg-white/90 hover:bg-red-500 hover:text-white text-slate-700 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-all shadow-sm z-10';
+                deleteBtn.innerHTML = '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
+                
+                const badge = document.createElement('div');
+                badge.className = 'absolute bottom-1 left-1 bg-red-900/80 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow';
+                badge.textContent = 'Baru';
+
+                div.appendChild(img);
+                div.appendChild(deleteBtn);
+                div.appendChild(badge);
+                gridContainer.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+        renderPreviews();
     }
 </script>
 @endsection

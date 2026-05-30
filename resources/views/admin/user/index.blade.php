@@ -108,7 +108,8 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 @if($item->foto_profile)
-                                <img src="https://ui-avatars.com/api/?name=User&background=FFCDD2&color=D32F2F" alt="{{ $item->name }}"
+                                @php $imgUrl = str_starts_with($item->foto_profile, 'http') ? $item->foto_profile : asset($item->foto_profile); @endphp
+                                <img src="{{ $imgUrl }}" alt="{{ $item->name }}"
                                     class="w-10 h-10 rounded-full object-cover border border-[#e4beba] shrink-0" />
                                 @else
                                 <div class="w-10 h-10 rounded-full bg-[#d32f2f] flex items-center justify-center text-white font-bold text-sm shrink-0 border border-[#af101a]">
@@ -139,13 +140,13 @@
 
                         {{-- Status --}}
                         <td class="px-6 py-4">
-                            @php $status = strtolower($item->status ?? 'active'); @endphp
-                            @if($status === 'active' || $status === 'aktif')
+                            @php $status = strtolower($item->status ?? 'aktif'); @endphp
+                            @if($status === 'aktif')
                             <div class="flex items-center gap-1.5 text-green-600">
                                 <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                                 <span class="text-xs font-bold uppercase">Aktif</span>
                             </div>
-                            @elseif($status === 'suspended')
+                            @elseif($status === 'ditangguhkan' || $status === 'suspended')
                             <div class="flex items-center gap-1.5 text-[#ba1a1a]">
                                 <div class="w-2 h-2 bg-[#ba1a1a] rounded-full"></div>
                                 <span class="text-xs font-bold uppercase">Ditangguhkan</span>
@@ -171,7 +172,7 @@
                                 <a href="{{ route('admin.users.edit', $item->id) }}"
                                     class="p-2 text-[#5b403d] hover:text-[#af101a] hover:bg-red-50 rounded-lg transition-all"
                                     title="Ubah Profil">
-                                    <svg class="text-[20px] inline-block align-middle" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <svg class="text-[20px] inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                                     </svg>
                                 </a>
@@ -182,7 +183,7 @@
                                     <button type="submit"
                                         class="p-2 text-[#5b403d] hover:text-[#ba1a1a] hover:bg-red-50 rounded-lg transition-all"
                                         title="Hapus Pengguna">
-                                        <svg class="text-[20px] inline-block align-middle" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <svg class="text-[20px] inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                         </svg>
                                     </button>
@@ -193,10 +194,10 @@
                     @empty
                     <tr>
                         <td colspan="6" class="px-6 py-12 text-center text-[#5b403d]">
-                            <svg class="text-4xl block mb-2 text-[#e4beba] inline-block align-middle" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <svg class="text-4xl block mb-2 text-[#e4beba] inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                             </svg>
-                            <p class="font-medium">Belum ada data user.</p>
+                            <p class="font-medium">Tidak ada data user.</p>
                         </td>
                     </tr>
                     @endforelse
