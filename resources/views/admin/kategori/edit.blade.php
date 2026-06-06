@@ -6,7 +6,7 @@
     {{-- Page Header --}}
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-            <div class="flex items-center gap-2 text-sm text-[#5b403d] mb-2">
+            <div class="flex items-center gap-2 text-sm text-[#5b403d] dark:text-gray-400 mb-2">
                 <a href="{{ route('admin.kategoris.index') }}" class="hover:text-[#af101a] transition-colors flex items-center gap-1">
                     <svg class="text-base inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -14,21 +14,21 @@
                     Kategori
                 </a>
                 <span class="text-[#e4beba]">/</span>
-                <span class="text-[#1b1c1c] font-semibold">Edit Kategori</span>
+                <span class="text-[#1b1c1c] font-semibold dark:text-white">Edit Kategori</span>
             </div>
-            <h1 class="text-3xl font-extrabold font-['Lexend'] text-[#1b1c1c] tracking-tight">Edit Kategori</h1>
-            <p class="text-[#5b403d] mt-1 text-sm">Ubah informasi kategori <strong>{{ $item->name }}</strong>.</p>
+            <h1 class="text-3xl font-extrabold font-['Lexend'] text-[#1b1c1c] tracking-tight dark:text-white">Edit Kategori</h1>
+            <p class="text-[#5b403d] mt-1 text-sm dark:text-gray-400">Ubah informasi kategori <strong>{{ $item->name }}</strong>.</p>
         </div>
         <div class="flex items-center gap-3">
             <button type="button" onclick="openDeleteModal()"
-                class="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#ffdad6] text-[#ba1a1a] text-sm font-semibold rounded-xl hover:bg-[#ffdad6]/30 transition-colors shadow-sm">
+                class="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#ffdad6] text-[#ba1a1a] text-sm font-semibold rounded-xl hover:bg-[#ffdad6]/30 transition-colors shadow-sm dark:bg-gray-800 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20">
                 <svg class="text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                 </svg>
                 Hapus
             </button>
             <a href="{{ route('admin.kategoris.index') }}"
-                class="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#e4beba] text-[#5b403d] text-sm font-semibold rounded-xl hover:bg-[#f6f3f2] transition-colors shadow-sm">
+                class="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#e4beba] text-[#5b403d] text-sm font-semibold rounded-xl hover:bg-[#f6f3f2] transition-colors shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                 <svg class="text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
@@ -45,6 +45,11 @@
     </div>
 
     {{-- Error Alert --}}
+    @if(session('error'))
+    <div class="mb-6 flex w-full border-l-4 border-red-500 bg-red-50 px-6 py-4 shadow-sm rounded-r-xl">
+        <p class="leading-relaxed text-red-800 font-semibold text-sm">{{ session('error') }}</p>
+    </div>
+    @endif
     @if($errors->any())
     <div class="mb-6 flex w-full border-l-4 border-red-500 bg-red-50 px-6 py-4 shadow-sm rounded-r-xl">
         <div>
@@ -62,12 +67,12 @@
 
         {{-- Form Card (2/3 width) --}}
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-xl border border-[#e4beba]/50 shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b border-[#e4beba]/50 flex items-center gap-3">
+            <div class="bg-white rounded-xl border border-[#e4beba]/50 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                <div class="px-6 py-4 border-b border-[#e4beba]/50 dark:border-gray-700 flex items-center gap-3">
                     <svg class="text-[#af101a] inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                     </svg>
-                    <h2 class="font-['Lexend'] text-base font-semibold text-[#1b1c1c]">Informasi Kategori</h2>
+                    <h2 class="font-['Lexend'] text-base font-semibold text-[#1b1c1c] dark:text-white">Informasi Kategori</h2>
                 </div>
 
                 <form id="kategoriEditForm" action="{{ route('admin.kategoris.update', $item->id) }}" method="POST">
@@ -77,11 +82,11 @@
 
                         {{-- Nama Kategori --}}
                         <div>
-                            <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">
-                                Nama Kategori <span class="text-[#ba1a1a]">*</span>
+                            <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">
+                                Nama Kategori <span class="text-[#ba1a1a] dark:text-red-400">*</span>
                             </label>
-                            <input type="text" id="nameInput" name="name" value="{{ old('name', $item->name) }}" required
-                                class="w-full px-4 py-3 bg-[#f6f3f2] border {{ $errors->has('name') ? 'border-red-400 bg-red-50' : 'border-[#e4beba]' }} rounded-lg text-sm text-[#1b1c1c] focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all"
+                            <input type="text" id="nameInput" name="name" value="{{ old('name', $item->name) }}" required maxlength="20"
+                                class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border {{ $errors->has('name') ? 'border-red-400 bg-red-50 dark:bg-red-900/20 dark:border-red-500' : 'border-[#e4beba] dark:border-gray-600' }} rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 dark:focus:ring-[#af101a]/30 focus:border-[#af101a] outline-none transition-all"
                                 placeholder="Contoh: Lapangan Futsal, Badminton, Tennis..." />
                             @error('name')
                             <p class="text-[#ba1a1a] text-xs mt-1.5 flex items-center gap-1">
@@ -94,13 +99,20 @@
 
                         {{-- Deskripsi (opsional) --}}
                         <div>
-                            <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">
+                            <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Deskripsi
-                                <span class="text-[10px] normal-case font-normal text-[#8f6f6c] ml-1">(opsional)</span>
+                                <span class="text-[10px] normal-case font-normal text-[#8f6f6c] dark:text-gray-500 ml-1">(opsional)</span>
                             </label>
                             <textarea name="description" rows="3"
-                                class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-lg text-sm text-[#1b1c1c] focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none"
+                                class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border {{ $errors->has('description') ? 'border-red-400 bg-red-50 dark:bg-red-900/20 dark:border-red-500' : 'border-[#e4beba] dark:border-gray-600' }} rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 dark:focus:ring-[#af101a]/30 focus:border-[#af101a] outline-none transition-all resize-none"
                                 placeholder="Deskripsi singkat tentang kategori ini...">{{ old('description', $item->description ?? '') }}</textarea>
+                            @error('description')
+                            <p class="text-[#ba1a1a] text-xs mt-1.5 flex items-center gap-1">
+                                <svg class="text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                                </svg>{{ $message }}
+                            </p>
+                            @enderror
                         </div>
 
                         {{-- Preview Slug --}}
@@ -116,14 +128,14 @@
                         </div>
 
                         {{-- Meta Info --}}
-                        <div class="pt-2 border-t border-[#e4beba]/50 grid grid-cols-2 gap-4">
+                        <div class="pt-2 border-t border-[#e4beba]/50 dark:border-gray-700 grid grid-cols-2 gap-4">
                             <div>
-                                <p class="text-xs text-[#5b403d] font-medium">Dibuat pada</p>
-                                <p class="text-sm font-semibold text-[#1b1c1c]">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</p>
+                                <p class="text-xs text-[#5b403d] dark:text-gray-400 font-medium">Dibuat pada</p>
+                                <p class="text-sm font-semibold text-[#1b1c1c] dark:text-white">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</p>
                             </div>
                             <div>
-                                <p class="text-xs text-[#5b403d] font-medium">Terakhir diubah</p>
-                                <p class="text-sm font-semibold text-[#1b1c1c]">{{ \Carbon\Carbon::parse($item->updated_at)->format('d M Y') }}</p>
+                                <p class="text-xs text-[#5b403d] dark:text-gray-400 font-medium">Terakhir diubah</p>
+                                <p class="text-sm font-semibold text-[#1b1c1c] dark:text-white">{{ \Carbon\Carbon::parse($item->updated_at)->format('d M Y') }}</p>
                             </div>
                         </div>
                     </div>
@@ -135,13 +147,13 @@
         <div class="space-y-6">
 
             {{-- Preview Card --}}
-            <div class="bg-white rounded-xl border border-[#e4beba]/50 shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b border-[#e4beba]/50 flex items-center gap-3">
+            <div class="bg-white rounded-xl border border-[#e4beba]/50 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                <div class="px-6 py-4 border-b border-[#e4beba]/50 dark:border-gray-700 flex items-center gap-3">
                     <svg class="text-[#af101a] inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <h2 class="font-['Lexend'] text-base font-semibold text-[#1b1c1c]">Preview Kategori</h2>
+                    <h2 class="font-['Lexend'] text-base font-semibold text-[#1b1c1c] dark:text-white">Preview Kategori</h2>
                 </div>
                 <div class="p-6 flex flex-col items-center text-center">
                     <div class="w-16 h-16 rounded-2xl bg-[#fdcbd0] flex items-center justify-center mb-4 border border-[#e4beba]">
@@ -150,17 +162,17 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z" />
                         </svg>
                     </div>
-                    <p class="font-bold text-[#1b1c1c] text-base" id="previewName">{{ $item->name }}</p>
-                    <code class="text-xs font-mono text-[#af101a] mt-1" id="previewSlug">{{ \Str::slug($item->name) }}</code>
+                    <p class="font-bold text-[#1b1c1c] text-base dark:text-white" id="previewName">{{ $item->name }}</p>
+                    <code class="text-xs font-mono text-[#af101a] dark:text-red-400 mt-1" id="previewSlug">{{ \Str::slug($item->name) }}</code>
                     <div class="mt-3 flex items-center gap-2">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400 text-xs font-bold">
                             <span class="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse"></span>
                             Aktif
                         </span>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-[#e4beba]/50 w-full text-center">
-                        <p class="text-xs text-[#5b403d] font-medium">Total Venue</p>
-                        <p class="text-xl font-black font-['Lexend'] text-[#1b1c1c]">
+                    <div class="mt-4 pt-4 border-t border-[#e4beba]/50 dark:border-gray-700 w-full text-center">
+                        <p class="text-xs text-[#5b403d] dark:text-gray-400 font-medium">Total Venue</p>
+                        <p class="text-xl font-black font-['Lexend'] text-[#1b1c1c] dark:text-white">
                             {{ $item->lapangans_count ?? $item->lapangans()->count() }}
                         </p>
                     </div>
@@ -168,15 +180,15 @@
             </div>
 
             {{-- Danger Zone --}}
-            <div class="bg-white rounded-xl border border-[#ffdad6] shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b border-[#ffdad6] flex items-center gap-3">
-                    <svg class="text-[#ba1a1a] inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <div class="bg-white rounded-xl border border-[#ffdad6] shadow-sm overflow-hidden dark:bg-gray-800 dark:border-red-900/50">
+                <div class="px-6 py-4 border-b border-[#ffdad6] dark:border-red-900/50 flex items-center gap-3">
+                    <svg class="text-[#ba1a1a] dark:text-red-400 inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                     </svg>
-                    <h2 class="font-['Lexend'] text-base font-semibold text-[#ba1a1a]">Zona Berbahaya</h2>
+                    <h2 class="font-['Lexend'] text-base font-semibold text-[#ba1a1a] dark:text-red-400">Zona Berbahaya</h2>
                 </div>
                 <div class="p-5">
-                    <p class="text-xs text-[#5b403d] mb-4">Menghapus kategori ini akan mempengaruhi semua venue yang terhubung.</p>
+                    <p class="text-xs text-[#5b403d] dark:text-gray-400 mb-4">Menghapus kategori ini akan mempengaruhi semua venue yang terhubung.</p>
                     <button type="button" onclick="openDeleteModal()"
                         class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#ffdad6]/50 border border-[#ffdad6] text-[#ba1a1a] text-sm font-bold rounded-lg hover:bg-[#ffdad6] transition-colors">
                         <svg class="text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

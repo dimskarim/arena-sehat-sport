@@ -7,17 +7,17 @@
     <!-- Page Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-            <h2 class="font-['Lexend'] text-[32px] font-semibold tracking-tight leading-[1.3] text-[#1b1c1c]">Manajemen Reservasi</h2>
-            <p class="text-[16px] text-[#5b403d] mt-1">Tinjau dan kelola seluruh reservasi lapangan yang masuk.</p>
+            <h2 class="font-['Lexend'] text-[32px] font-semibold tracking-tight leading-[1.3] text-[#1b1c1c] dark:text-white">Manajemen Reservasi</h2>
+            <p class="text-[16px] text-[#5b403d] dark:text-gray-400 mt-1">Tinjau dan kelola seluruh reservasi lapangan yang masuk.</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.bookings.create') }}" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e4beba] rounded-xl text-[14px] font-semibold hover:bg-[#f6f3f2] transition-colors active:scale-95 text-[#1b1c1c]">
+            <a href="{{ route('admin.bookings.create') }}" class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e4beba] rounded-xl text-[14px] font-semibold hover:bg-[#f6f3f2] transition-colors active:scale-95 text-[#1b1c1c] dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
                 Tambah Reservasi
             </a>
-            <button class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e4beba] rounded-xl text-[14px] font-semibold hover:bg-[#f6f3f2] transition-colors active:scale-95 text-[#1b1c1c]">
+            <button class="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#e4beba] rounded-xl text-[14px] font-semibold hover:bg-[#f6f3f2] transition-colors active:scale-95 text-[#1b1c1c] dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
@@ -51,52 +51,52 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
             </svg>
         </div>
-        <div class="bg-white p-6 rounded-xl border border-[#e4beba] shadow-sm flex flex-col justify-between">
+        <div class="bg-white p-6 rounded-xl border border-[#e4beba] shadow-sm flex flex-col justify-between dark:bg-gray-800 dark:border-gray-700">
             <div>
-                <p class="text-sm text-[#5b403d] font-semibold text-[14px]">Reservasi Aktif</p>
-                <h3 class="text-3xl font-bold text-[#1b1c1c] mt-1">128</h3>
+                <p class="text-sm text-[#5b403d] font-semibold text-[14px] dark:text-gray-400">Reservasi Aktif</p>
+                <h3 class="text-3xl font-bold text-[#1b1c1c] mt-1 dark:text-white">128</h3>
             </div>
             <div class="mt-4 flex -space-x-2">
-                <img alt="User 1" class="w-8 h-8 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=U1&background=FFCDD2&color=D32F2F&size=32" />
-                <img alt="User 2" class="w-8 h-8 rounded-full border-2 border-white" src="https://ui-avatars.com/api/?name=U2&background=E8D5C4&color=795358&size=32" />
-                <div class="w-8 h-8 rounded-full border-2 border-white bg-zinc-100 flex items-center justify-center text-[10px] font-bold text-zinc-600">+120</div>
+                <img alt="User 1" class="w-8 h-8 rounded-full border-2 border-white dark:border-gray-800" src="https://ui-avatars.com/api/?name=U1&background=FFCDD2&color=D32F2F&size=32" />
+                <img alt="User 2" class="w-8 h-8 rounded-full border-2 border-white dark:border-gray-800" src="https://ui-avatars.com/api/?name=U2&background=E8D5C4&color=795358&size=32" />
+                <div class="w-8 h-8 rounded-full border-2 border-white dark:border-gray-800 bg-zinc-100 dark:bg-gray-700 flex items-center justify-center text-[10px] font-bold text-zinc-600 dark:text-gray-300">+120</div>
             </div>
         </div>
-        <div class="bg-white p-6 rounded-xl border border-[#e4beba] shadow-sm flex flex-col justify-between">
+        <div class="bg-white p-6 rounded-xl border border-[#e4beba] shadow-sm flex flex-col justify-between dark:bg-gray-800 dark:border-gray-700">
             <div>
-                <p class="text-sm text-[#5b403d] font-semibold text-[14px]">Menunggu Persetujuan</p>
-                <h3 class="text-3xl font-bold text-[#ba1a1a] mt-1">14</h3>
+                <p class="text-sm text-[#5b403d] font-semibold text-[14px] dark:text-gray-400">Menunggu Persetujuan</p>
+                <h3 class="text-3xl font-bold text-[#ba1a1a] mt-1 dark:text-red-400">14</h3>
             </div>
             <button class="text-[#af101a] font-bold text-sm text-left hover:underline">Lihat semua antrean</button>
         </div>
     </div>
 
     <!-- Filters Section -->
-    <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm overflow-hidden mb-8">
-        <form method="GET" action="{{ route('admin.bookings.index') }}" class="p-6 border-b border-[#e4beba]">
+    <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm overflow-hidden mb-8 dark:bg-gray-800 dark:border-gray-700">
+        <form method="GET" action="{{ route('admin.bookings.index') }}" class="p-6 border-[#e4beba] dark:border-gray-700">
             <div class="flex flex-col lg:flex-row lg:items-center gap-4">
                 <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="relative">
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block">Dari Tanggal</label>
+                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Dari Tanggal</label>
                         <div class="relative">
-                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d] dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                             </svg>
-                            <input name="date_from" value="{{ request('date_from') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all" type="date" />
+                            <input name="date_from" value="{{ request('date_from') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30" type="date" />
                         </div>
                     </div>
                     <div class="relative">
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block">Sampai Tanggal</label>
+                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Sampai Tanggal</label>
                         <div class="relative">
-                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d]" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d] dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                             </svg>
-                            <input name="date_to" value="{{ request('date_to') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all" type="date" />
+                            <input name="date_to" value="{{ request('date_to') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30" type="date" />
                         </div>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block">Status</label>
-                        <select name="status" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer">
+                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Status</label>
+                        <select name="status" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30">
                             <option value="">Semua Status</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="menunggu_verifikasi" {{ request('status') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
@@ -106,8 +106,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block">Venue / Lapangan</label>
-                        <select name="venue_id" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer">
+                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Venue / Lapangan</label>
+                        <select name="venue_id" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30">
                             <option value="">Semua Lapangan</option>
                         </select>
                     </div>
@@ -116,7 +116,7 @@
                     <button type="submit" class="px-6 py-2.5 bg-[#1b1c1c] text-[#fcf9f8] rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95 whitespace-nowrap">
                         Terapkan Filter
                     </button>
-                    <a href="{{ route('admin.bookings.index') }}" class="px-4 py-2.5 bg-white border border-[#e4beba] text-[#5b403d] rounded-xl font-semibold text-sm hover:bg-[#f6f3f2] transition-colors whitespace-nowrap">
+                    <a href="{{ route('admin.bookings.index') }}" class="px-4 py-2.5 bg-white border border-[#e4beba] text-[#5b403d] rounded-xl font-semibold text-sm hover:bg-[#f6f3f2] transition-colors whitespace-nowrap dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                         Reset
                     </a>
                 </div>
@@ -125,10 +125,10 @@
     </div>
 
     <!-- Table Content -->
-    <div class="overflow-x-auto bg-white rounded-t-xl border border-[#e4beba] border-b-0">
+    <div class="overflow-x-auto bg-white rounded-t-xl border border-[#e4beba] border-b-0 dark:bg-gray-800 dark:border-gray-700">
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="bg-[#f0eded] text-[#5b403d] text-xs font-bold uppercase tracking-wider">
+                <tr class="bg-[#f0eded] text-[#5b403d] text-xs font-bold uppercase tracking-wider dark:bg-gray-900/50 dark:text-gray-400">
                     <th class="px-6 py-4">Pengguna</th>
                     <th class="px-6 py-4">Venue/Lapangan</th>
                     <th class="px-6 py-4">Tanggal & Waktu</th>
@@ -137,55 +137,55 @@
                     <th class="px-6 py-4 text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-[#e4beba]">
+            <tbody class="divide-y divide-[#e4beba] dark:divide-gray-700">
                 @forelse($items as $item)
-                <tr class="hover:bg-[#f6f3f2] transition-colors group">
-                    <td class="px-6 py-5 border-b border-[#e4beba]">
+                <tr class="hover:bg-[#f6f3f2] transition-colors group dark:hover:bg-gray-700/20">
+                    <td class="px-6 py-5 border-b border-[#e4beba] dark:border-gray-700">
                         <div class="flex items-center gap-3">
-                            <div class="text-sm font-bold w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center text-[#af101a]">
+                            <div class="text-sm font-bold w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center text-[#af101a] dark:bg-gray-700 dark:text-red-400">
                                 {{ strtoupper(substr($item->user->name ?? 'U', 0, 2)) }}
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-[#1b1c1c]">{{ $item->user->name ?? '-' }}</p>
-                                <p class="text-xs text-[#5b403d]">{{ $item->user->email ?? '-' }}</p>
+                                <p class="text-sm font-bold text-[#1b1c1c] dark:text-white">{{ $item->user->name ?? '-' }}</p>
+                                <p class="text-xs text-[#5b403d] dark:text-gray-400">{{ $item->user->email ?? '-' }}</p>
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-5 border-b border-[#e4beba]">
-                        <p class="text-sm font-medium text-[#1b1c1c]">{{ $item->lapangan->name ?? '-' }}</p>
-                        <p class="text-xs text-[#5b403d]">{{ $item->lapangan->kategori->name ?? 'Venue' }}</p>
+                    <td class="px-6 py-5 border-b border-[#e4beba] dark:border-gray-700">
+                        <p class="text-sm font-medium text-[#1b1c1c] dark:text-white">{{ $item->lapangan->name ?? '-' }}</p>
+                        <p class="text-xs text-[#5b403d] dark:text-gray-400">{{ $item->lapangan->kategori->name ?? 'Venue' }}</p>
                     </td>
-                    <td class="px-6 py-5 border-b border-[#e4beba]">
-                        <p class="text-sm font-medium text-[#1b1c1c]">{{ \Carbon\Carbon::parse($item->tanggal_booking)->format('d M Y') }}</p>
-                        <p class="text-xs text-[#5b403d]">{{ $item->waktu_mulai ?? '' }} - {{ $item->waktu_selesai ?? '' }}</p>
+                    <td class="px-6 py-5 border-b border-[#e4beba] dark:border-gray-700">
+                        <p class="text-sm font-medium text-[#1b1c1c] dark:text-white">{{ \Carbon\Carbon::parse($item->tanggal_booking)->format('d M Y') }}</p>
+                        <p class="text-xs text-[#5b403d] dark:text-gray-400">{{ $item->waktu_mulai ?? '' }} - {{ $item->waktu_selesai ?? '' }}</p>
                     </td>
-                    <td class="px-6 py-5 text-right text-sm font-bold text-[#1b1c1c] border-b border-[#e4beba]">
+                    <td class="px-6 py-5 text-right text-sm font-bold text-[#1b1c1c] border-b border-[#e4beba] dark:border-gray-700 dark:text-white">
                         Rp {{ number_format($item->total_harga ?? 0, 0, ',', '.') }}
                     </td>
-                    <td class="px-6 py-5 border-b border-[#e4beba]">
+                    <td class="px-6 py-5 border-b border-[#e4beba] dark:border-gray-700">
                         @if(strtolower($item->status) == 'paid' || strtolower($item->status) == 'completed' || strtolower($item->status) == 'confirmed')
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400">
                             <span class="w-1.5 h-1.5 rounded-full bg-green-600 mr-1.5"></span>
                             {{ ucfirst($item->status) }}
                         </span>
                         @elseif(strtolower($item->status) == 'pending')
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400">
                             <span class="w-1.5 h-1.5 rounded-full bg-red-600 mr-1.5"></span>
                             Pending
                         </span>
                         @elseif(strtolower($item->status) == 'canceled' || strtolower($item->status) == 'cancelled')
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-zinc-200 text-zinc-600">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-zinc-200 text-zinc-600 dark:bg-gray-700 dark:text-gray-400">
                             <span class="w-1.5 h-1.5 rounded-full bg-zinc-500 mr-1.5"></span>
                             Canceled
                         </span>
                         @else
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                             <span class="w-1.5 h-1.5 rounded-full bg-gray-600 mr-1.5"></span>
                             {{ ucfirst($item->status) }}
                         </span>
                         @endif
                     </td>
-                    <td class="px-6 py-5 text-center border-b border-[#e4beba]">
+                    <td class="px-6 py-5 text-center border-b border-[#e4beba] dark:border-gray-700">
                         <div class="flex items-center justify-center gap-2">
                             <a href="{{ route('admin.bookings.edit', $item->id) }}" class="text-[#af101a] font-bold text-xs hover:bg-[#ffdad6] px-3 py-1.5 rounded-lg transition-colors">
                                 Details
@@ -202,7 +202,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-10 text-center text-[#5b403d]">Belum ada data pemesanan.</td>
+                    <td colspan="6" class="px-6 py-10 text-center text-[#5b403d] dark:text-gray-400">Belum ada data pemesanan.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -210,15 +210,15 @@
     </div>
 
     <!-- Pagination -->
-    <div class="p-6 bg-[#f6f3f2] flex flex-col sm:flex-row items-center justify-between rounded-b-xl border border-[#e4beba] border-t-0">
+    <div class="p-6 bg-[#f6f3f2] flex flex-col sm:flex-row items-center justify-between rounded-b-xl border border-[#e4beba] border-t-0 dark:bg-gray-800/50 dark:border-gray-700">
         <div class="mb-4 sm:mb-0">
             @if(method_exists($items, 'firstItem'))
-            <p class="text-xs font-medium text-[#5b403d]">Menampilkan {{ $items->firstItem() ?? 0 }} hingga {{ $items->lastItem() ?? 0 }} dari {{ $items->total() ?? 0 }} reservasi</p>
+            <p class="text-xs font-medium text-[#5b403d] dark:text-gray-400">Menampilkan {{ $items->firstItem() ?? 0 }} hingga {{ $items->lastItem() ?? 0 }} dari {{ $items->total() ?? 0 }} reservasi</p>
             @endif
         </div>
         <div>
             @if(method_exists($items, 'links'))
-            {{ $items->links() }}
+            {{ $items->links('components.pagination') }}
             @endif
         </div>
     </div>
@@ -227,16 +227,18 @@
     <div class="mt-8">
         <div class="flex items-center justify-between mb-5">
             <div>
-                <h2 class="font-['Lexend'] text-2xl font-bold text-[#1b1c1c]">Laporan Keuangan</h2>
-                <p class="text-sm text-[#5b403d] mt-1">Rekapitulasi pendapatan dari semua pesanan yang berhasil
+                <h2 class="font-['Lexend'] text-2xl font-bold text-[#1b1c1c] dark:text-white">Laporan Keuangan</h2>
+                <p class="text-sm text-[#5b403d] dark:text-gray-400 mt-1">Rekapitulasi pendapatan dari semua pesanan yang berhasil
                     @if(request('date_from') || request('date_to'))
-                        <span class="font-semibold text-[#af101a]">pada rentang tanggal yang dipilih</span>
+                    <span class="font-semibold text-[#af101a] dark:text-red-400">pada rentang tanggal yang dipilih</span>
                     @endif
                 </p>
             </div>
             <a href="{{ route('admin.payments.index') }}" class="flex items-center gap-2 text-sm font-bold text-[#af101a] hover:underline">
                 Verifikasi Pembayaran
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
             </a>
         </div>
 
@@ -265,16 +267,16 @@
                     </div>
                 </div>
                 <svg class="absolute -right-6 -bottom-6 w-48 h-48 opacity-5" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
 
             {{-- Quick Actions --}}
             <div class="space-y-4">
-                <div class="bg-white border border-[#e4beba] rounded-2xl p-6 flex flex-col justify-between h-full">
+                <div class="bg-white border border-[#e4beba] rounded-2xl p-6 flex flex-col justify-between h-full dark:bg-gray-800 dark:border-gray-700">
                     <div>
-                        <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-1">Filter Laporan</h4>
-                        <p class="text-sm text-[#5b403d] mb-4">Gunakan filter tanggal di atas untuk melihat laporan per rentang waktu atau jenis lapangan.</p>
+                        <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-1 dark:text-white">Filter Laporan</h4>
+                        <p class="text-sm text-[#5b403d] mb-4 dark:text-gray-400">Gunakan filter tanggal di atas untuk melihat laporan per rentang waktu atau jenis lapangan.</p>
                     </div>
                     <div class="space-y-2">
                         <a href="{{ route('admin.bookings.index', ['date_from' => now()->startOfMonth()->format('Y-m-d'), 'date_to' => now()->format('Y-m-d')]) }}"
@@ -282,7 +284,7 @@
                             Laporan Bulan Ini
                         </a>
                         <a href="{{ route('admin.bookings.index', ['status' => 'completed']) }}"
-                            class="block text-center px-4 py-2.5 bg-white border border-[#e4beba] text-[#1b1c1c] rounded-xl text-sm font-semibold hover:bg-[#f6f3f2] transition-colors">
+                            class="block text-center px-4 py-2.5 bg-white border border-[#e4beba] text-[#1b1c1c] rounded-xl text-sm font-semibold hover:bg-[#f6f3f2] transition-colors dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700">
                             Semua Reservasi Selesai
                         </a>
                     </div>

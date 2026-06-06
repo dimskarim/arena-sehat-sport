@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html class="light" lang="id">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Masuk - ArenaFlow</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo/logo-icon.svg') }}" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -81,29 +83,59 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .brand-font { font-family: 'Lexend', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Lexend', sans-serif;
+        }
 
         /* Animation Styles */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .animate-fade-up {
             animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
         }
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
-        .delay-400 { animation-delay: 400ms; }
+
+        .delay-100 {
+            animation-delay: 100ms;
+        }
+
+        .delay-200 {
+            animation-delay: 200ms;
+        }
+
+        .delay-300 {
+            animation-delay: 300ms;
+        }
+
+        .delay-400 {
+            animation-delay: 400ms;
+        }
     </style>
 </head>
+
 <body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden">
     <!-- Subtle Background Accents -->
     <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-primary-fixed opacity-20 blur-[120px] -z-10 rounded-full"></div>
     <div class="absolute bottom-0 left-0 w-1/4 h-1/4 bg-secondary-container opacity-30 blur-[100px] -z-10 rounded-full"></div>
-    
+
     <!-- Main Container -->
     <main class="w-full max-w-md px-6 py-12 md:py-24">
         <!-- Header / Logo -->
@@ -115,7 +147,7 @@
             <h1 class="text-3xl font-bold tracking-tight text-on-surface mb-2 font-headline">Selamat Datang Kembali</h1>
             <p class="text-on-surface-variant font-body">Masuk ke akun Anda untuk mulai booking lapangan.</p>
         </div>
-        
+
         <!-- Social Login -->
         <button class="w-full flex items-center justify-center gap-3 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container-low transition-colors py-3.5 px-4 rounded-lg shadow-sm group active:scale-95 transition-transform duration-150 animate-fade-up delay-100">
             <svg class="w-5 h-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -126,14 +158,14 @@
             </svg>
             <span class="text-on-surface font-semibold text-sm">Masuk dengan Google</span>
         </button>
-        
+
         <!-- Divider -->
         <div class="flex items-center my-8 animate-fade-up delay-200">
             <div class="flex-grow border-t border-surface-container-highest"></div>
             <span class="px-4 text-xs font-medium text-on-surface-variant uppercase tracking-widest bg-background">atau masuk dengan email</span>
             <div class="flex-grow border-t border-surface-container-highest"></div>
         </div>
-        
+
         <!-- Form Fields -->
         <form class="space-y-5 animate-fade-up delay-300" action="#" method="POST">
             @csrf
@@ -141,10 +173,10 @@
                 <label class="text-xs font-bold text-on-surface-variant ml-1 uppercase" for="email">Email</label>
                 <div class="relative group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-xl">mail</span>
-                    <input class="w-full bg-white border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="email" name="email" placeholder="nama@email.com" required type="email"/>
+                    <input class="w-full bg-white border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="email" name="email" placeholder="nama@email.com" required type="email" />
                 </div>
             </div>
-            
+
             <div class="space-y-1.5">
                 <div class="flex justify-between items-center px-1">
                     <label class="text-xs font-bold text-on-surface-variant uppercase" for="password">Password</label>
@@ -152,21 +184,21 @@
                 </div>
                 <div class="relative group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-xl">lock</span>
-                    <input class="w-full bg-white border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="password" name="password" placeholder="••••••••" required type="password"/>
+                    <input class="w-full bg-white border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="password" name="password" placeholder="••••••••" required type="password" />
                 </div>
             </div>
-            
+
             <!-- Primary CTA -->
             <button class="w-full bg-primary hover:bg-primary-container text-on-primary font-bold py-4 rounded-lg shadow-lg shadow-primary/10 active:scale-95 transition-all duration-150 mt-4 font-headline uppercase tracking-wide" type="submit">
                 Masuk
             </button>
         </form>
-        
+
         <!-- Secondary Option -->
         <p class="text-center mt-8 text-sm text-on-surface-variant font-body animate-fade-up delay-400">
             Belum punya akun? <a class="text-primary font-bold hover:underline transition-all" href="{{ route('front.register') }}">Daftar sekarang</a>
         </p>
-        
+
         <!-- Footer / OTP Option -->
         <div class="mt-12 pt-8 border-t border-surface-container-highest flex flex-col items-center">
             <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest mb-4">Butuh cara lain?</p>
@@ -179,13 +211,14 @@
             </a>
         </div>
     </main>
-    
+
     <!-- Side Decoration (Hidden on small screens) -->
     <div class="hidden lg:flex fixed left-0 top-0 bottom-0 w-1/4 items-center justify-center p-12 pointer-events-none opacity-20">
-        <img class="w-full h-auto object-contain transform -rotate-12" data-alt="A stylized abstract digital artwork of a tennis court" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyh7bkwSNNlQeH6IB2foG21RxQRr4f9GsI0twt4GyucEoQJQo6wclqPoV9gsG-2HlLdOpjEb2HXnBi8_SOiDHxu4f2-6n0uYmPCGrpoGXvoMYZsSyYHeNu9e_3lJteUQ657J0yS_xxqNPEPvDfC765kSDjPGeUAymIYJDlUatpCQcTdyrHk3WAtHQV4zC76CPHtMb3CB17n6BzFM_7kWPkXZUcrawx7GV5I0mxl1qtaO6eSBRAO3rkBQk388Z8ZdpnK6uZXELz4nA"/>
+        <img class="w-full h-auto object-contain transform -rotate-12" data-alt="A stylized abstract digital artwork of a tennis court" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyh7bkwSNNlQeH6IB2foG21RxQRr4f9GsI0twt4GyucEoQJQo6wclqPoV9gsG-2HlLdOpjEb2HXnBi8_SOiDHxu4f2-6n0uYmPCGrpoGXvoMYZsSyYHeNu9e_3lJteUQ657J0yS_xxqNPEPvDfC765kSDjPGeUAymIYJDlUatpCQcTdyrHk3WAtHQV4zC76CPHtMb3CB17n6BzFM_7kWPkXZUcrawx7GV5I0mxl1qtaO6eSBRAO3rkBQk388Z8ZdpnK6uZXELz4nA" />
     </div>
     <div class="hidden lg:flex fixed right-0 top-0 bottom-0 w-1/4 items-center justify-center p-12 pointer-events-none opacity-20">
-        <img class="w-full h-auto object-contain transform rotate-12" data-alt="An artistic digital rendering of a basketball hoop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMO2bDj4HqmreiWKcg7rh6AEAx3l5hr4I2xuV4sQQBeKSqDggMcKoDGKLyJ7f4wHvuCBWldEV-9X5zdQ1-HOFwg43VMD8ohNY4eND-wR9X4KZmsARK4G718Upe5PvUnbGJHmFxBa2iVMWa0DlzUtqJo1R7QY0HMOc2y-CCrepBZVfoK-QshXttzO7i1OdWX8ziwQdChUGFPI8QF4sQyQengYZRI0gIXXYM4OofJIoq8VdFzmnYfxs4KaW2qKdau5OWm9cIHyoOAFc"/>
+        <img class="w-full h-auto object-contain transform rotate-12" data-alt="An artistic digital rendering of a basketball hoop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMO2bDj4HqmreiWKcg7rh6AEAx3l5hr4I2xuV4sQQBeKSqDggMcKoDGKLyJ7f4wHvuCBWldEV-9X5zdQ1-HOFwg43VMD8ohNY4eND-wR9X4KZmsARK4G718Upe5PvUnbGJHmFxBa2iVMWa0DlzUtqJo1R7QY0HMOc2y-CCrepBZVfoK-QshXttzO7i1OdWX8ziwQdChUGFPI8QF4sQyQengYZRI0gIXXYM4OofJIoq8VdFzmnYfxs4KaW2qKdau5OWm9cIHyoOAFc" />
     </div>
 </body>
+
 </html>
