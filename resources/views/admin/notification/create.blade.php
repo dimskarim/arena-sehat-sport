@@ -8,7 +8,9 @@
         <div>
             <div class="flex items-center gap-2 text-sm text-[#5b403d] mb-2">
                 <a href="{{ route('admin.notifications.index') }}" class="hover:text-[#af101a] transition-colors flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                    </svg>
                     Kembali ke Notifikasi
                 </a>
                 <span class="text-[#e4beba]">/</span>
@@ -18,7 +20,9 @@
             <p class="text-[#5b403d] mt-1 text-sm">Kirim pesan pemberitahuan ke pengguna tertentu.</p>
         </div>
         <button type="submit" form="notifForm" class="flex items-center gap-2 px-6 py-2.5 bg-[#af101a] text-white text-sm font-semibold rounded-xl hover:opacity-90 shadow-lg shadow-red-900/20 active:scale-95 transition-all">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
             Kirim Notifikasi
         </button>
     </div>
@@ -45,7 +49,7 @@
                         <select name="user_id" required class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Pilih Pengguna —</option>
                             @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
+                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
                             @endforeach
                         </select>
                         @error('user_id') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
@@ -57,9 +61,9 @@
                         <select name="booking_id" class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Tidak terkait booking tertentu —</option>
                             @foreach($bookings as $booking)
-                                <option value="{{ $booking->id }}" {{ old('booking_id') == $booking->id ? 'selected' : '' }}>
-                                    #{{ $booking->id }} — {{ optional($booking->user)->name ?? 'User' }} — {{ optional($booking->lapangan)->name ?? 'Lapangan' }} — {{ ucfirst($booking->status) }}
-                                </option>
+                            <option value="{{ $booking->id }}" {{ old('booking_id') == $booking->id ? 'selected' : '' }}>
+                                #{{ $booking->id }} — {{ optional($booking->user)->name ?? 'User' }} — {{ optional($booking->lapangan)->name ?? 'Lapangan' }} — {{ ucfirst($booking->status) }}
+                            </option>
                             @endforeach
                         </select>
                         @error('booking_id') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
@@ -111,7 +115,9 @@
         <div class="space-y-6">
             <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm p-6">
                 <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-[#d32f2f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg class="w-5 h-5 text-[#d32f2f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                     Tips Notifikasi
                 </h4>
                 <ul class="space-y-3 text-sm text-[#5b403d]">
@@ -130,9 +136,9 @@
 </div>
 
 <script>
-function setTemplate(judul, pesan) {
-    document.querySelector('[name="deskripsi"]').value = judul;
-    document.querySelector('[name="pesan"]').value = pesan;
-}
+    function setTemplate(judul, pesan) {
+        document.querySelector('[name="deskripsi"]').value = judul;
+        document.querySelector('[name="pesan"]').value = pesan;
+    }
 </script>
 @endsection

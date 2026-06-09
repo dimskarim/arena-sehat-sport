@@ -60,12 +60,18 @@ class LapanganController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $this->service->deleteLapangan($id);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Data berhasil dihapus.']);
+            }
             return redirect()->route('admin.lapangans.index')->with('success', 'Data berhasil dihapus.');
         } catch (Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], 400);
+            }
             return back()->with('error', $e->getMessage());
         }
     }

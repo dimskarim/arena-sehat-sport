@@ -18,27 +18,27 @@ class TimeController extends Controller
         $opQuery = WaktuOperasional::with('lapangan')->latest();
         if ($request->lapangan_id) $opQuery->where('lapangan_id', $request->lapangan_id);
         if ($request->hari)        $opQuery->where('hari', $request->hari);
-        $oprationalWaktus = $opQuery->paginate(8)->withQueryString();
+        $oprationalWaktus = $opQuery->paginate(8, ['*'], 'op_page')->withQueryString();
 
-        // Slot Waktu (all) — used for stats summary + cards grid
-        $slotQuery = SlotWaktu::with('waktuOperasional.lapangan')->latest();
-        if ($request->lapangan_id) {
-            $slotQuery->whereHas('waktuOperasional', function ($q) use ($request) {
-                $q->where('lapangan_id', $request->lapangan_id);
+        // Base query for slots
+        $slotQueryBase = SlotWaktu::with('waktuOperasional.lapangan')->latest();
+        if ($request->lapangan_id || $request->hari) {
+            $slotQueryBase->whereHas('waktuOperasional', function ($q) use ($request) {
+                if ($request->lapangan_id) $q->where('lapangan_id', $request->lapangan_id);
+                if ($request->hari) $q->where('hari', $request->hari);
             });
         }
-        $slotAll = $slotQuery->get();
+
+        // Slot Waktu (all) — used for stats summary
+        $slotAll = (clone $slotQueryBase)->get();
+
+        // Slot Waktu — paginated for the cards grid
+        $slotCards = (clone $slotQueryBase)->paginate(12, ['*'], 'card_page')->withQueryString();
 
         // Slot Waktu — paginated for the detail table
-        $slotQuery2 = SlotWaktu::with('waktuOperasional.lapangan')->latest();
-        if ($request->lapangan_id) {
-            $slotQuery2->whereHas('waktuOperasional', function ($q) use ($request) {
-                $q->where('lapangan_id', $request->lapangan_id);
-            });
-        }
-        $slotWaktus = $slotQuery2->paginate(12)->withQueryString();
+        $slotWaktus = (clone $slotQueryBase)->paginate(12, ['*'], 'table_page')->withQueryString();
 
-        return view('admin.time.index', compact('lapangans', 'oprationalWaktus', 'slotAll', 'slotWaktus'))
+        return view('admin.time.index', compact('lapangans', 'oprationalWaktus', 'slotAll', 'slotCards', 'slotWaktus'))
             ->with('title', 'Manajemen Operasional Waktu');
     }
 }

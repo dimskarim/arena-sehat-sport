@@ -58,12 +58,18 @@ class KategoriController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $this->service->delete($id);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Kategori berhasil dihapus.']);
+            }
             return redirect()->route('admin.kategoris.index')->with('success', 'Kategori berhasil dihapus.');
         } catch (Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], 400);
+            }
             return back()->with('error', $e->getMessage());
         }
     }

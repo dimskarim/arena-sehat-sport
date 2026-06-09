@@ -53,13 +53,9 @@
                 </option>
                 @endforeach
             </select>
-            <select name="hari" onchange="this.form.submit()"
-                class="py-2 px-3 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 dark:text-white transition-all text-sm outline-none">
-                <option value="">Semua Hari</option>
-                @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $h)
-                <option value="{{ $h }}" {{ request('hari') == $h ? 'selected' : '' }}>{{ $h }}</option>
-                @endforeach
-            </select>
+            @if(request('hari'))
+                <input type="hidden" name="hari" value="{{ request('hari') }}">
+            @endif
             @if(request('lapangan_id') || request('hari'))
             <a href="{{ url()->current() }}" class="text-xs text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 flex items-center gap-1 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -69,6 +65,14 @@
             @endif
         </form>
     </div>
+
+    @if(request('lapangan_id'))
+    <div class="mb-6">
+        <h2 class="text-xl font-bold text-slate-800 dark:text-white">
+            Menampilkan Jadwal Lapangan: {{ $lapangans->firstWhere('id', request('lapangan_id'))?->name ?? 'Semua Lapangan' }}
+        </h2>
+    </div>
+    @endif
 
     {{-- Top Grid: Jam Operasional Table + Stats --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -246,19 +250,33 @@
                     </p>
                 </div>
             </div>
-            <a href="{{ route('admin.slot-waktus.create') }}"
-                class="flex items-center gap-2 px-5 py-2.5 bg-[#af101a] dark:bg-red-600 text-white text-sm font-bold rounded-xl hover:opacity-90 dark:hover:bg-red-700 transition-all shadow-md shadow-red-700/20 active:scale-95 self-start sm:self-auto">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Tambah Slot
-            </a>
+            <div class="flex flex-wrap items-center gap-3">
+                <form method="GET" action="{{ url()->current() }}" class="flex items-center">
+                    @if(request('lapangan_id'))
+                        <input type="hidden" name="lapangan_id" value="{{ request('lapangan_id') }}">
+                    @endif
+                    <select name="hari" onchange="this.form.submit()"
+                        class="py-2.5 px-4 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 dark:text-white transition-all text-sm outline-none font-semibold shadow-sm">
+                        <option value="">Filter Hari</option>
+                        @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $h)
+                        <option value="{{ $h }}" {{ request('hari') == $h ? 'selected' : '' }}>{{ $h }}</option>
+                        @endforeach
+                    </select>
+                </form>
+                <a href="{{ route('admin.slot-waktus.create') }}"
+                    class="flex items-center gap-2 px-5 py-2.5 bg-[#af101a] dark:bg-red-600 text-white text-sm font-bold rounded-xl hover:opacity-90 dark:hover:bg-red-700 transition-all shadow-md shadow-red-700/20 active:scale-95 self-start sm:self-auto">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Tambah Slot
+                </a>
+            </div>
         </div>
 
         <div class="p-6">
-            @if($slotWaktus->count() > 0)
+            @if($slotCards->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                @foreach($slotWaktus as $slot)
+                @foreach($slotCards as $slot)
                 @php
                 $st = strtolower($slot->status ?? 'aktif');
                 $isMaintenance = in_array($st, ['pemeliharaan', 'maintenance']);
@@ -278,13 +296,16 @@
                         </span>
                         @if($isMaintenance)
                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#af101a] dark:bg-red-600 text-white">Pemeliharaan</span>
-                        @elseif($isActive)
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Aktif</span>
                         @else
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400">Nonaktif</span>
+                        <button type="button" onclick="toggleSlotStatus({{ $slot->id }})" id="statusBtn-{{ $slot->id }}"
+                            class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors
+                            {{ $isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-red-100 hover:text-red-700' : 'bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400 hover:bg-green-100 hover:text-green-700' }}">
+                            {{ $isActive ? 'Aktif' : 'Nonaktif' }}
+                        </button>
                         @endif
                     </div>
-                    <p class="text-xs text-slate-400 dark:text-gray-500 mb-3 truncate">{{ optional($slot->lapangan)->name ?? '-' }}</p>
+                    <p class="text-xs text-slate-400 dark:text-gray-500 mb-1 truncate">{{ optional(optional($slot->waktuOperasional)->lapangan)->name ?? '-' }}</p>
+                    <p class="text-[10px] font-bold text-blue-600 dark:text-blue-400 mb-3 truncate">{{ optional($slot->waktuOperasional)->hari ?? '-' }}</p>
                     <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-gray-700">
                         <div class="flex items-center gap-1">
                             <a href="{{ route('admin.slot-waktus.edit', $slot->id) }}"
@@ -317,9 +338,9 @@
                 </a>
             </div>
 
-            @if(method_exists($slotWaktus, 'links'))
+            @if(method_exists($slotCards, 'links'))
             <div class="mt-6">
-                {{ $slotWaktus->links('components.pagination') }}
+                {{ $slotCards->links('components.pagination') }}
             </div>
             @endif
 
@@ -360,9 +381,14 @@
                             @forelse($slotWaktus as $slot)
                             <tr class="hover:bg-slate-50 dark:hover:bg-gray-700/20 transition-colors">
                                 <td class="px-5 py-3 text-xs text-slate-400 dark:text-gray-500 font-mono">SLT-{{ str_pad($slot->id, 4, '0', STR_PAD_LEFT) }}</td>
-                                <td class="px-5 py-3 text-sm font-semibold text-slate-800 dark:text-white">{{ optional($slot->lapangan)->name ?? '-' }}</td>
+                                <td class="px-5 py-3 text-sm font-semibold text-slate-800 dark:text-white">{{ optional(optional($slot->waktuOperasional)->lapangan)->name ?? '-' }}</td>
                                 <td class="px-5 py-3">
+                                    @if($slot->waktuOperasional)
+                                    <span class="px-2.5 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-bold mr-1">{{ $slot->waktuOperasional->hari }}</span>
+                                    <span class="text-xs font-mono text-slate-500 dark:text-gray-400">{{ substr($slot->waktuOperasional->waktu_buka, 0, 5) }} - {{ substr($slot->waktuOperasional->waktu_tutup, 0, 5) }}</span>
+                                    @else
                                     <span class="text-xs text-slate-400 dark:text-gray-500">—</span>
+                                    @endif
                                 </td>
                                 <td class="px-5 py-3 text-sm font-mono text-slate-600 dark:text-gray-400">{{ substr($slot->waktu_mulai ?? '--:--', 0, 5) }}</td>
                                 <td class="px-5 py-3 text-sm font-mono text-slate-600 dark:text-gray-400">{{ substr($slot->waktu_selesai ?? '--:--', 0, 5) }}</td>
@@ -420,4 +446,45 @@
             </div>
 
         </div>
-        @endsection
+
+<script>
+    async function toggleSlotStatus(id) {
+        const btn = document.getElementById(`statusBtn-${id}`);
+        if(!btn) return;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(`{{ url('admin/slot-waktus') }}/${id}/toggle-status`, {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if(response.ok && data.success) {
+                if(data.status === 'aktif') {
+                    btn.className = "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-red-100 hover:text-red-700";
+                    btn.innerHTML = "Aktif";
+                } else {
+                    btn.className = "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400 hover:bg-green-100 hover:text-green-700";
+                    btn.innerHTML = "Nonaktif";
+                }
+            } else {
+                alert(data.message || 'Gagal mengubah status');
+                btn.innerHTML = originalText;
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Terjadi kesalahan koneksi.');
+            btn.innerHTML = originalText;
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
+
+@endsection

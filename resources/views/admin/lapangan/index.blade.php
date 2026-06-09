@@ -168,15 +168,12 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                 </a>
-                                <form action="{{ route('admin.lapangans.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus lapangan ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="p-2 text-slate-400 hover:text-red-700 hover:bg-red-50 rounded-lg" title="Hapus">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </form>
+                                <button type="button" onclick="openDeleteModal('{{ route('admin.lapangans.destroy', $item->id) }}', '{{ addslashes($item->name) }}')"
+                                    class="p-2 text-slate-400 hover:text-red-700 hover:bg-red-50 rounded-lg" title="Hapus">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -238,9 +235,106 @@
         </div>
     </div>
 
+    {{-- Modal Konfirmasi Hapus --}}
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+        :class="{
+            'xl:pl-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+            'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+            'pl-0': $store.sidebar.isMobileOpen
+        }">
+        <div class="w-1/3 transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all scale-95 opacity-0 dark:bg-gray-800 dark:border dark:border-gray-700" id="deleteModalContent">
+            <div class="flex items-center justify-center mb-5">
+                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                    <svg class="text-[#af101a] dark:text-red-400 text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-center text-xl font-bold text-slate-900 mb-2 dark:text-white">Hapus Lapangan Ini?</h3>
+            <p class="text-center text-sm text-slate-500 mb-6 dark:text-gray-400">
+                Apakah Anda yakin ingin menghapus lapangan <strong id="deleteItemName"></strong> secara permanen? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div id="deleteFeedback" class="hidden mb-4 rounded-lg p-4 text-sm"></div>
+            <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
+                <button type="button" onclick="closeDeleteModal()" class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">
+                    Batal
+                </button>
+                <button type="button" id="confirmDeleteBtn" onclick="executeDelete()" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-lg bg-[#af101a] px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteModalContent = document.getElementById('deleteModalContent');
+    const deleteFeedback = document.getElementById('deleteFeedback');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const deleteItemName = document.getElementById('deleteItemName');
+    let currentDeleteUrl = '';
+
+    function openDeleteModal(url, name) {
+        currentDeleteUrl = url;
+        deleteItemName.textContent = name;
+
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('flex');
+        void deleteModal.offsetWidth;
+        deleteModal.classList.remove('opacity-0');
+        deleteModalContent.classList.remove('scale-95', 'opacity-0');
+        deleteModalContent.classList.add('scale-100', 'opacity-100');
+        deleteFeedback.className = 'hidden mb-4 rounded-lg p-4 text-sm';
+    }
+
+    function closeDeleteModal() {
+        deleteModal.classList.add('opacity-0');
+        deleteModalContent.classList.remove('scale-100', 'opacity-100');
+        deleteModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        }, 300);
+    }
+
+    async function executeDelete() {
+        if (!currentDeleteUrl) return;
+
+        const originalBtnText = confirmDeleteBtn.innerHTML;
+        confirmDeleteBtn.disabled = true;
+        confirmDeleteBtn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white inline-block align-middle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Processing...`;
+
+        try {
+            const response = await fetch(currentDeleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json().catch(() => ({}));
+            if (response.ok) {
+                deleteFeedback.classList.remove('hidden');
+                deleteFeedback.classList.add('bg-green-50', 'text-green-800', 'border', 'border-green-200');
+                deleteFeedback.innerHTML = '<p class="flex items-center gap-2">✅ Berhasil dihapus. Mengalihkan...</p>';
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                throw new Error(data.message || 'Terjadi kesalahan saat menghapus data.');
+            }
+        } catch (error) {
+            deleteFeedback.classList.remove('hidden');
+            deleteFeedback.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+            deleteFeedback.innerHTML = `<p class="flex items-center gap-2">❌ ${error.message}</p>`;
+            confirmDeleteBtn.disabled = false;
+            confirmDeleteBtn.innerHTML = originalBtnText;
+        }
+    }
+
     document.getElementById('searchInput').addEventListener('keyup', function() {
         let filter = this.value.toLowerCase();
         let rows = document.querySelectorAll('tbody tr');

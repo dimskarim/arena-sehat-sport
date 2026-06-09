@@ -46,6 +46,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('notifications', NotificationController::class);
         Route::resource('bookings', BookingController::class);
         Route::resource('slot-waktus', SlotWaktuController::class);
+        Route::patch('slot-waktus/{id}/toggle-status', [SlotWaktuController::class, 'toggleStatus'])->name('slot-waktus.toggle-status');
         Route::resource('oprational-waktus', OprationalWaktuController::class);
         Route::get('/time', [TimeController::class, 'index'])->name('time.index');
     });

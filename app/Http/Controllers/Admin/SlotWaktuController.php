@@ -69,4 +69,24 @@ class SlotWaktuController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+    public function toggleStatus(Request $request, $id)
+    {
+        try {
+            $slot = \App\Models\SlotWaktu::findOrFail($id);
+            // Toggle between 'aktif' and 'nonaktif'
+            $slot->status = $slot->status === 'aktif' ? 'nonaktif' : 'aktif';
+            $slot->save();
+
+            return response()->json([
+                'success' => true,
+                'status' => $slot->status,
+                'message' => 'Status slot berhasil diubah.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengubah status.'
+            ], 500);
+        }
+    }
 }
