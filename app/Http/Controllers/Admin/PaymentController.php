@@ -19,7 +19,7 @@ class PaymentController extends Controller
 
     public function index(Request $request)
     {
-        $items = $this->service->getAll($request->query('status'), $request->query('booking_id'), $request->query('per_page', 10));
+        $items = $this->service->getAll($request->query('status'), $request->query('booking_id'), $request->query('per_page', 10), $request->query('search'));
         return view('admin.payment.index', compact('items'), ['title' => 'Pembayaran']);
     }
 

@@ -73,30 +73,21 @@
 
     <!-- Filters Section -->
     <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm overflow-hidden mb-8 dark:bg-gray-800 dark:border-gray-700">
-        <form method="GET" action="{{ route('admin.bookings.index') }}" class="p-6 border-[#e4beba] dark:border-gray-700">
+        <form method="GET" action="{{ route('admin.bookings.index') }}" id="filterForm" class="p-6 border-[#e4beba] dark:border-gray-700">
             <div class="flex flex-col lg:flex-row lg:items-center gap-4">
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="relative">
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Dari Tanggal</label>
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="relative lg:col-span-2">
+                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Cari Pengguna atau Lapangan</label>
                         <div class="relative">
                             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d] dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                             </svg>
-                            <input name="date_from" value="{{ request('date_from') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30" type="date" />
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Sampai Tanggal</label>
-                        <div class="relative">
-                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5b403d] dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                            </svg>
-                            <input name="date_to" value="{{ request('date_to') }}" class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30" type="date" />
+                            <input type="text" name="search" id="searchInput" value="{{ request('search') }}" placeholder="Ketik nama pengguna atau lapangan..." class="w-full pl-10 pr-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30" />
                         </div>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Status</label>
-                        <select name="status" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30">
+                        <select name="status" id="statusFilter" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30">
                             <option value="">Semua Status</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="menunggu_verifikasi" {{ request('status') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
@@ -105,16 +96,10 @@
                             <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="text-xs font-bold text-[#5b403d] mb-1.5 block dark:text-gray-400">Venue / Lapangan</label>
-                        <select name="venue_id" class="w-full px-4 py-2.5 bg-[#fcf9f8] rounded-xl border border-[#e4beba] text-sm focus:border-[#af101a] focus:ring-0 transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-[#af101a]/30">
-                            <option value="">Semua Lapangan</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="lg:pt-6 flex gap-2">
-                    <button type="submit" class="px-6 py-2.5 bg-[#1b1c1c] text-[#fcf9f8] rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95 whitespace-nowrap">
-                        Terapkan Filter
+                    <button type="submit" class="px-6 py-2.5 bg-[#1b1c1c] text-[#fcf9f8] rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95 whitespace-nowrap hidden lg:block">
+                        Cari
                     </button>
                     <a href="{{ route('admin.bookings.index') }}" class="px-4 py-2.5 bg-white border border-[#e4beba] text-[#5b403d] rounded-xl font-semibold text-sm hover:bg-[#f6f3f2] transition-colors whitespace-nowrap dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                         Reset
@@ -123,6 +108,8 @@
             </div>
         </form>
     </div>
+
+    <div id="booking-table-container">
 
     <!-- Table Content -->
     <div class="overflow-x-auto bg-white rounded-t-xl border border-[#e4beba] border-b-0 dark:bg-gray-800 dark:border-gray-700">
@@ -190,13 +177,9 @@
                             <a href="{{ route('admin.bookings.edit', $item->id) }}" class="text-[#af101a] font-bold text-xs hover:bg-[#ffdad6] px-3 py-1.5 rounded-lg transition-colors">
                                 Details
                             </a>
-                            <form action="{{ route('admin.bookings.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 font-bold text-xs hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
-                                    Hapus
-                                </button>
-                            </form>
+                            <button type="button" onclick="openDeleteModal('{{ route('admin.bookings.destroy', $item->id) }}', 'Reservasi dari {{ addslashes($item->user->name ?? '-') }}')" class="text-red-600 font-bold text-xs hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
+                                Hapus
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -221,6 +204,7 @@
             {{ $items->links('components.pagination') }}
             @endif
         </div>
+    </div>
     </div>
 
     <!-- Laporan Keuangan Section -->
@@ -293,4 +277,188 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Konfirmasi Hapus --}}
+<div id="deleteModal" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 font-['Inter'] text-[#1b1c1c] dark:text-white"
+    :class="{
+            'xl:pl-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+            'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+            'pl-0': $store.sidebar.isMobileOpen
+        }">
+    <div class="w-fit transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all scale-95 opacity-0 border border-[#e4beba] dark:border-gray-700" id="deleteModalContent">
+        <div class="flex items-center justify-center mb-5">
+            <div class="flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                <svg class="text-[#af101a] dark:text-red-400 text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                </svg>
+            </div>
+        </div>
+        <h3 class="text-center text-xl font-bold text-[#1b1c1c] dark:text-white mb-2">Hapus Data Ini?</h3>
+        <p class="text-center text-sm text-[#5b403d] dark:text-gray-400 mb-6">
+            Apakah Anda yakin ingin menghapus <strong id="deleteItemName"></strong>? Tindakan ini tidak dapat dibatalkan.
+        </p>
+        <div id="deleteFeedback" class="hidden mb-4 rounded-lg p-4 text-sm"></div>
+        <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
+            <button type="button" onclick="closeDeleteModal()"
+                class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-2.5 text-sm font-semibold text-[#5b403d] dark:text-gray-300 hover:bg-[#f6f3f2] dark:hover:bg-gray-700 transition-colors">
+                Batal
+            </button>
+            <button type="button" id="confirmDeleteBtn" onclick="executeDelete()"
+                class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-lg bg-[#af101a] dark:bg-red-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-800 dark:hover:bg-red-700 transition-colors">
+                Ya, Hapus
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteModal, deleteModalContent, deleteFeedback, confirmDeleteBtn, deleteItemName;
+    let deleteUrl = '';
+
+    function initDeleteModal() {
+        deleteModal = document.getElementById('deleteModal');
+        deleteModalContent = document.getElementById('deleteModalContent');
+        deleteFeedback = document.getElementById('deleteFeedback');
+        confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        deleteItemName = document.getElementById('deleteItemName');
+    }
+
+    function openDeleteModal(url, name) {
+        if (!deleteModal) initDeleteModal();
+        deleteUrl = url;
+        deleteItemName.textContent = name || 'Data';
+
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('flex');
+        void deleteModal.offsetWidth;
+        deleteModal.classList.remove('opacity-0');
+        deleteModalContent.classList.remove('scale-95', 'opacity-0');
+        deleteModalContent.classList.add('scale-100', 'opacity-100');
+        deleteFeedback.className = 'hidden mb-4 rounded-lg p-4 text-sm';
+    }
+
+    function closeDeleteModal() {
+        if (!deleteModal) return;
+        deleteModal.classList.add('opacity-0');
+        deleteModalContent.classList.remove('scale-100', 'opacity-100');
+        deleteModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        }, 300);
+    }
+
+    async function executeDelete() {
+        if (!deleteUrl) return;
+
+        const originalBtnText = confirmDeleteBtn.innerHTML;
+        confirmDeleteBtn.disabled = true;
+        confirmDeleteBtn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
+
+        try {
+            const response = await fetch(deleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                deleteFeedback.classList.remove('hidden');
+                deleteFeedback.classList.add('bg-green-50', 'text-green-800', 'border', 'border-green-200');
+                deleteFeedback.innerHTML = '<p class="flex items-center gap-2">✅ Berhasil dihapus. Merefresh...</p>';
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                throw new Error(data.message || 'Terjadi kesalahan saat menghapus data.');
+            }
+        } catch (error) {
+            deleteFeedback.classList.remove('hidden');
+            deleteFeedback.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+            deleteFeedback.innerHTML = `<p class="flex items-center gap-2">❌ ${error.message}</p>`;
+            confirmDeleteBtn.disabled = false;
+            confirmDeleteBtn.innerHTML = originalBtnText;
+        }
+    }
+</script>
+
+<script>
+    // AJAX Filter & Pagination
+    async function fetchBookingData(url) {
+        const container = document.getElementById('booking-table-container');
+        if (!container) return;
+        
+        container.style.opacity = '0.5';
+        container.style.pointerEvents = 'none';
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            const html = await response.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newContainer = doc.getElementById('booking-table-container');
+
+            if (newContainer) {
+                container.innerHTML = newContainer.innerHTML;
+            }
+            window.history.pushState({}, '', url);
+        } catch (error) {
+            console.error('AJAX Error:', error);
+        } finally {
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Event Delegation for filtering
+    let searchTimeout;
+    document.addEventListener('input', function(e) {
+        if (e.target.id === 'searchInput') {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const form = document.getElementById('filterForm');
+                if (form) {
+                    const url = new URL(form.action);
+                    const formData = new FormData(form);
+                    formData.forEach((value, key) => {
+                        if (value) url.searchParams.append(key, value);
+                    });
+                    fetchBookingData(url.toString());
+                }
+            }, 300);
+        }
+    });
+
+    document.addEventListener('change', function(e) {
+        if (e.target.id === 'statusFilter') {
+            const form = document.getElementById('filterForm');
+            if (form) {
+                const url = new URL(form.action);
+                const formData = new FormData(form);
+                formData.forEach((value, key) => {
+                    if (value) url.searchParams.append(key, value);
+                });
+                fetchBookingData(url.toString());
+            }
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        // Intercept Pagination Links
+        const link = e.target.closest('#booking-table-container nav a');
+        if (link) {
+            e.preventDefault();
+            fetchBookingData(link.href);
+        }
+    });
+</script>
 @endsection

@@ -8,10 +8,12 @@ class SlotWaktuService
 {
     public function getAll($lapanganId = null, $perPage = 10)
     {
-        $query = SlotWaktu::with('lapangan');
+        $query = SlotWaktu::with('waktuOperasional.lapangan');
 
         if ($lapanganId) {
-            $query->where('lapangan_id', $lapanganId);
+            $query->whereHas('waktuOperasional', function($q) use ($lapanganId) {
+                $q->where('lapangan_id', $lapanganId);
+            });
         }
 
         return $query->latest()->paginate($perPage);
@@ -24,7 +26,7 @@ class SlotWaktuService
 
     public function getById($id)
     {
-        return SlotWaktu::with('lapangan')->findOrFail($id);
+        return SlotWaktu::with('waktuOperasional.lapangan')->findOrFail($id);
     }
 
     public function update($id, array $data)

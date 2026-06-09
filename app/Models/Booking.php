@@ -57,4 +57,17 @@ class Booking extends Model
             $query->whereDate('tanggal_booking', $date);
         }
     }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($q2) use ($search) {
+                    $q2->where('name', 'like', '%' . $search . '%');
+                })->orWhereHas('lapangan', function ($q2) use ($search) {
+                    $q2->where('name', 'like', '%' . $search . '%');
+                });
+            });
+        }
+    }
 }

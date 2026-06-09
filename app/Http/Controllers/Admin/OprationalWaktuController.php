@@ -19,8 +19,7 @@ class OprationalWaktuController extends Controller
 
     public function index(Request $request)
     {
-        $items = $this->service->getAll($request->query('lapangan_id'), $request->query('per_page', 10));
-        return view('admin.oprational_waktu.index', compact('items'), ['title' => 'Jam Operasional']);
+        return redirect()->route('admin.time.index');
     }
 
     public function create()
@@ -33,7 +32,7 @@ class OprationalWaktuController extends Controller
     {
         try {
             $this->service->create($request->validated());
-            return redirect()->route('admin.oprational-waktus.index')->with('success', 'Jam Operasional berhasil ditambahkan.');
+            return redirect()->route('admin.time.index')->with('success', 'Jam Operasional berhasil ditambahkan.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -46,7 +45,7 @@ class OprationalWaktuController extends Controller
             $lapangans = \App\Models\Lapangan::all();
             return view('admin.oprational_waktu.edit', compact('item', 'lapangans'), ['title' => 'Edit Jam Operasional']);
         } catch (Exception $e) {
-            return redirect()->route('admin.oprational-waktus.index')->with('error', 'Data tidak ditemukan.');
+            return redirect()->route('admin.time.index')->with('error', 'Data tidak ditemukan.');
         }
     }
 
@@ -54,7 +53,7 @@ class OprationalWaktuController extends Controller
     {
         try {
             $this->service->update($id, $request->validated());
-            return redirect()->route('admin.oprational-waktus.index')->with('success', 'Jam Operasional berhasil diperbarui.');
+            return redirect()->route('admin.time.index')->with('success', 'Jam Operasional berhasil diperbarui.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -64,7 +63,7 @@ class OprationalWaktuController extends Controller
     {
         try {
             $this->service->delete($id);
-            return redirect()->route('admin.oprational-waktus.index')->with('success', 'Data berhasil dihapus.');
+            return redirect()->route('admin.time.index')->with('success', 'Data berhasil dihapus.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }

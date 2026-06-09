@@ -7,13 +7,19 @@ use Illuminate\Support\Facades\Storage;
 
 class PaymentService
 {
-    public function getAll($status = null, $bookingId = null, $perPage = 10)
+    public function getAll($status = null, $bookingId = null, $perPage = 10, $search = null)
     {
-        return Payment::with(['booking.user', 'booking.lapangan'])
+        $query = Payment::with(['booking.user', 'booking.lapangan'])
             ->filterStatus($status)
-            ->filterBooking($bookingId)
-            ->latest()
-            ->paginate($perPage);
+            ->filterBooking($bookingId);
+
+        if ($search) {
+            $query->whereHas('booking.user', function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%');
+            });
+        }
+
+        return $query->latest()->paginate($perPage)->withQueryString();
     }
 
     public function create(array $data, $file = null)

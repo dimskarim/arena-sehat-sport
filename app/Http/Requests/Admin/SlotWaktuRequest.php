@@ -14,7 +14,7 @@ class SlotWaktuRequest extends FormRequest
     public function rules()
     {
         return [
-            'lapangan_id' => 'required|exists:lapangans,id',
+            'waktu_operasional_id' => 'required|exists:waktu_operasionals,id',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_selesai' => 'required|date_format:H:i|after:waktu_mulai',
         ];
@@ -23,8 +23,8 @@ class SlotWaktuRequest extends FormRequest
     public function messages()
     {
         return [
-            'lapangan_id.required' => 'Lapangan wajib dipilih',
-            'lapangan_id.exists' => 'Lapangan tidak ditemukan',
+            'waktu_operasional_id.required' => 'Hari Operasional Lapangan wajib dipilih',
+            'waktu_operasional_id.exists' => 'Hari Operasional tidak valid',
             'waktu_mulai.required' => 'Waktu mulai wajib diisi',
             'waktu_mulai.date_format' => 'Format waktu mulai harus HH:mm',
             'waktu_selesai.required' => 'Waktu selesai wajib diisi',

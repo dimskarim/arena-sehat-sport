@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-[1280px] mx-auto font-['Inter'] text-slate-900 dark:text-white">
+<div id="time-content-container" class="max-w-[1280px] mx-auto font-['Inter'] text-slate-900 dark:text-white transition-opacity duration-300 relative">
 
     {{-- Page Header --}}
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-2 mb-8">
@@ -44,7 +44,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
             </svg>
             <span class="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Filter:</span>
-            <select name="lapangan_id" onchange="this.form.submit()"
+            <select name="lapangan_id" id="lapanganFilter"
                 class="py-2 px-3 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 dark:text-white transition-all text-sm outline-none">
                 <option value="">Semua Lapangan</option>
                 @foreach($lapangans as $lap)
@@ -54,7 +54,7 @@
                 @endforeach
             </select>
             @if(request('hari'))
-                <input type="hidden" name="hari" value="{{ request('hari') }}">
+            <input type="hidden" name="hari" value="{{ request('hari') }}">
             @endif
             @if(request('lapangan_id') || request('hari'))
             <a href="{{ url()->current() }}" class="text-xs text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 flex items-center gap-1 transition-colors">
@@ -134,15 +134,11 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
                                     </a>
-                                    <form action="{{ route('admin.oprational-waktus.destroy', $opw->id) }}" method="POST"
-                                        class="inline-block" onsubmit="return confirm('Hapus jam operasional ini?');">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="p-1.5 text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all" title="Hapus">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                            </svg>
-                                        </button>
-                                    </form>
+                                    <button type="button" onclick="openDeleteModal('{{ route('admin.oprational-waktus.destroy', $opw->id) }}', 'Jam Operasional Ini')" class="p-1.5 text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all" title="Hapus">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -253,9 +249,9 @@
             <div class="flex flex-wrap items-center gap-3">
                 <form method="GET" action="{{ url()->current() }}" class="flex items-center">
                     @if(request('lapangan_id'))
-                        <input type="hidden" name="lapangan_id" value="{{ request('lapangan_id') }}">
+                    <input type="hidden" name="lapangan_id" value="{{ request('lapangan_id') }}">
                     @endif
-                    <select name="hari" onchange="this.form.submit()"
+                    <select name="hari" id="hariFilter"
                         class="py-2.5 px-4 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 dark:text-white transition-all text-sm outline-none font-semibold shadow-sm">
                         <option value="">Filter Hari</option>
                         @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $h)
@@ -314,15 +310,11 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
                             </a>
-                            <form action="{{ route('admin.slot-waktus.destroy', $slot->id) }}" method="POST"
-                                class="inline-block" onsubmit="return confirm('Hapus slot ini?');">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="p-1 text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-all" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </button>
-                            </form>
+                            <button type="button" onclick="openDeleteModal('{{ route('admin.slot-waktus.destroy', $slot->id) }}', 'Slot Ini')" class="p-1 text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-all" title="Hapus">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -355,7 +347,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg Tambah Slot Pertama
-                </a>
+                        </a>
             </div>
             @endif
 
@@ -410,15 +402,11 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('admin.slot-waktus.destroy', $slot->id) }}" method="POST"
-                                            class="inline-block" onsubmit="return confirm('Hapus slot ini?');">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="p-2 text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all" title="Hapus">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <button type="button" onclick="openDeleteModal('{{ route('admin.slot-waktus.destroy', $slot->id) }}', 'Slot Waktu Ini')" class="p-2 text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all" title="Hapus">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -444,47 +432,297 @@
                     {{ $slotWaktus->links('components.pagination') }}
                 </div>
             </div>
+            <div id="ajax-modal-overlay" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300 font-['Inter']"
+                :class="{
+            'xl:pl-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+            'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+            'pl-0': $store.sidebar.isMobileOpen
+        }">
+                <div id="ajax-modal-content" class="w-fit transform scale-95 opacity-0 transition-all duration-300"></div>
+            </div>
 
         </div>
 
-<script>
-    async function toggleSlotStatus(id) {
-        const btn = document.getElementById(`statusBtn-${id}`);
-        if(!btn) return;
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '...';
-        btn.disabled = true;
+        <script>
+            async function toggleSlotStatus(id) {
+                const btn = document.getElementById(`statusBtn-${id}`);
+                if (!btn) return;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '...';
+                btn.disabled = true;
 
-        try {
-            const response = await fetch(`{{ url('admin/slot-waktus') }}/${id}/toggle-status`, {
-                method: 'PATCH',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                try {
+                    const response = await fetch(`{{ url('admin/slot-waktus') }}/${id}/toggle-status`, {
+                        method: 'PATCH',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (response.ok && data.success) {
+                        if (data.status === 'aktif') {
+                            btn.className = "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-red-100 hover:text-red-700";
+                            btn.innerHTML = "Aktif";
+                        } else {
+                            btn.className = "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400 hover:bg-green-100 hover:text-green-700";
+                            btn.innerHTML = "Nonaktif";
+                        }
+                    } else {
+                        alert(data.message || 'Gagal mengubah status');
+                        btn.innerHTML = originalText;
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert('Terjadi kesalahan koneksi.');
+                    btn.innerHTML = originalText;
+                } finally {
+                    btn.disabled = false;
+                }
+            }
+
+            // AJAX Filter & Pagination
+            async function fetchTimeData(url) {
+                const container = document.getElementById('time-content-container');
+                container.style.opacity = '0.5';
+                container.style.pointerEvents = 'none';
+
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    const html = await response.text();
+
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newContainer = doc.getElementById('time-content-container');
+
+                    if (newContainer) {
+                        container.innerHTML = newContainer.innerHTML;
+                    }
+                    window.history.pushState({}, '', url);
+                } catch (error) {
+                    console.error('AJAX Error:', error);
+                } finally {
+                    container.style.opacity = '1';
+                    container.style.pointerEvents = 'auto';
+                }
+            }
+
+            // Event Delegation for filtering and pagination
+            document.addEventListener('change', function(e) {
+                if (e.target.id === 'lapanganFilter' || e.target.id === 'hariFilter') {
+                    const form = e.target.closest('form');
+                    if (form) {
+                        const url = new URL(form.action);
+                        const formData = new FormData(form);
+                        formData.forEach((value, key) => {
+                            if (value) url.searchParams.append(key, value);
+                        });
+                        fetchTimeData(url.toString());
+                    }
                 }
             });
-            const data = await response.json();
-            if(response.ok && data.success) {
-                if(data.status === 'aktif') {
-                    btn.className = "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-red-100 hover:text-red-700";
-                    btn.innerHTML = "Aktif";
-                } else {
-                    btn.className = "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-gray-400 hover:bg-green-100 hover:text-green-700";
-                    btn.innerHTML = "Nonaktif";
-                }
-            } else {
-                alert(data.message || 'Gagal mengubah status');
-                btn.innerHTML = originalText;
-            }
-        } catch (error) {
-            console.error(error);
-            alert('Terjadi kesalahan koneksi.');
-            btn.innerHTML = originalText;
-        } finally {
-            btn.disabled = false;
-        }
-    }
-</script>
 
-@endsection
+            document.addEventListener('click', function(e) {
+                // Intercept Pagination Links
+                const link = e.target.closest('#time-content-container nav a');
+                if (link) {
+                    e.preventDefault();
+                    fetchTimeData(link.href);
+                    return;
+                }
+
+                // Intercept Create/Edit Links to open as Modal over current page
+                const modalLink = e.target.closest('a[href*="/create"], a[href*="/edit"]');
+                if (modalLink && !modalLink.hasAttribute('data-no-modal')) {
+                    e.preventDefault();
+                    openAjaxModal(modalLink.href);
+                }
+            });
+
+            // AJAX Modal Logic
+            async function openAjaxModal(url) {
+                const overlay = document.getElementById('ajax-modal-overlay');
+                const contentContainer = document.getElementById('ajax-modal-content');
+
+                if (!overlay || !contentContainer) return;
+
+                // Show loading spinner
+                contentContainer.innerHTML = '<div class="mx-auto w-10 h-10 border-4 border-[#af101a] border-t-transparent rounded-full animate-spin"></div>';
+
+                // Trigger fade in
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                void overlay.offsetWidth; // trigger reflow
+                overlay.classList.remove('opacity-0');
+                contentContainer.classList.remove('scale-95', 'opacity-0');
+                contentContainer.classList.add('scale-100', 'opacity-100');
+
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    let card = doc.querySelector('.min-h-\\[70vh\\] > div');
+
+                    if (card) {
+                        contentContainer.innerHTML = '';
+                        card.className = "w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-100 dark:border-gray-700 relative";
+                        contentContainer.appendChild(card);
+
+                        // Add click outside to close
+                        overlay.onclick = function(e) {
+                            if (e.target === overlay) closeAjaxModal();
+                        };
+
+                        // Intercept close buttons inside the card (links going back to index)
+                        const closeBtns = card.querySelectorAll('a[href*="index"]');
+                        closeBtns.forEach(btn => {
+                            btn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                closeAjaxModal();
+                            });
+                        });
+                    } else {
+                        // Fallback
+                        window.location.href = url;
+                    }
+                } catch (error) {
+                    console.error('Modal load error:', error);
+                    window.location.href = url;
+                }
+            }
+
+            function closeAjaxModal() {
+                const overlay = document.getElementById('ajax-modal-overlay');
+                const contentContainer = document.getElementById('ajax-modal-content');
+                if (overlay) {
+                    overlay.classList.add('opacity-0');
+                    contentContainer.classList.remove('scale-100', 'opacity-100');
+                    contentContainer.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('flex');
+                    }, 300);
+                }
+            }
+        </script>
+
+        {{-- Modal Konfirmasi Hapus --}}
+        <div id="deleteModal" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 font-['Inter'] text-[#1b1c1c] dark:text-white"
+            :class="{
+            'xl:pl-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+            'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+            'pl-0': $store.sidebar.isMobileOpen
+        }">
+            <div class="w-fit transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all scale-95 opacity-0 border border-[#e4beba] dark:border-gray-700" id="deleteModalContent">
+                <div class="flex items-center justify-center mb-5">
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                        <svg class="text-[#af101a] dark:text-red-400 text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-center text-xl font-bold text-[#1b1c1c] dark:text-white mb-2">Hapus Data Ini?</h3>
+                <p class="text-center text-sm text-[#5b403d] dark:text-gray-400 mb-6">
+                    Apakah Anda yakin ingin menghapus <strong id="deleteItemName"></strong>? Tindakan ini tidak dapat dibatalkan.
+                </p>
+                <div id="deleteFeedback" class="hidden mb-4 rounded-lg p-4 text-sm"></div>
+                <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-2.5 text-sm font-semibold text-[#5b403d] dark:text-gray-300 hover:bg-[#f6f3f2] dark:hover:bg-gray-700 transition-colors">
+                        Batal
+                    </button>
+                    <button type="button" id="confirmDeleteBtn" onclick="executeDelete()"
+                        class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-lg bg-[#af101a] dark:bg-red-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-800 dark:hover:bg-red-700 transition-colors">
+                        Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let deleteModal, deleteModalContent, deleteFeedback, confirmDeleteBtn, deleteItemName;
+            let deleteUrl = '';
+
+            function initDeleteModal() {
+                deleteModal = document.getElementById('deleteModal');
+                deleteModalContent = document.getElementById('deleteModalContent');
+                deleteFeedback = document.getElementById('deleteFeedback');
+                confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                deleteItemName = document.getElementById('deleteItemName');
+            }
+
+            function openDeleteModal(url, name) {
+                initDeleteModal();
+                deleteUrl = url;
+                deleteItemName.textContent = name || 'Data';
+
+                deleteModal.classList.remove('hidden');
+                deleteModal.classList.add('flex');
+                void deleteModal.offsetWidth;
+                deleteModal.classList.remove('opacity-0');
+                deleteModalContent.classList.remove('scale-95', 'opacity-0');
+                deleteModalContent.classList.add('scale-100', 'opacity-100');
+                deleteFeedback.className = 'hidden mb-4 rounded-lg p-4 text-sm';
+            }
+
+            function closeDeleteModal() {
+                initDeleteModal();
+                if (!deleteModal) return;
+                deleteModal.classList.add('opacity-0');
+                deleteModalContent.classList.remove('scale-100', 'opacity-100');
+                deleteModalContent.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    deleteModal.classList.add('hidden');
+                    deleteModal.classList.remove('flex');
+                }, 300);
+            }
+
+            async function executeDelete() {
+                if (!deleteUrl) return;
+
+                const originalBtnText = confirmDeleteBtn.innerHTML;
+                confirmDeleteBtn.disabled = true;
+                confirmDeleteBtn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...`;
+
+                try {
+                    const response = await fetch(deleteUrl, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json().catch(() => ({}));
+
+                    if (response.ok) {
+                        deleteFeedback.classList.remove('hidden');
+                        deleteFeedback.classList.add('bg-green-50', 'text-green-800', 'border', 'border-green-200');
+                        deleteFeedback.innerHTML = '<p class="flex items-center gap-2">✅ Berhasil dihapus. Merefresh...</p>';
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        throw new Error(data.message || 'Terjadi kesalahan saat menghapus data.');
+                    }
+                } catch (error) {
+                    deleteFeedback.classList.remove('hidden');
+                    deleteFeedback.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+                    deleteFeedback.innerHTML = `<p class="flex items-center gap-2">❌ ${error.message}</p>`;
+                    confirmDeleteBtn.disabled = false;
+                    confirmDeleteBtn.innerHTML = originalBtnText;
+                }
+            }
+        </script>
+        @endsection

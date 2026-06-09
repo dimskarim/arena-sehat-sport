@@ -271,7 +271,7 @@
             'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
             'pl-0': $store.sidebar.isMobileOpen
         }">
-        <div id="deleteModalContent" class="w-1/3 bg-white rounded-2xl p-6 shadow-xl scale-95 opacity-0 transition-all">
+        <div id="deleteModalContent" class="w-fit bg-white rounded-2xl p-6 shadow-xl scale-95 opacity-0 transition-all">
             <div class="flex items-center justify-center mb-4">
                 <div class="w-14 h-14 bg-[#ffdad6] rounded-full flex items-center justify-center">
                     <svg class="text-[#af101a] text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

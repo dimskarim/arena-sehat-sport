@@ -19,21 +19,20 @@ class SlotWaktuController extends Controller
 
     public function index(Request $request)
     {
-        $items = $this->service->getAll($request->query('lapangan_id'), $request->query('per_page', 10));
-        return view('admin.slot_waktu.index', compact('items'), ['title' => 'Slot Waktu']);
+        return redirect()->route('admin.time.index');
     }
 
     public function create()
     {
-        $lapangans = \App\Models\Lapangan::all();
-        return view('admin.slot_waktu.create', compact('lapangans'), ['title' => 'Tambah Slot Waktu']);
+        $waktuOperasionals = \App\Models\WaktuOperasional::with('lapangan')->get();
+        return view('admin.slot_waktu.create', compact('waktuOperasionals'), ['title' => 'Tambah Slot Waktu']);
     }
 
     public function store(SlotWaktuRequest $request)
     {
         try {
             $this->service->create($request->validated());
-            return redirect()->route('admin.slot-waktus.index')->with('success', 'Slot Waktu berhasil ditambahkan.');
+            return redirect()->route('admin.time.index')->with('success', 'Slot Waktu berhasil ditambahkan.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -43,10 +42,10 @@ class SlotWaktuController extends Controller
     {
         try {
             $item = $this->service->getById($id);
-            $lapangans = \App\Models\Lapangan::all();
-            return view('admin.slot_waktu.edit', compact('item', 'lapangans'), ['title' => 'Edit Slot Waktu']);
+            $waktuOperasionals = \App\Models\WaktuOperasional::with('lapangan')->get();
+            return view('admin.slot_waktu.edit', compact('item', 'waktuOperasionals'), ['title' => 'Edit Slot Waktu']);
         } catch (Exception $e) {
-            return redirect()->route('admin.slot-waktus.index')->with('error', 'Data tidak ditemukan.');
+            return redirect()->route('admin.time.index')->with('error', 'Data tidak ditemukan.');
         }
     }
 
@@ -54,7 +53,7 @@ class SlotWaktuController extends Controller
     {
         try {
             $this->service->update($id, $request->validated());
-            return redirect()->route('admin.slot-waktus.index')->with('success', 'Slot Waktu berhasil diperbarui.');
+            return redirect()->route('admin.time.index')->with('success', 'Slot Waktu berhasil diperbarui.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -64,7 +63,7 @@ class SlotWaktuController extends Controller
     {
         try {
             $this->service->delete($id);
-            return redirect()->route('admin.slot-waktus.index')->with('success', 'Data berhasil dihapus.');
+            return redirect()->route('admin.time.index')->with('success', 'Data berhasil dihapus.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }

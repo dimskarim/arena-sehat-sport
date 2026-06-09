@@ -24,7 +24,8 @@ class BookingController extends Controller
             $request->query('user_id'),
             $request->query('date_from') ?? $request->query('date'),
             $request->query('per_page', 10),
-            $request->query('date_to')
+            $request->query('date_to'),
+            $request->query('search')
         );
 
         // Summary stats (across all matching records, not just current page)
@@ -33,12 +34,18 @@ class BookingController extends Controller
         if ($request->date_from) $statsQuery->whereDate('tanggal_booking', '>=', $request->date_from);
         if ($request->date_to)   $statsQuery->whereDate('tanggal_booking', '<=', $request->date_to);
 
+        if ($request->search) $statsQuery->search($request->search);
+
         $summaryStats = [
             'gross_income'     => (clone $statsQuery)->whereIn('status', ['confirmed', 'completed', 'paid'])->sum('total_harga'),
             'total_confirmed'  => (clone $statsQuery)->whereIn('status', ['confirmed', 'completed', 'paid'])->count(),
             'total_pending'    => (clone $statsQuery)->where('status', 'pending')->count(),
             'total_cancelled'  => (clone $statsQuery)->whereIn('status', ['cancelled', 'canceled'])->count(),
         ];
+
+        if ($request->ajax()) {
+            return view('admin.booking.index', compact('items', 'summaryStats'), ['title' => 'History Booking'])->render();
+        }
 
         return view('admin.booking.index', compact('items', 'summaryStats'), ['title' => 'History Booking']);
     }

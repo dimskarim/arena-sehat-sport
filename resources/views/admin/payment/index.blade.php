@@ -47,27 +47,45 @@
     </div>
 
     {{-- Filter --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-5 mb-6">
-        <form method="GET" action="{{ route('admin.payments.index') }}" class="flex flex-col sm:flex-row items-end gap-4">
-            <div class="flex-1">
-                <label class="text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-1.5 block">Filter Status</label>
-                <select name="status" class="w-full px-4 py-2.5 bg-[#fcf9f8] dark:bg-gray-700/50 rounded-xl border border-[#e4beba] dark:border-gray-600 text-sm dark:text-white focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none appearance-none cursor-pointer transition-all">
-                    <option value="">Semua Status</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="menunggu_verifikasi" {{ request('status') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                    <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Paid</option>
-                    <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Ditolak</option>
-                </select>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-4 mb-6">
+        <form id="filterForm" method="GET" action="{{ route('admin.payments.index') }}" class="flex flex-wrap items-center gap-3 w-full">
+            <div class="relative flex-1 min-w-[250px]">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-[#5b403d] dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama penyewa..." 
+                    class="w-full pl-10 pr-10 py-2 bg-[#fcf9f8] dark:bg-gray-700/50 rounded-xl border border-[#e4beba] dark:border-gray-600 text-sm dark:text-white focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all">
+                @if(request('search'))
+                <a href="{{ route('admin.payments.index', ['status' => request('status')]) }}" class="absolute inset-y-0 right-8 pr-2 flex items-center text-gray-400 hover:text-red-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </a>
+                @endif
+                <button type="submit" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-[#af101a] transition-colors">
+                    <span class="sr-only">Search</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
             </div>
-            <div class="flex gap-2">
-                <button type="submit" class="px-6 py-2.5 bg-[#1b1c1c] dark:bg-gray-700 text-white rounded-xl font-bold text-sm hover:bg-zinc-700 dark:hover:bg-gray-600 transition-colors">Terapkan</button>
-                <a href="{{ route('admin.payments.index') }}" class="px-6 py-2.5 bg-white dark:bg-gray-800 border border-[#e4beba] dark:border-gray-600 text-[#5b403d] dark:text-gray-300 rounded-xl font-bold text-sm hover:bg-[#f6f3f2] dark:hover:bg-gray-700 transition-colors">Reset</a>
-            </div>
+
+            <span class="text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest hidden sm:block">Status:</span>
+            <select name="status" id="statusFilter" class="min-w-[180px] px-4 py-2 bg-[#fcf9f8] dark:bg-gray-700/50 rounded-xl border border-[#e4beba] dark:border-gray-600 text-sm dark:text-white focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none cursor-pointer transition-all">
+                <option value="">Semua Status</option>
+                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="menunggu_verifikasi" {{ request('status') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Ditolak</option>
+            </select>
+            @if(request('status') || request('search'))
+            <a href="{{ route('admin.payments.index') }}" class="text-xs text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 flex items-center gap-1 transition-colors ml-auto font-bold shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg> Reset Filter
+            </a>
+            @endif
         </form>
     </div>
 
     {{-- Data Table --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm overflow-hidden">
+    <div id="table-container" class="bg-white dark:bg-gray-800 rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm overflow-hidden transition-opacity duration-300 relative">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -242,5 +260,68 @@ function submitTolak() {
 }
 document.getElementById('buktiModal').addEventListener('click', function(e){ if(e.target===this) closeBuktiModal(); });
 document.getElementById('tolakModal').addEventListener('click', function(e){ if(e.target===this) closeTolakModal(); });
+
+// AJAX Filter & Pagination
+const filterForm = document.getElementById('filterForm');
+const tableContainer = document.getElementById('table-container');
+
+async function fetchTableData(url) {
+    tableContainer.style.opacity = '0.5';
+    tableContainer.style.pointerEvents = 'none';
+    
+    try {
+        const response = await fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const html = await response.text();
+        
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const newTable = doc.getElementById('table-container');
+        if (newTable) {
+            tableContainer.innerHTML = newTable.innerHTML;
+        }
+        
+        // Update browser URL
+        window.history.pushState({}, '', url);
+    } catch (e) {
+        console.error('Error fetching data:', e);
+    } finally {
+        tableContainer.style.opacity = '1';
+        tableContainer.style.pointerEvents = 'auto';
+    }
+}
+
+filterForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const url = new URL(this.action);
+    const formData = new FormData(this);
+    formData.forEach((value, key) => {
+        if(value) url.searchParams.append(key, value);
+    });
+    fetchTableData(url.toString());
+});
+
+document.getElementById('statusFilter').addEventListener('change', function() {
+    filterForm.dispatchEvent(new Event('submit'));
+});
+
+document.addEventListener('click', function(e) {
+    const link = e.target.closest('#table-container nav a'); // Targets Laravel pagination links
+    if (link) {
+        e.preventDefault();
+        fetchTableData(link.href);
+    }
+});
+
+let typingTimer;
+filterForm.querySelector('input[name="search"]').addEventListener('input', function() {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => {
+        filterForm.dispatchEvent(new Event('submit'));
+    }, 400); // 400ms typing delay
+});
+
 </script>
 @endsection

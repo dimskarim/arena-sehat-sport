@@ -1,97 +1,80 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-[1280px] mx-auto font-['Inter'] text-slate-900">
+<div id="time-content-container" class="max-w-[1280px] mx-auto font-['Inter'] text-slate-900 dark:text-white transition-opacity duration-300 relative">
+    <div class="min-h-[70vh] m-auto flex items-center justify-center p-4 font-['Inter']">
+        <div class="w-fit bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-100 dark:border-gray-700 relative">
 
-    {{-- Page Header --}}
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-        <div>
-            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 mb-2">
-                <a href="{{ route('admin.oprational-waktus.index') }}" class="hover:text-red-700 dark:hover:text-red-400 transition-colors">Oprational Waktu</a>
-                <svg class="text-base inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-                <span class="text-slate-900 dark:text-white font-semibold">Tambah Jadwal</span>
+            {{-- Header --}}
+            <div class="px-6 py-5 border-b border-slate-100 dark:border-gray-700 bg-slate-50/50 dark:bg-gray-900/20 flex items-center justify-between">
+                <div>
+                    <h2 class="font-['Lexend'] text-xl font-bold text-slate-900 dark:text-white">Tambah Jadwal Operasional</h2>
+                    <p class="text-xs text-slate-500 dark:text-gray-400 mt-1">Lengkapi form di bawah untuk membuat jadwal baru.</p>
+                </div>
+                <a href="{{ route('admin.oprational-waktus.index') }}" class="p-2 text-slate-400 hover:text-red-600 transition-colors rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </a>
             </div>
-            <h1 class="font-['Lexend'] text-[32px] font-semibold tracking-tight text-slate-900 dark:text-white">Tambah Jadwal Operasional</h1>
-            <p class="text-slate-500 dark:text-gray-400 text-sm mt-1">Lengkapi informasi jadwal operasional untuk venue lapangan.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.oprational-waktus.index') }}" class="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 transition-colors shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
-                <svg class="text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                </svg>
-                Batal
-            </a>
-            <button type="submit" form="createForm" class="flex items-center gap-2 px-6 py-2.5 bg-[#af101a] text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-red-700/20 active:scale-95 dark:bg-red-600 dark:hover:bg-red-700">
-                <svg class="text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Simpan Jadwal
-            </button>
+
+            {{-- Form --}}
+            <form action="{{ route('admin.oprational-waktus.store') }}" method="POST">
+                @csrf
+
+                <div class="p-6 space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
+                            Venue Lapangan <span class="text-red-600">*</span>
+                        </label>
+                        <select name="lapangan_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
+                            <option value="">Pilih Venue Lapangan</option>
+                            @foreach($lapangans as $lap)
+                            <option value="{{ $lap->id }}" {{ old('lapangan_id') == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('lapangan_id') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
+                            Hari Operasional <span class="text-red-600">*</span>
+                        </label>
+                        <select name="hari" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
+                            <option value="">Pilih Hari</option>
+                            @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $hari)
+                            <option value="{{ $hari }}" {{ old('hari') == $hari ? 'selected' : '' }}>{{ $hari }}</option>
+                            @endforeach
+                        </select>
+                        @error('hari') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
+                                Jam Buka <span class="text-red-600">*</span>
+                            </label>
+                            <input type="time" name="waktu_buka" value="{{ old('waktu_buka') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
+                            @error('waktu_buka') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
+                                Jam Tutup <span class="text-red-600">*</span>
+                            </label>
+                            <input type="time" name="waktu_tutup" value="{{ old('waktu_tutup') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
+                            @error('waktu_tutup') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Footer --}}
+                <div class="px-6 py-4 bg-slate-50/50 dark:bg-gray-900/20 border-t border-slate-100 dark:border-gray-700 flex justify-end gap-3">
+                    <a href="{{ route('admin.oprational-waktus.index') }}" class="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-100 transition-colors dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">Batal</a>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#af101a] text-white text-sm font-bold hover:bg-red-800 transition-all shadow-md shadow-red-700/20 dark:bg-red-600 dark:hover:bg-red-700">Simpan Jadwal</button>
+                </div>
+            </form>
         </div>
     </div>
-
-    {{-- Form --}}
-    <form id="createForm" action="{{ route('admin.oprational-waktus.store') }}" method="POST">
-        @csrf
-
-        <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3 dark:border-gray-700">
-                <svg class="text-red-700 dark:text-red-400 inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h2 class="font-['Lexend'] text-base font-semibold text-slate-900 dark:text-white">Informasi Jadwal</h2>
-            </div>
-            
-            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div class="sm:col-span-2">
-                    <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
-                        Venue Lapangan <span class="text-red-600">*</span>
-                    </label>
-                    <select name="lapangan_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
-                        <option value="">Pilih Venue</option>
-                        @foreach($lapangans as $lap)
-                            <option value="{{ $lap->id }}" {{ old('lapangan_id') == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('lapangan_id') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
-                </div>
-
-                <div class="sm:col-span-2">
-                    <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
-                        Hari Operasional <span class="text-red-600">*</span>
-                    </label>
-                    <select name="hari" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
-                        <option value="">Pilih Hari Operasional</option>
-                        <option value="Senin" {{ old('hari') == 'Senin' ? 'selected' : '' }}>Senin</option>
-                        <option value="Selasa" {{ old('hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
-                        <option value="Rabu" {{ old('hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
-                        <option value="Kamis" {{ old('hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                        <option value="Jumat" {{ old('hari') == 'Jumat' ? 'selected' : '' }}>Jumat</option>
-                        <option value="Sabtu" {{ old('hari') == 'Sabtu' ? 'selected' : '' }}>Sabtu</option>
-                        <option value="Minggu" {{ old('hari') == 'Minggu' ? 'selected' : '' }}>Minggu</option>
-                    </select>
-                    @error('hari') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
-                        Jam Buka <span class="text-red-600">*</span>
-                    </label>
-                    <input type="time" name="waktu_buka" value="{{ old('waktu_buka') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
-                    @error('waktu_buka') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
-                        Jam Tutup <span class="text-red-600">*</span>
-                    </label>
-                    <input type="time" name="waktu_tutup" value="{{ old('waktu_tutup') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
-                    @error('waktu_tutup') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
-                </div>
-            </div>
-        </div>
-    </form>
 </div>
 @endsection
