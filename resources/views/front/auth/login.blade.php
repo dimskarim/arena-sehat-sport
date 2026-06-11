@@ -167,13 +167,22 @@
         </div>
 
         <!-- Form Fields -->
-        <form class="space-y-5 animate-fade-up delay-300" action="#" method="POST">
+        <form class="space-y-5 animate-fade-up delay-300" action="{{ route('login.submit') }}" method="POST">
             @csrf
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-600 p-3 rounded-lg text-sm mb-4">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="space-y-1.5">
                 <label class="text-xs font-bold text-on-surface-variant ml-1 uppercase" for="email">Email</label>
                 <div class="relative group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-xl">mail</span>
-                    <input class="w-full bg-white border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="email" name="email" placeholder="nama@email.com" required type="email" />
+                    <input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="email" name="email" placeholder="nama@email.com" required type="email" />
                 </div>
             </div>
 
@@ -184,7 +193,7 @@
                 </div>
                 <div class="relative group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-xl">lock</span>
-                    <input class="w-full bg-white border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="password" name="password" placeholder="••••••••" required type="password" />
+                    <input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="password" name="password" placeholder="••••••••" required type="password" />
                 </div>
             </div>
 

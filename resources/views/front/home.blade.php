@@ -34,11 +34,11 @@
     </section>
 
     <!-- Categories Section (Bento Style) -->
-    <section class="py-xl bg-surface-container-low">
+    <section class="py-xl bg-surface-container-low dark:bg-gray-900 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-lg motion-hidden">
-                <h2 class="font-h2 text-h2 text-on-surface mb-2">Jelajahi Olahraga Populer</h2>
-                <p class="text-on-surface-variant max-w-xl mx-auto">Pilih dari fasilitas unggulan yang dikurasi khusus untuk performa maksimalmu.</p>
+                <h2 class="font-h2 text-h2 text-on-surface dark:text-white mb-2">Jelajahi Olahraga Populer</h2>
+                <p class="text-on-surface-variant dark:text-gray-400 max-w-xl mx-auto">Pilih dari fasilitas unggulan yang dikurasi khusus untuk performa maksimalmu.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Futsal -->
@@ -81,7 +81,7 @@
                             <h3 class="font-h3 text-h3 text-white">Padel</h3>
                             <p class="text-gray-300 text-sm">Rasakan sensasi olahraga paling tren</p>
                         </div>
-                        <a href="{{ route('lapangan.index') }}" class="bg-white text-primary-container font-bold px-6 py-2 rounded-full hover:bg-primary-container hover:text-white transition-colors">
+                        <a href="{{ route('lapangan.index') }}" class="bg-surface-container-lowest text-primary-container font-bold px-6 py-2 rounded-full hover:bg-primary-container hover:text-white transition-colors">
                             Lihat Padel
                         </a>
                     </div>
@@ -91,50 +91,43 @@
     </section>
 
     <!-- Why Choose Us Section -->
-    <section class="py-xl bg-white">
+    <section class="py-xl bg-surface-container-lowest dark:bg-gray-950 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid md:grid-cols-3 gap-12">
-                <div class="flex flex-col items-center text-center p-8 rounded-2xl hover:bg-secondary-fixed/30 transition-all border border-transparent hover:border-outline-variant motion-hidden delay-100">
-                    <div class="w-16 h-16 bg-primary-container/10 flex items-center justify-center rounded-2xl mb-6">
-                        <span class="material-symbols-outlined text-primary-container text-4xl" data-icon="bolt">bolt</span>
+                <div class="flex flex-col items-center text-center p-8 rounded-2xl hover:bg-secondary-fixed/30 dark:hover:bg-gray-800 transition-all border border-transparent hover:border-outline-variant dark:hover:border-gray-700 motion-hidden delay-100">
+                    <div class="w-16 h-16 bg-primary-container/10 dark:bg-red-900/30 flex items-center justify-center rounded-2xl mb-6">
+                        <span class="material-symbols-outlined text-primary-container dark:text-red-400 text-4xl" data-icon="bolt">bolt</span>
                     </div>
-                    <h3 class="font-h3 text-h3 text-on-surface mb-4">Sangat Cepat</h3>
-                    <p class="font-body-md text-on-surface-variant">Pembaruan ketersediaan real-time. Pesan dan konfirmasi venue favoritmu di bawah 30 detik.</p>
+                    <h3 class="font-h3 text-xl text-on-surface dark:text-white mb-3">Instant Booking</h3>
+                    <p class="text-on-surface-variant dark:text-gray-400">Konfirmasi real-time tanpa menunggu. Jadwalmu langsung diamankan saat pembayaran selesai.</p>
                 </div>
-                <div class="flex flex-col items-center text-center p-8 rounded-2xl hover:bg-secondary-fixed/30 transition-all border border-transparent hover:border-outline-variant motion-hidden delay-200">
-                    <div class="w-16 h-16 bg-primary-container/10 flex items-center justify-center rounded-2xl mb-6">
-                        <span class="material-symbols-outlined text-primary-container text-4xl" data-icon="payments">payments</span>
+                <div class="flex flex-col items-center text-center p-8 rounded-2xl hover:bg-secondary-fixed/30 dark:hover:bg-gray-800 transition-all border border-transparent hover:border-outline-variant dark:hover:border-gray-700 motion-hidden delay-200">
+                    <div class="w-16 h-16 bg-primary-container/10 dark:bg-red-900/30 flex items-center justify-center rounded-2xl mb-6">
+                        <span class="material-symbols-outlined text-primary-container dark:text-red-400 text-4xl" data-icon="verified">verified</span>
                     </div>
-                    <h3 class="font-h3 text-h3 text-on-surface mb-4">Pembayaran Mulus</h3>
-                    <p class="font-body-md text-on-surface-variant">Berbagai opsi pembayaran aman dari E-wallet hingga transfer bank instan tanpa ribet.</p>
+                    <h3 class="font-h3 text-xl text-on-surface dark:text-white mb-3">Verified Venues</h3>
+                    <p class="text-on-surface-variant dark:text-gray-400">Setiap fasilitas telah melewati inspeksi standar tinggi untuk kualitas lantai, pencahayaan, dan fasilitas.</p>
                 </div>
-                <div class="flex flex-col items-center text-center p-8 rounded-2xl hover:bg-secondary-fixed/30 transition-all border border-transparent hover:border-outline-variant motion-hidden delay-300">
-                    <div class="w-16 h-16 bg-primary-container/10 flex items-center justify-center rounded-2xl mb-6">
-                        <span class="material-symbols-outlined text-primary-container text-4xl" data-icon="schedule">schedule</span>
+                <div class="flex flex-col items-center text-center p-8 rounded-2xl hover:bg-secondary-fixed/30 dark:hover:bg-gray-800 transition-all border border-transparent hover:border-outline-variant dark:hover:border-gray-700 motion-hidden delay-300">
+                    <div class="w-16 h-16 bg-primary-container/10 dark:bg-red-900/30 flex items-center justify-center rounded-2xl mb-6">
+                        <span class="material-symbols-outlined text-primary-container dark:text-red-400 text-4xl" data-icon="support_agent">support_agent</span>
                     </div>
-                    <h3 class="font-h3 text-h3 text-on-surface mb-4">Tersedia 24/7</h3>
-                    <p class="font-body-md text-on-surface-variant">Sistem kami tak pernah tidur. Pesan kapan saja, di mana saja, dari sesi pagi buta hingga larut malam.</p>
+                    <h3 class="font-h3 text-xl text-on-surface dark:text-white mb-3">24/7 Support</h3>
+                    <p class="text-on-surface-variant dark:text-gray-400">Tim dedikasi siap membantumu kapan saja, dari pembatalan mendadak hingga permintaan khusus.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Newsletter / CTA Section -->
-    <section class="py-xl bg-primary-container overflow-hidden relative">
-        <div class="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-12 transform translate-x-1/2"></div>
-        <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-            <div class="max-w-xl motion-hidden slide-right">
-                <h2 class="font-h2 text-h2 text-white mb-4">Siap untuk pertandingan terbaikmu?</h2>
-                <p class="text-white/80 font-body-lg">Bergabung dengan 10.000+ atlet yang memesan lapangan melalui ArenaFlow setiap minggunya.</p>
-            </div>
-            <div class="flex w-full md:w-auto gap-4 motion-hidden delay-200">
-                <a href="{{ route('admin.login') }}" class="text-center bg-white text-primary-container px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all flex-1 md:flex-none">
-                    Daftar Sekarang
-                </a>
-                <a href="{{ route('lapangan.index') }}" class="text-center border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition-all flex-1 md:flex-none">
-                    Cek Lokasi
-                </a>
-            </div>
+    <section class="py-xl bg-surface-container-low dark:bg-gray-900 transition-colors duration-300">
+        <div class="max-w-4xl mx-auto px-6 text-center motion-hidden">
+            <h2 class="font-h2 text-h2 text-on-surface dark:text-white mb-6">Siap Untuk Berkeringat?</h2>
+            <p class="text-on-surface-variant dark:text-gray-400 mb-8 max-w-2xl mx-auto">Bergabung dengan ribuan atlet amatir dan pro yang mempercayakan jadwal olahraga mereka pada ArenaFlow.</p>
+            <a href="{{ route('lapangan.index') }}" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-primary/90 transition-transform active:scale-95 shadow-lg shadow-primary/20">
+                <span>Cari Lapangan Terdekat</span>
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+            </a>
         </div>
     </section>
 </main>

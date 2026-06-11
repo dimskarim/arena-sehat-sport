@@ -118,7 +118,7 @@
                         {{-- Preview Slug --}}
                         <div>
                             <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Preview Slug</label>
-                            <div class="flex items-center gap-2 px-4 py-3 bg-[#f0eded] border border-[#e4beba] rounded-lg">
+                            <div class="flex items-center gap-2 px-4 py-3 bg-[#f0eded] border border-[#e4beba] dark:border-gray-700 rounded-lg">
                                 <svg class="text-[#8f6f6c] text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
                                 </svg>
@@ -156,7 +156,7 @@
                     <h2 class="font-['Lexend'] text-base font-semibold text-[#1b1c1c] dark:text-white">Preview Kategori</h2>
                 </div>
                 <div class="p-6 flex flex-col items-center text-center">
-                    <div class="w-16 h-16 rounded-2xl bg-[#fdcbd0] flex items-center justify-center mb-4 border border-[#e4beba]">
+                    <div class="w-16 h-16 rounded-2xl bg-[#fdcbd0] flex items-center justify-center mb-4 border border-[#e4beba] dark:border-gray-700">
                         <svg class="text-[#af101a] text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             style="font-variation-settings: 'FILL' 1;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z" />
@@ -223,7 +223,7 @@
             <div id="deleteFeedback" class="hidden mb-4 rounded-lg p-4 text-sm"></div>
             <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
                 <button type="button" onclick="closeDeleteModal()"
-                    class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] bg-white px-5 py-2.5 text-sm font-semibold text-[#5b403d] hover:bg-[#f6f3f2]">
+                    class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] dark:border-gray-700 bg-white px-5 py-2.5 text-sm font-semibold text-[#5b403d] hover:bg-[#f6f3f2]">
                     Batal
                 </button>
                 <button type="button" id="confirmDeleteBtn" onclick="executeDelete()"

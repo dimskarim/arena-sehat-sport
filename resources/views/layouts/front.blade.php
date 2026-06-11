@@ -15,16 +15,16 @@
             theme: {
                 extend: {
                     "colors": {
-                        "surface-container-high": "#eae7e7",
+                        "surface-container-high": "var(--color-surface-container-high, #eae7e7)",
                         "primary-container": "#d32f2f",
                         "secondary-fixed-dim": "#ebbabf",
-                        "on-background": "#1b1c1c",
+                        "on-background": "var(--color-on-background, #1b1c1c)",
                         "inverse-primary": "#ffb3ac",
                         "secondary-fixed": "#ffd9dd",
-                        "inverse-surface": "#303030",
-                        "surface-dim": "#dcd9d9",
+                        "inverse-surface": "var(--color-inverse-surface, #303030)",
+                        "surface-dim": "var(--color-surface-dim, #dcd9d9)",
                         "secondary": "#7a5459",
-                        "background": "#fcf9f8",
+                        "background": "var(--color-background, #fcf9f8)",
                         "tertiary": "#005f7b",
                         "on-tertiary-container": "#e9f7ff",
                         "on-error": "#ffffff",
@@ -32,33 +32,33 @@
                         "on-secondary-fixed": "#2f1317",
                         "on-primary": "#ffffff",
                         "on-tertiary-fixed-variant": "#004d65",
-                        "surface-container-low": "#f6f3f2",
+                        "surface-container-low": "var(--color-surface-container-low, #f6f3f2)",
                         "tertiary-fixed": "#bee9ff",
                         "secondary-container": "#fdcbd0",
                         "on-error-container": "#93000a",
-                        "surface-container": "#f0eded",
+                        "surface-container": "var(--color-surface-container, #f0eded)",
                         "on-primary-fixed-variant": "#930010",
                         "on-primary-fixed": "#410003",
                         "tertiary-fixed-dim": "#7bd1f8",
-                        "outline": "#8f6f6c",
+                        "outline": "var(--color-outline, #8f6f6c)",
                         "error-container": "#ffdad6",
-                        "inverse-on-surface": "#f3f0ef",
-                        "surface": "#fcf9f8",
-                        "outline-variant": "#e4beba",
-                        "surface-bright": "#fcf9f8",
+                        "inverse-on-surface": "var(--color-inverse-on-surface, #f3f0ef)",
+                        "surface": "var(--color-surface, #fcf9f8)",
+                        "outline-variant": "var(--color-outline-variant, #e4beba)",
+                        "surface-bright": "var(--color-surface-bright, #fcf9f8)",
                         "on-tertiary": "#ffffff",
                         "on-primary-container": "#fff2f0",
-                        "surface-variant": "#e5e2e1",
+                        "surface-variant": "var(--color-surface-variant, #e5e2e1)",
                         "surface-tint": "#ba1a20",
-                        "surface-container-highest": "#e5e2e1",
-                        "on-surface": "#1b1c1c",
+                        "surface-container-highest": "var(--color-surface-container-highest, #e5e2e1)",
+                        "on-surface": "var(--color-on-surface, #1b1c1c)",
                         "primary": "#af101a",
-                        "on-surface-variant": "#5b403d",
+                        "on-surface-variant": "var(--color-on-surface-variant, #5b403d)",
                         "primary-fixed-dim": "#ffb3ac",
                         "on-secondary-fixed-variant": "#603d42",
                         "on-tertiary-fixed": "#001f2a",
                         "primary-fixed": "#ffdad6",
-                        "surface-container-lowest": "#ffffff",
+                        "surface-container-lowest": "var(--color-surface-container-lowest, #ffffff)",
                         "error": "#ba1a1a",
                         "on-secondary-container": "#795358",
                         "tertiary-container": "#00799c"
@@ -120,12 +120,34 @@
         }
     </script>
     <style>
+        html.dark {
+            --color-surface: #111827; /* gray-900 */
+            --color-on-surface: #f9fafb; /* gray-50 */
+            --color-surface-container-low: #1f2937; /* gray-800 */
+            --color-surface-container-lowest: #030712; /* gray-950 */
+            --color-surface-container: #374151; /* gray-700 */
+            --color-surface-container-high: #4b5563; /* gray-600 */
+            --color-surface-container-highest: #6b7280; /* gray-500 */
+            --color-on-surface-variant: #9ca3af; /* gray-400 */
+            --color-outline-variant: #374151; /* gray-700 */
+            --color-outline: #6b7280; /* gray-500 */
+            --color-background: #111827; /* gray-900 */
+            --color-on-background: #f9fafb; /* gray-50 */
+            --color-surface-dim: #030712; /* gray-950 */
+            --color-surface-bright: #1f2937; /* gray-800 */
+            --color-surface-variant: #374151; /* gray-700 */
+            --color-inverse-surface: #f9fafb; /* gray-50 */
+            --color-inverse-on-surface: #111827; /* gray-900 */
+        }
+
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
         body {
             font-family: 'Inter', sans-serif;
+            background-color: var(--color-surface, #fcf9f8);
+            color: var(--color-on-surface, #1b1c1c);
         }
 
         h1,
@@ -152,10 +174,35 @@
         .delay-300 { transition-delay: 300ms; }
         .delay-400 { transition-delay: 400ms; }
     </style>
+    <script>
+        // Apply dark mode immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            if (isDark) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+    </script>
     @stack('styles')
 </head>
 
-<body class="bg-surface font-body-md text-on-surface">
+<body class="bg-surface font-body-md text-on-surface transition-colors duration-300">
     <!-- TopAppBar -->
     <header class="fixed top-0 w-full z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-[0_4px_20px_rgba(211,47,47,0.08)]">
         <nav class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto font-['Lexend'] antialiased">
@@ -166,9 +213,40 @@
                 <a class="text-gray-600 dark:text-gray-400 font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('booking.riwayat') }}">My Bookings</a>
                 <a class="text-gray-600 dark:text-gray-400 font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('support') }}">Support</a>
             </div>
-            <div class="flex items-center gap-4">
-                <button class="material-symbols-outlined text-gray-600 dark:text-gray-400 hover:text-red-600 transition-all">search</button>
-                <a href="{{ route('front.login') }}" class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md transition-transform active:scale-95 hover:opacity-90">Sign In</a>
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleDarkMode()" class="text-gray-600 dark:text-gray-400 hover:text-red-600 transition-all flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" title="Toggle Theme">
+                    <span class="material-symbols-outlined dark:hidden">dark_mode</span>
+                    <span class="material-symbols-outlined hidden dark:block">light_mode</span>
+                </button>
+                @auth
+                    <div class="relative group">
+                        <button class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg font-label-md transition-all active:scale-95 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700">
+                            <span class="material-symbols-outlined text-[20px]">person</span>
+                            {{ explode(' ', Auth::user()->name)[0] }}
+                        </button>
+                        <div class="absolute right-0 top-[120%] w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:top-full transition-all duration-200 z-50">
+                            <div class="py-2">
+                                <a href="{{ route('profile.index') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">account_circle</span> Profil Saya
+                                </a>
+                                <a href="{{ route('booking.riwayat') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                                    <span class="material-symbols-outlined text-[18px]">history</span> Riwayat Booking
+                                </a>
+                            </div>
+                            <div class="border-t border-gray-100 dark:border-gray-800 py-2">
+                                <form action="{{ route('front.logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="flex w-full items-center gap-2 text-left px-4 py-2.5 text-sm text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-400 transition-colors">
+                                        <span class="material-symbols-outlined text-[18px]">logout</span> Logout
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="bg-red-700 text-white px-6 py-2 rounded-lg font-label-md transition-transform active:scale-95 hover:bg-red-800">Sign In</a>
+                @endauth
             </div>
         </nav>
     </header>

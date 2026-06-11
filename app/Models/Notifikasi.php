@@ -11,7 +11,7 @@ class Notifikasi extends Model
 
     protected $table = 'notifikasis';
 
-    protected $fillable = ['user_id', 'booking_id', 'deskripsi', 'pesan'];
+    protected $fillable = ['user_id', 'booking_id', 'deskripsi', 'pesan', 'is_read'];
 
     public function user()
     {

@@ -30,7 +30,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {{-- Form --}}
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm p-8">
+            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-8">
                 <form id="notifForm" action="{{ route('admin.notifications.store') }}" method="POST">
                     @csrf
 
@@ -46,7 +46,7 @@
                     {{-- Penerima --}}
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Penerima (Pengguna) <span class="text-[#ba1a1a]">*</span></label>
-                        <select name="user_id" required class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
+                        <select name="user_id" required class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Pilih Pengguna —</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
@@ -58,7 +58,7 @@
                     {{-- Booking terkait --}}
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Booking Terkait <span class="text-[10px] normal-case font-normal text-[#8f6f6c] ml-1">(opsional)</span></label>
-                        <select name="booking_id" class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
+                        <select name="booking_id" class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Tidak terkait booking tertentu —</option>
                             @foreach($bookings as $booking)
                             <option value="{{ $booking->id }}" {{ old('booking_id') == $booking->id ? 'selected' : '' }}>
@@ -73,7 +73,7 @@
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Judul / Deskripsi</label>
                         <input type="text" name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Contoh: Konfirmasi Pembayaran"
-                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all">
+                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all">
                         @error('deskripsi') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
@@ -81,7 +81,7 @@
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Isi Pesan <span class="text-[#ba1a1a]">*</span></label>
                         <textarea name="pesan" required rows="5" placeholder="Tulis pesan notifikasi di sini..."
-                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none">{{ old('pesan') }}</textarea>
+                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none">{{ old('pesan') }}</textarea>
                         @error('pesan') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
@@ -113,7 +113,7 @@
 
         {{-- Sidebar Tips --}}
         <div class="space-y-6">
-            <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm p-6">
+            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-6">
                 <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-[#d32f2f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

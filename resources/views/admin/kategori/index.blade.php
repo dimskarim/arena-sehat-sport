@@ -121,12 +121,12 @@
                         {{-- Ikon / Thumbnail --}}
                         <td class="px-6 py-4">
                             @if($item->icon ?? $item->gambar ?? null)
-                            <div class="w-12 h-12 rounded-xl bg-[#f0eded] overflow-hidden border border-[#e4beba]/50">
+                            <div class="w-12 h-12 rounded-xl bg-[#f0eded] overflow-hidden border border-[#e4beba]/50 dark:border-gray-700">
                                 <img src="https://placehold.co/100x100/f3f4f6/a1a1aa?text=Image"
                                     alt="{{ $item->name }}" class="w-full h-full object-cover" />
                             </div>
                             @else
-                            <div class="w-12 h-12 rounded-xl bg-[#fdcbd0] flex items-center justify-center border border-[#e4beba]/50">
+                            <div class="w-12 h-12 rounded-xl bg-[#fdcbd0] flex items-center justify-center border border-[#e4beba]/50 dark:border-gray-700">
                                 <svg class="text-[#af101a] text-xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                     style="font-variation-settings: 'FILL' 1;">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z" />
@@ -244,8 +244,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
             </svg>
         </div>
-        <div class="bg-white rounded-2xl p-6 border border-[#e4beba]/50 shadow-sm">
-            <h4 class="font-bold text-lg mb-4 flex items-center gap-2 font-['Lexend'] text-[#1b1c1c]">
+        <div class="bg-white rounded-2xl p-6 border border-[#e4beba]/50 dark:border-gray-700 shadow-sm dark:bg-gray-800">
+            <h4 class="font-bold text-lg mb-4 flex items-center gap-2 font-['Lexend'] text-[#1b1c1c] dark:text-white">
                 <svg class="text-[#7a5459] inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -254,11 +254,11 @@
             <div class="space-y-4">
                 <div class="flex gap-3">
                     <div class="w-2 h-2 mt-1.5 rounded-full bg-[#af101a] shrink-0"></div>
-                    <p class="text-sm text-[#5b403d]">Sistem menampilkan <span class="font-bold text-[#1b1c1c]">{{ $items->count() }}</span> kategori aktif saat ini.</p>
+                    <p class="text-sm text-[#5b403d] dark:text-gray-400">Sistem menampilkan <span class="font-bold text-[#1b1c1c] dark:text-white">{{ $items->count() }}</span> kategori aktif saat ini.</p>
                 </div>
                 <div class="flex gap-3">
                     <div class="w-2 h-2 mt-1.5 rounded-full bg-green-500 shrink-0"></div>
-                    <p class="text-sm text-[#5b403d]">Semua kategori tersedia untuk ditambahkan venue baru.</p>
+                    <p class="text-sm text-[#5b403d] dark:text-gray-400">Semua kategori tersedia untuk ditambahkan venue baru.</p>
                 </div>
             </div>
         </div>
@@ -271,23 +271,23 @@
             'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
             'pl-0': $store.sidebar.isMobileOpen
         }">
-        <div id="deleteModalContent" class="w-fit bg-white rounded-2xl p-6 shadow-xl scale-95 opacity-0 transition-all">
+        <div id="deleteModalContent" class="w-fit bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl scale-95 opacity-0 transition-all">
             <div class="flex items-center justify-center mb-4">
-                <div class="w-14 h-14 bg-[#ffdad6] rounded-full flex items-center justify-center">
-                    <svg class="text-[#af101a] text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <div class="w-14 h-14 bg-[#ffdad6] dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                    <svg class="text-[#af101a] dark:text-red-400 text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                     </svg>
                 </div>
             </div>
-            <h3 class="text-center text-xl font-bold text-[#1b1c1c] mb-2">Hapus Kategori Ini?</h3>
-            <p class="text-center text-sm text-[#5b403d] mb-6">
+            <h3 class="text-center text-xl font-bold text-[#1b1c1c] dark:text-white mb-2">Hapus Kategori Ini?</h3>
+            <p class="text-center text-sm text-[#5b403d] dark:text-gray-400 mb-6">
                 Apakah Anda yakin ingin menghapus <strong id="deleteItemName"></strong>?
                 Tindakan ini tidak dapat dibatalkan.
             </p>
             <div id="deleteFeedback" class="hidden mb-4 rounded-lg p-4 text-sm"></div>
             <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
                 <button type="button" onclick="closeDeleteModal()"
-                    class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] bg-white px-5 py-2.5 text-sm font-semibold text-[#5b403d] hover:bg-[#f6f3f2]">
+                    class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] dark:border-gray-700 bg-white dark:bg-gray-700 px-5 py-2.5 text-sm font-semibold text-[#5b403d] dark:text-gray-200 hover:bg-[#f6f3f2] dark:hover:bg-gray-600">
                     Batal
                 </button>
                 <button type="button" id="confirmDeleteBtn" onclick="executeDelete()"

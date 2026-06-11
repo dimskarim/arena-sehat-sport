@@ -14,7 +14,7 @@
         
         <div class="relative w-full max-w-2xl mx-auto shadow-lg shadow-surface-variant/50 rounded-full">
             <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-outline text-2xl">search</span>
-            <input class="w-full bg-white border border-outline-variant rounded-full py-4 pl-14 pr-6 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-body-lg transition-all" placeholder="Cari artikel bantuan (mis. 'cara ganti jadwal')..." type="text"/>
+            <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-full py-4 pl-14 pr-6 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-body-lg transition-all" placeholder="Cari artikel bantuan (mis. 'cara ganti jadwal')..." type="text"/>
             <button class="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md hover:bg-primary-container transition-colors active:scale-95 shadow-md shadow-primary/20">Cari</button>
         </div>
     </section>
@@ -60,7 +60,7 @@
     <!-- FAQ Section -->
     <section class="mb-xl motion-hidden delay-200">
         <h2 class="font-h3 text-h3 text-on-background mb-md">Pertanyaan yang Sering Diajukan (FAQ)</h2>
-        <div class="bg-white rounded-2xl shadow-[0_4px_20px_rgba(211,47,47,0.04)] border border-outline-variant divide-y divide-outline-variant">
+        <div class="bg-surface-container-lowest rounded-2xl shadow-[0_4px_20px_rgba(211,47,47,0.04)] border border-outline-variant divide-y divide-outline-variant">
             <!-- FAQ Item 1 -->
             <details class="group p-6" open>
                 <summary class="flex justify-between items-center font-label-lg font-bold text-on-background cursor-pointer list-none">
@@ -124,7 +124,7 @@
                 <p class="text-body-lg text-on-primary-container/80 mb-6">Tim dukungan profesional kami tersedia setiap hari dari jam 08:00 - 22:00 WIB untuk membantu Anda.</p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <a href="https://wa.me/6281234567890" target="_blank" class="bg-white text-primary px-8 py-3.5 rounded-xl font-bold font-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors shadow-lg active:scale-95">
+                    <a href="https://wa.me/6281234567890" target="_blank" class="bg-surface-container-lowest text-primary px-8 py-3.5 rounded-xl font-bold font-label-lg flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors shadow-lg active:scale-95">
                         <span class="material-symbols-outlined text-green-500">chat</span>
                         Chat via WhatsApp
                     </a>

@@ -41,7 +41,7 @@
         <!-- Left Column: Payment Methods & Status -->
         <div class="lg:col-span-8 space-y-md">
             <!-- Section 3: Status Display (Top Priority Informational) -->
-            <section class="bg-white rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-red-50 motion-hidden delay-100">
+            <section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-red-50 motion-hidden delay-100">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
                     <div class="flex items-center gap-md">
                         <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary">
@@ -59,7 +59,7 @@
                 </div>
             </section>
             <!-- Section 1: Select Payment Method -->
-            <section class="bg-white rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant motion-hidden delay-200">
+            <section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant motion-hidden delay-200">
                 <h3 class="font-h3 text-h3 mb-md">Pilih Metode Pembayaran</h3>
                 <div class="space-y-sm">
                     <p class="text-label-md font-semibold text-on-surface-variant uppercase tracking-wider">Transfer Bank</p>
@@ -115,7 +115,7 @@
         <!-- Right Column: Verification & Summary -->
         <div class="lg:col-span-4 space-y-md">
             <!-- Section 2: Upload Proof -->
-            <section class="bg-white rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant motion-hidden slide-right delay-200">
+            <section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant motion-hidden slide-right delay-200">
                 <h3 class="font-label-md text-on-background mb-sm">Unggah Bukti Pembayaran</h3>
                 <div class="border-2 border-dashed border-outline-variant rounded-xl p-md text-center bg-surface-container-low hover:border-primary transition-colors group">
                     <input class="hidden" id="proof-upload" type="file"/>
@@ -133,7 +133,7 @@
                 </div>
             </section>
             <!-- Booking Summary -->
-            <section class="bg-white rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant overflow-hidden motion-hidden slide-right delay-300">
+            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant overflow-hidden motion-hidden slide-right delay-300">
                 <div class="h-32 bg-gray-200 overflow-hidden relative">
                     <img alt="Tennis court" class="w-full h-full object-cover" data-alt="professional indoor tennis court with bright blue surface and crisp white lines under soft artificial lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY15NAdb84C4nw2wGphPYnCY9N1AuJcfRFNDLMYq8zfQSdrnOYtGDqcQ-JkWLJOax8XwsFqGYh_UmNZdEuzHe3frln1NPPzvIBWI3imWLZV1DgMP2B7uNS96srtmJ0433U-Xye3D5uw7gb9LH6dAbFY7cnZSJJ-1dxqiwIsJEes1CAUm4sQJ76Wiigkz9EI4iYFTd7-pghrBSriW1eJaohv6yH96uHIJPqarQtaM_d2DAE8KcNzthdQyvi_zBE2tZZXLJBQSeu9BI"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-md">

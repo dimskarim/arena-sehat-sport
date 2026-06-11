@@ -145,7 +145,7 @@
                     
                     <!-- Registration Mode Toggle -->
                     <div class="bg-surface-container-low p-1 rounded-lg flex items-center">
-                        <button class="flex-1 py-2 text-sm font-semibold rounded-md bg-white text-primary shadow-sm border border-outline-variant/20">
+                        <button class="flex-1 py-2 text-sm font-semibold rounded-md bg-surface-container-lowest text-primary shadow-sm border border-outline-variant/20">
                             Daftar dengan Email
                         </button>
                         <button class="flex-1 py-2 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors">
@@ -154,8 +154,17 @@
                     </div>
                     
                     <!-- Form Content (Email Flow) -->
-                    <form class="space-y-4" action="#" method="POST">
+                    <form class="space-y-4" action="{{ route('front.register.submit') }}" method="POST">
                         @csrf
+                        @if ($errors->any())
+                            <div class="bg-red-100 text-red-600 p-3 rounded-lg text-sm mb-4">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="space-y-1">
                             <label class="text-xs font-bold uppercase tracking-wider text-on-surface-variant ml-1">Nama Lengkap</label>
                             <input class="w-full px-4 py-3 rounded-lg border border-outline-variant bg-surface-bright focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" name="name" placeholder="Masukkan nama lengkap" type="text" required/>
@@ -207,10 +216,7 @@
                     </button>
                     
                     <!-- Login Link -->
-                    <p class="text-center text-on-surface-variant">
-                        Sudah punya akun? 
-                        <a class="text-primary font-bold hover:underline" href="{{ route('front.login') }}">Masuk</a>
-                    </p>
+                    <p class="text-on-surface-variant mt-sm font-body-md text-center">Sudah punya akun? <a class="text-primary font-bold hover:underline" href="{{ route('login') }}">Masuk</a></p>
                     <a href="{{ route('home') }}" class="text-center flex justify-center items-center gap-2 text-primary text-sm hover:underline">
                         <span class="material-symbols-outlined text-sm">arrow_back</span> Kembali ke Beranda
                     </a>

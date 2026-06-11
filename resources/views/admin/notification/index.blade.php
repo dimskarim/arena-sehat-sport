@@ -14,7 +14,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
                 Kirim Pengumuman Massal
             </button>
-            <a href="{{ route('admin.notifications.create') }}" class="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#e4beba] text-[#1b1c1c] rounded-xl font-semibold text-sm hover:bg-[#f6f3f2] transition-colors shadow-sm">
+            <a href="{{ route('admin.notifications.create') }}" class="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#e4beba] dark:border-gray-700 text-[#1b1c1c] rounded-xl font-semibold text-sm hover:bg-[#f6f3f2] transition-colors shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                 Tambah Notifikasi
             </a>
@@ -29,7 +29,7 @@
 
     {{-- Stats --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-xl border border-[#e4beba] shadow-sm flex items-center gap-4">
+        <div class="bg-white p-6 rounded-xl border border-[#e4beba] dark:border-gray-700 shadow-sm flex items-center gap-4">
             <div class="w-12 h-12 bg-[#fdcbd0] rounded-xl flex items-center justify-center shrink-0">
                 <svg class="w-6 h-6 text-[#d32f2f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
             </div>
@@ -38,7 +38,7 @@
                 <p class="text-2xl font-black font-['Lexend']">{{ method_exists($items, 'total') ? $items->total() : count($items) }}</p>
             </div>
         </div>
-        <div class="bg-white p-6 rounded-xl border border-[#e4beba] shadow-sm flex items-center gap-4">
+        <div class="bg-white p-6 rounded-xl border border-[#e4beba] dark:border-gray-700 shadow-sm flex items-center gap-4">
             <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center shrink-0">
                 <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
@@ -58,84 +58,103 @@
         </div>
     </div>
 
-    {{-- Table --}}
-    <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-[#f0eded] text-[#5b403d] text-xs font-bold uppercase tracking-wider border-b border-[#e4beba]">
-                        <th class="px-6 py-4">Penerima</th>
-                        <th class="px-6 py-4">Pesan</th>
-                        <th class="px-6 py-4">Booking</th>
-                        <th class="px-6 py-4 text-center">Status Baca</th>
-                        <th class="px-6 py-4">Waktu</th>
-                        <th class="px-6 py-4 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-[#e4beba]">
-                    @forelse($items as $item)
-                    <tr class="hover:bg-[#f6f3f2] transition-colors group {{ !$item->is_read ? 'bg-amber-50/30' : '' }}">
-                        <td class="px-6 py-5">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-[#d32f2f] flex items-center justify-center text-white font-bold text-xs shrink-0">
+    {{-- Notification List (Cards) --}}
+    <div class="grid grid-cols-1 gap-4">
+        @forelse($items as $item)
+            @php
+                // Generate the link to mark as read and redirect
+                $link = route('admin.notifications.read', $item->id);
+            @endphp
+            <a href="{{ $link }}" class="block bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm hover:shadow-md hover:border-[#d32f2f]/30 transition-all p-5 relative overflow-hidden group">
+                <!-- Read indicator stripe -->
+                @if(!$item->is_read)
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500"></div>
+                @else
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gray-400"></div>
+                @endif
+                
+                <div class="flex items-start sm:items-center gap-4 flex-col sm:flex-row">
+                    <!-- Icon -->
+                    <div class="w-12 h-12 rounded-full bg-[#f6f3f2] flex items-center justify-center shrink-0 group-hover:bg-[#d32f2f]/10 transition-colors">
+                        @if($item->booking_id)
+                            <svg class="w-6 h-6 text-[#d32f2f]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        @else
+                            <svg class="w-6 h-6 text-[#5b403d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        @endif
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="flex-grow">
+                        <div class="flex items-center justify-between gap-4 mb-1">
+                            <h3 class="font-bold text-[#1b1c1c] text-base group-hover:text-[#d32f2f] transition-colors">{{ $item->pesan ?? 'Notifikasi Baru' }}</h3>
+                            <span class="text-xs font-semibold text-[#5b403d] shrink-0">{{ $item->created_at ? $item->created_at->diffForHumans() : '-' }}</span>
+                        </div>
+                        <p class="text-sm text-[#5b403d] mb-3">{{ $item->deskripsi ?? 'Tidak ada deskripsi.' }}</p>
+                        
+                        <div class="flex items-center flex-wrap gap-3">
+                            <!-- Sender/User -->
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-[#e4beba] flex items-center justify-center text-[#5b403d] font-bold text-[10px]">
                                     {{ strtoupper(substr(optional($item->user)->name ?? 'U', 0, 2)) }}
                                 </div>
-                                <div>
-                                    <p class="text-sm font-bold text-[#1b1c1c]">{{ optional($item->user)->name ?? '-' }}</p>
-                                    <p class="text-xs text-[#5b403d]">{{ optional($item->user)->email ?? 'ID: '.$item->user_id }}</p>
-                                </div>
+                                <span class="text-xs font-medium text-[#1b1c1c]">{{ optional($item->user)->name ?? 'Sistem' }}</span>
                             </div>
-                        </td>
-                        <td class="px-6 py-5 max-w-xs">
-                            <p class="text-sm text-[#1b1c1c] truncate font-medium">{{ $item->pesan ?? '-' }}</p>
-                            @if($item->deskripsi)
-                            <p class="text-xs text-[#5b403d] mt-0.5 truncate">{{ $item->deskripsi }}</p>
-                            @endif
-                        </td>
-                        <td class="px-6 py-5">
+                            
+                            <!-- Booking ID Badge -->
                             @if($item->booking_id)
-                                <a href="{{ route('admin.bookings.edit', $item->booking_id) }}" class="text-xs font-bold text-[#af101a] hover:underline">#{{ $item->booking_id }}</a>
-                            @else
-                                <span class="text-xs text-slate-400">—</span>
+                                <div class="w-1 h-1 rounded-full bg-[#e4beba]"></div>
+                                <span class="text-xs font-bold text-[#af101a] bg-[#ffdad6] px-2 py-0.5 rounded-md">Booking #{{ $item->booking_id }}</span>
                             @endif
-                        </td>
-                        <td class="px-6 py-5 text-center">
-                            @if($item->is_read)
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700"><span class="w-1.5 h-1.5 bg-green-600 rounded-full"></span> Dibaca</span>
+                            
+                            <!-- Read Status -->
+                            @if(!$item->is_read)
+                                <div class="w-1 h-1 rounded-full bg-[#e4beba]"></div>
+                                <span class="text-xs font-bold text-green-600 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> Belum Dibaca
+                                </span>
                             @else
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 animate-pulse"><span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> Belum Dibaca</span>
+                                <div class="w-1 h-1 rounded-full bg-[#e4beba]"></div>
+                                <span class="text-xs font-bold text-gray-500 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Sudah Dibaca
+                                </span>
                             @endif
-                        </td>
-                        <td class="px-6 py-5">
-                            <p class="text-xs text-[#5b403d]">{{ $item->created_at ? $item->created_at->format('d M Y, H:i') : '-' }}</p>
-                        </td>
-                        <td class="px-6 py-5 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <a href="{{ route('admin.notifications.edit', $item->id) }}" class="text-[#af101a] font-bold text-xs hover:bg-[#ffdad6] px-3 py-1.5 rounded-lg transition-colors">Edit</a>
-                                <form action="{{ route('admin.notifications.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus notifikasi ini?');">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="text-slate-500 font-bold text-xs hover:bg-red-50 hover:text-red-700 px-3 py-1.5 rounded-lg transition-colors">Hapus</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-[#5b403d]">
-                            <svg class="w-12 h-12 mx-auto mb-2 text-[#e4beba]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                            <p class="font-medium">Belum ada data notifikasi.</p>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="px-6 py-4 bg-[#f6f3f2] flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[#e4beba]">
-            @if(method_exists($items, 'firstItem'))
-            <p class="text-xs text-[#5b403d]">Menampilkan <span class="font-bold text-[#1b1c1c]">{{ $items->firstItem() }} - {{ $items->lastItem() }}</span> dari {{ number_format($items->total()) }} notifikasi</p>
-            @endif
-            @if(method_exists($items, 'links')) {{ $items->links() }} @endif
-        </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Delete Button (Separate from link to avoid clicking both) -->
+                    <div class="shrink-0 flex items-center gap-2 ml-auto sm:ml-0" onclick="event.preventDefault(); event.stopPropagation();">
+                        <form action="{{ route('admin.notifications.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus notifikasi ini?');">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors" title="Hapus Notifikasi">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </a>
+        @empty
+            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 p-12 text-center shadow-sm">
+                <div class="w-16 h-16 bg-[#f6f3f2] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-[#5b403d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                </div>
+                <h3 class="font-bold text-lg text-[#1b1c1c] mb-1">Belum Ada Notifikasi</h3>
+                <p class="text-sm text-[#5b403d]">Saat ini belum ada data notifikasi yang masuk ke sistem.</p>
+            </div>
+        @endforelse
+    </div>
+
+    <div class="mt-6 px-6 py-4 bg-[#f6f3f2] rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+        @if(method_exists($items, 'firstItem') && $items->hasPages())
+        <p class="text-sm text-[#5b403d]">
+            Menampilkan <span class="font-bold text-[#1b1c1c]">{{ $items->firstItem() ?? 0 }}-{{ $items->lastItem() ?? 0 }}</span> 
+            dari {{ number_format($items->total() ?? 0) }} notifikasi
+        </p>
+        {{ $items->links('components.pagination') }}
+        @else
+        <p class="text-sm text-[#5b403d]">
+            Menampilkan <span class="font-bold text-[#1b1c1c]">{{ $items->count() }}</span> notifikasi
+        </p>
+        @endif
     </div>
 </div>
 
@@ -160,13 +179,13 @@
             <div class="mb-5">
                 <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Judul / Subjek Pengumuman <span class="text-[#ba1a1a]">*</span></label>
                 <input type="text" name="deskripsi" required placeholder="Contoh: Diskon Kemerdekaan! 🎉"
-                    class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all">
+                    class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all">
             </div>
 
             <div class="mb-5">
                 <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Isi Pesan <span class="text-[#ba1a1a]">*</span></label>
                 <textarea name="pesan" required rows="4" placeholder="Tulis isi pengumuman di sini..."
-                    class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none"></textarea>
+                    class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none"></textarea>
             </div>
 
             <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-700 mb-5 flex items-start gap-2">
@@ -175,7 +194,7 @@
             </div>
 
             <div class="flex gap-3">
-                <button type="button" onclick="closeBroadcastModal()" class="flex-1 py-3 rounded-xl border border-[#e4beba] text-sm font-semibold text-[#5b403d] hover:bg-[#f6f3f2] transition-colors">Batal</button>
+                <button type="button" onclick="closeBroadcastModal()" class="flex-1 py-3 rounded-xl border border-[#e4beba] dark:border-gray-700 text-sm font-semibold text-[#5b403d] hover:bg-[#f6f3f2] transition-colors">Batal</button>
                 <button type="submit" class="flex-1 py-3 rounded-xl bg-[#d32f2f] text-white text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                     Kirim Sekarang

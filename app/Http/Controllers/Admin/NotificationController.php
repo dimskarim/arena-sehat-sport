@@ -71,4 +71,20 @@ class NotificationController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
+    public function read($id)
+    {
+        try {
+            $notification = \App\Models\Notifikasi::findOrFail($id);
+            $notification->update(['is_read' => true]);
+            
+            if ($notification->booking_id) {
+                return redirect()->route('admin.bookings.edit', $notification->booking_id);
+            }
+            
+            return redirect()->route('admin.notifications.index');
+        } catch (Exception $e) {
+            return redirect()->route('admin.notifications.index')->with('error', 'Notifikasi tidak ditemukan.');
+        }
+    }
 }

@@ -26,7 +26,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {{-- Form --}}
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm p-8">
+            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-8">
                 <form id="editNotifForm" action="{{ route('admin.notifications.update', $item->id) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -43,7 +43,7 @@
                     {{-- Penerima --}}
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Penerima (Pengguna) <span class="text-[#ba1a1a]">*</span></label>
-                        <select name="user_id" required class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
+                        <select name="user_id" required class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Pilih Pengguna —</option>
                             @foreach($users as $user)
                                 <option value="{{ $user->id }}" {{ old('user_id', $item->user_id) == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
@@ -55,7 +55,7 @@
                     {{-- Booking terkait --}}
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Booking Terkait <span class="text-[10px] normal-case font-normal text-[#8f6f6c] ml-1">(opsional)</span></label>
-                        <select name="booking_id" class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
+                        <select name="booking_id" class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Tidak terkait booking tertentu —</option>
                             @foreach($bookings as $booking)
                                 <option value="{{ $booking->id }}" {{ old('booking_id', $item->booking_id) == $booking->id ? 'selected' : '' }}>
@@ -70,7 +70,7 @@
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Judul / Deskripsi</label>
                         <input type="text" name="deskripsi" value="{{ old('deskripsi', $item->deskripsi) }}" placeholder="Contoh: Konfirmasi Pembayaran"
-                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all">
+                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all">
                         @error('deskripsi') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
@@ -78,7 +78,7 @@
                     <div class="mb-6">
                         <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Isi Pesan <span class="text-[#ba1a1a]">*</span></label>
                         <textarea name="pesan" required rows="5" placeholder="Tulis pesan notifikasi di sini..."
-                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none">{{ old('pesan', $item->pesan) }}</textarea>
+                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none">{{ old('pesan', $item->pesan) }}</textarea>
                         @error('pesan') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
@@ -110,7 +110,7 @@
 
         {{-- Sidebar Info --}}
         <div class="space-y-6">
-            <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm p-6">
+            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-6">
                 <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-4">Detail Notifikasi</h4>
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
@@ -127,7 +127,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-2xl border border-[#e4beba] shadow-sm p-6">
+            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-6">
                 <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-4">Hapus Notifikasi</h4>
                 <p class="text-sm text-[#5b403d] mb-4">Tindakan ini tidak bisa dibatalkan.</p>
                 <form action="{{ route('admin.notifications.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus notifikasi ini?');">
