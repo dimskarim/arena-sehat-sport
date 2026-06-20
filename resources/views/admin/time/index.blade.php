@@ -1,6 +1,71 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .ts-wrapper.form-control {
+        border: none;
+        padding: 0;
+        background: transparent;
+    }
+
+    .ts-control {
+        border-radius: 0.75rem !important;
+        padding: 0.5rem 0.75rem !important;
+        border: 1px solid #e2e8f0 !important;
+        background-color: #f8fafc !important;
+        font-size: 0.875rem !important;
+        min-height: 38px !important;
+    }
+
+    .dark .ts-control {
+        border-color: #4b5563 !important;
+        background-color: rgba(55, 65, 81, 0.5) !important;
+        color: white !important;
+    }
+
+    .dark .ts-dropdown {
+        background-color: #1f2937 !important;
+        border-color: #4b5563 !important;
+        color: white !important;
+    }
+
+    .dark .ts-dropdown .option:hover,
+    .dark .ts-dropdown .active {
+        background-color: rgba(75, 85, 99, 0.8) !important;
+        color: white !important;
+    }
+
+    /* Flatpickr Time Picker Compact Styling */
+    .flatpickr-calendar.hasTime.noCalendar {
+        width: 130px !important;
+        min-width: 130px !important;
+        padding: 0 !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+    }
+
+    .flatpickr-time {
+        height: 54px !important;
+        line-height: 54px !important;
+        max-height: 54px !important;
+        border-top: none !important;
+    }
+
+    .flatpickr-time input.flatpickr-hour,
+    .flatpickr-time input.flatpickr-minute {
+        font-size: 1.125rem !important;
+        font-weight: 600 !important;
+    }
+
+    .flatpickr-time .flatpickr-time-separator {
+        font-weight: 600 !important;
+        color: #475569 !important;
+    }
+
+    .dark .flatpickr-time .flatpickr-time-separator {
+        color: #94a3b8 !important;
+    }
+</style>
 <div id="time-content-container" class="max-w-[1280px] mx-auto font-['Inter'] text-slate-900 dark:text-white transition-opacity duration-300 relative">
 
     {{-- Page Header --}}
@@ -10,14 +75,14 @@
             <p class="text-slate-500 dark:text-gray-400 text-[15px]">Atur jam buka dan kelola slot waktu ketersediaan lapangan</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.oprational-waktus.create') }}"
+            <a href="{{ route('admin.oprational-waktus.create', request()->only(['lapangan_id'])) }}"
                 class="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-gray-300 text-sm font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 Tambah Jam Operasional
             </a>
-            <a href="{{ route('admin.slot-waktus.create') }}"
+            <a href="{{ route('admin.slot-waktus.create', request()->only(['lapangan_id', 'hari'])) }}"
                 class="flex items-center gap-2 px-5 py-2.5 bg-[#af101a] dark:bg-red-600 text-white text-sm font-semibold rounded-xl hover:opacity-90 dark:hover:bg-red-700 transition-all shadow-lg shadow-red-700/20 active:scale-95">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -37,22 +102,76 @@
     </div>
     @endif
 
+    {{-- Error Alert --}}
+    @if(session('error'))
+    <div class="mb-6 flex items-center gap-3 border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 dark:border-red-500 px-5 py-4 rounded-r-xl shadow-sm">
+        <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+        <p class="text-red-800 dark:text-red-400 font-semibold text-sm">{{ session('error') }}</p>
+    </div>
+    @endif
+
+    @if($errors->any())
+    <div class="mb-6 border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 dark:border-red-500 px-5 py-4 rounded-r-xl shadow-sm">
+        <div class="flex items-center gap-3 mb-2">
+            <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <p class="text-red-800 dark:text-red-400 font-bold text-sm">Gagal Menyimpan Data</p>
+        </div>
+        <ul class="list-disc list-inside text-sm text-red-700 dark:text-red-300 ml-8 space-y-1">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     {{-- Filter Bar --}}
-    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-slate-100 dark:border-gray-700 shadow-sm flex flex-wrap items-center gap-4 mb-6">
-        <form method="GET" action="{{ url()->current() }}" class="flex flex-wrap items-center gap-3 w-full">
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-slate-100 dark:border-gray-700 shadow-sm flex flex-wrap items-center gap-4 mb-6 relative">
+        <form method="GET" action="{{ url()->current() }}" class="flex flex-wrap items-center gap-3 w-full" id="filterFormTop">
             <svg class="w-5 h-5 text-slate-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
             </svg>
             <span class="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Filter:</span>
-            <select name="lapangan_id" id="lapanganFilter"
-                class="py-2 px-3 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 dark:text-white transition-all text-sm outline-none">
-                <option value="">Semua Lapangan</option>
-                @foreach($lapangans as $lap)
-                <option value="{{ $lap->id }}" {{ request('lapangan_id') == $lap->id ? 'selected' : '' }}>
-                    {{ $lap->name }}
-                </option>
-                @endforeach
-            </select>
+
+            <div class="relative w-[250px] z-40">
+                <select name="lapangan_id" id="lapanganFilter" class="hidden">
+                    <option value="">Semua Lapangan</option>
+                    @foreach($lapangans as $lap)
+                    <option value="{{ $lap->id }}" {{ request('lapangan_id') == $lap->id ? 'selected' : '' }}>
+                        {{ $lap->name }}
+                    </option>
+                    @endforeach
+                </select>
+
+                <div id="custom-lapangan-btn" class="flex items-center justify-between w-full px-4 py-2 bg-slate-50 hover:bg-white/[0.12] rounded-xl border border-slate-200 text-sm font-semibold transition-all cursor-pointer shadow-sm dark:bg-gray-700/50 dark:border-gray-600 dark:text-white">
+                    <span class="text-slate-700 dark:text-white truncate" id="custom-lapangan-text">
+                        {{ $lapangans->firstWhere('id', request('lapangan_id'))?->name ?? 'Semua Lapangan' }}
+                    </span>
+                    <svg id="custom-lapangan-icon" class="w-4 h-4 text-slate-500 transition-transform duration-200 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+
+                <div id="custom-lapangan-menu" class="absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50 max-h-[300px] flex flex-col">
+                    <div class="absolute -top-1.5 left-6 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
+
+                    <div class="p-2 border-b border-slate-100 dark:border-gray-700 relative z-20 bg-white dark:bg-gray-800 rounded-t-xl">
+                        <input type="text" id="custom-lapangan-search" placeholder="Cari lapangan..." class="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-red-800 focus:ring-1 focus:ring-red-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white" onclick="event.stopPropagation()">
+                    </div>
+
+                    <ul class="relative z-10 py-1 overflow-y-auto flex-1" id="custom-lapangan-options">
+                        <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('lapangan_id') == '' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">Semua Lapangan</li>
+                        @foreach($lapangans as $lap)
+                        <li data-value="{{ $lap->id }}" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('lapangan_id') == $lap->id ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">{{ $lap->name }}</li>
+                        @endforeach
+                        <li id="custom-lapangan-empty" class="px-4 py-2.5 text-sm text-slate-500 text-center hidden dark:text-gray-400">Tidak ditemukan</li>
+                    </ul>
+                </div>
+            </div>
+
             @if(request('hari'))
             <input type="hidden" name="hari" value="{{ request('hari') }}">
             @endif
@@ -91,7 +210,7 @@
                         <p class="text-xs text-slate-400 dark:text-gray-500">Tabel <code class="bg-slate-100 dark:bg-gray-700 px-1 rounded text-[10px]">oprational_waktu</code></p>
                     </div>
                 </div>
-                <a href="{{ route('admin.oprational-waktus.create') }}"
+                <a href="{{ route('admin.oprational-waktus.create', request()->only(['lapangan_id'])) }}"
                     class="flex items-center gap-1 px-3 py-1.5 bg-[#af101a] dark:bg-red-600 text-white text-xs font-bold rounded-lg hover:opacity-90 dark:hover:bg-red-700 transition-all">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -231,8 +350,8 @@
     </div>
 
     {{-- Slot Harian Cards --}}
-    <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-100 dark:border-gray-700 shadow-sm overflow-hidden mb-6">
-        <div class="px-6 py-5 border-b border-slate-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-100 dark:border-gray-700 shadow-sm relative z-40 mb-6">
+        <div class="px-6 py-5 border-b border-slate-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-40">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-lg bg-red-50 dark:bg-red-900/30 flex items-center justify-center">
                     <svg class="w-5 h-5 text-[#af101a] dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -246,20 +365,45 @@
                     </p>
                 </div>
             </div>
-            <div class="flex flex-wrap items-center gap-3">
-                <form method="GET" action="{{ url()->current() }}" class="flex items-center">
+            <div class="flex flex-wrap items-center gap-3 relative z-40">
+                <form method="GET" action="{{ url()->current() }}" class="flex items-center" id="hariFilterForm">
                     @if(request('lapangan_id'))
                     <input type="hidden" name="lapangan_id" value="{{ request('lapangan_id') }}">
                     @endif
-                    <select name="hari" id="hariFilter"
-                        class="py-2.5 px-4 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 dark:text-white transition-all text-sm outline-none font-semibold shadow-sm">
-                        <option value="">Filter Hari</option>
-                        @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $h)
-                        <option value="{{ $h }}" {{ request('hari') == $h ? 'selected' : '' }}>{{ $h }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative w-[160px] z-50">
+                        <!-- Hidden Select -->
+                        <select name="hari" id="hariFilter" class="hidden">
+                            <option value="">Filter Hari</option>
+                            @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $h)
+                            <option value="{{ $h }}" {{ request('hari') == $h ? 'selected' : '' }}>{{ $h }}</option>
+                            @endforeach
+                        </select>
+
+                        <!-- Custom Dropdown Button -->
+                        <div id="custom-hari-btn" class="flex items-center justify-between w-full px-4 py-2.5 bg-slate-50 hover:bg-white/[0.12] rounded-xl border border-slate-200 text-sm font-semibold transition-all cursor-pointer shadow-sm dark:bg-gray-700/50 dark:border-gray-600 dark:text-white">
+                            <span class="text-slate-700 dark:text-white truncate" id="custom-hari-text">
+                                {{ request('hari') ?: 'Filter Hari' }}
+                            </span>
+                            <svg id="custom-hari-icon" class="w-4 h-4 text-slate-500 transition-transform duration-200 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+
+                        <!-- Custom Dropdown Menu -->
+                        <div id="custom-hari-menu" class="absolute right-0 sm:left-0 top-[calc(100%+0.5rem)] w-48 sm:w-full bg-white dark:bg-gray-800 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50">
+                            <!-- Upward Pointer -->
+                            <div class="absolute -top-1.5 right-6 sm:left-6 sm:right-auto w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
+
+                            <ul class="relative z-10 py-1" id="custom-hari-options">
+                                <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('hari') == '' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">Semua Hari</li>
+                                @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $idx => $h)
+                                <li data-value="{{ $h }}" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('hari') == $h ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 {{ $idx === 6 ? 'rounded-b-lg' : '' }}">{{ $h }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </form>
-                <a href="{{ route('admin.slot-waktus.create') }}"
+                <a href="{{ route('admin.slot-waktus.create', request()->only(['lapangan_id', 'hari'])) }}"
                     class="flex items-center gap-2 px-5 py-2.5 bg-[#af101a] dark:bg-red-600 text-white text-sm font-bold rounded-xl hover:opacity-90 dark:hover:bg-red-700 transition-all shadow-md shadow-red-700/20 active:scale-95 self-start sm:self-auto">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -321,7 +465,7 @@
                 @endforeach
 
                 {{-- Add Custom Slot --}}
-                <a href="{{ route('admin.slot-waktus.create') }}"
+                <a href="{{ route('admin.slot-waktus.create', request()->only(['lapangan_id', 'hari'])) }}"
                     class="p-4 rounded-xl border-2 border-dashed border-slate-200 dark:border-gray-700 flex flex-col items-center justify-center min-h-[112px] hover:border-[#af101a] dark:hover:border-red-500 hover:bg-red-50/10 dark:hover:bg-red-900/10 transition-all cursor-pointer group">
                     <svg class="text-slate-300 dark:text-gray-600 group-hover:text-[#af101a] dark:group-hover:text-red-500 transition-colors w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -342,12 +486,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"></path>
                 </svg>
                 <p class="font-semibold text-slate-400 dark:text-gray-500 mb-4">Belum ada slot waktu.</p>
-                <a href="{{ route('admin.slot-waktus.create') }}"
+                <a href="{{ route('admin.slot-waktus.create', request()->only(['lapangan_id', 'hari'])) }}"
                     class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#af101a] dark:bg-red-600 text-white text-sm font-bold rounded-xl hover:opacity-90 dark:hover:bg-red-700 transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg Tambah Slot Pertama
-                        </a>
+                    </svg> Tambah Slot Pertama
+                </a>
             </div>
             @endif
 
@@ -442,6 +586,12 @@
             </div>
 
         </div>
+
+        <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
         <script>
             async function toggleSlotStatus(id) {
@@ -579,6 +729,16 @@
                         card.className = "w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-100 dark:border-gray-700 relative";
                         contentContainer.appendChild(card);
 
+                        // Initialize TomSelect inside modal
+                        if (typeof initTomSelect === 'function') {
+                            initTomSelect();
+                        }
+
+                        // Initialize Flatpickr inside modal
+                        if (typeof initFlatpickr === 'function') {
+                            initFlatpickr();
+                        }
+
                         // Add click outside to close
                         overlay.onclick = function(e) {
                             if (e.target === overlay) closeAjaxModal();
@@ -615,6 +775,57 @@
                     }, 300);
                 }
             }
+
+            function initTomSelect() {
+                document.querySelectorAll('.tom-select-custom').forEach((el) => {
+                    if (!el.tomselect) {
+                        new TomSelect(el, {
+                            create: false,
+                            sortField: {
+                                field: "text",
+                                direction: "asc"
+                            },
+                            onChange: function(value) {
+                                const form = el.closest('form');
+                                // Only trigger AJAX fetch if it's the main filter form
+                                if (form && form.method.toUpperCase() === 'GET' && !form.action.includes('create') && !form.action.includes('edit')) {
+                                    const url = new URL(form.action);
+                                    const formData = new FormData(form);
+                                    formData.forEach((v, key) => {
+                                        if (v) url.searchParams.append(key, v);
+                                    });
+                                    if (typeof fetchTimeData === 'function') {
+                                        fetchTimeData(url.toString());
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            function initFlatpickr() {
+                if (typeof flatpickr !== 'undefined') {
+                    flatpickr('.timepicker-custom', {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true,
+                        disableMobile: "true"
+                    });
+                }
+            }
+
+            // Init on first load
+            initTomSelect();
+            initFlatpickr();
+
+            // Re-init when AJAX completes
+            const originalFetchTimeData = fetchTimeData;
+            window.fetchTimeData = async function(url) {
+                await originalFetchTimeData(url);
+                initTomSelect();
+            };
         </script>
 
         {{-- Modal Konfirmasi Hapus --}}
@@ -651,6 +862,158 @@
         </div>
 
         <script>
+            // Custom Dropdown Logic (Using Event Delegation to survive AJAX replacements)
+            document.addEventListener('click', function(e) {
+                const hariBtn = e.target.closest('#custom-hari-btn');
+                const lapBtn = e.target.closest('#custom-lapangan-btn');
+                const hariMenu = document.getElementById('custom-hari-menu');
+                const lapMenu = document.getElementById('custom-lapangan-menu');
+
+                // 1. Toggle Hari Dropdown
+                if (hariBtn) {
+                    e.stopPropagation();
+                    if (hariMenu) {
+                        hariMenu.classList.toggle('hidden');
+                        const hariIcon = document.getElementById('custom-hari-icon');
+                        if (hariMenu.classList.contains('hidden')) {
+                            hariIcon?.classList.remove('rotate-180');
+                        } else {
+                            hariIcon?.classList.add('rotate-180');
+                        }
+                    }
+                } else if (hariMenu && !hariMenu.contains(e.target)) {
+                    hariMenu.classList.add('hidden');
+                    document.getElementById('custom-hari-icon')?.classList.remove('rotate-180');
+                }
+
+                // 2. Toggle Lapangan Dropdown
+                if (lapBtn) {
+                    e.stopPropagation();
+                    if (lapMenu) {
+                        lapMenu.classList.toggle('hidden');
+                        const lapIcon = document.getElementById('custom-lapangan-icon');
+                        if (lapMenu.classList.contains('hidden')) {
+                            lapIcon?.classList.remove('rotate-180');
+                        } else {
+                            lapIcon?.classList.add('rotate-180');
+                        }
+                    }
+                } else if (lapMenu && !lapMenu.contains(e.target)) {
+                    lapMenu.classList.add('hidden');
+                    document.getElementById('custom-lapangan-icon')?.classList.remove('rotate-180');
+                }
+
+                // 3. Hari Option Click
+                const hariOption = e.target.closest('#custom-hari-options li');
+                if (hariOption && !hariBtn) {
+                    const value = hariOption.getAttribute('data-value');
+                    if (value !== null) {
+                        const text = hariOption.innerText;
+                        
+                        const hFilter = document.getElementById('hariFilter');
+                        if (hFilter) hFilter.value = value;
+                        
+                        const hText = document.getElementById('custom-hari-text');
+                        if (hText) hText.innerText = text || 'Filter Hari';
+                        
+                        document.querySelectorAll('#custom-hari-options li').forEach(opt => {
+                            opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
+                            opt.classList.add('text-slate-700');
+                        });
+                        
+                        hariOption.classList.remove('text-slate-700');
+                        hariOption.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        
+                        if (hariMenu) hariMenu.classList.add('hidden');
+                        document.getElementById('custom-hari-icon')?.classList.remove('rotate-180');
+                        
+                        const hariForm = document.getElementById('hariFilterForm');
+                        if (hariForm) {
+                            const url = new URL(hariForm.action);
+                            const formData = new FormData(hariForm);
+                            formData.forEach((v, key) => {
+                                if (v) url.searchParams.append(key, v);
+                            });
+                            if (typeof fetchTimeData === 'function') {
+                                fetchTimeData(url.toString());
+                            } else {
+                                hariForm.submit();
+                            }
+                        }
+                    }
+                }
+
+                // 4. Lapangan Option Click
+                const lapOption = e.target.closest('#custom-lapangan-options li');
+                if (lapOption && lapOption.id !== 'custom-lapangan-empty' && !lapBtn) {
+                    const value = lapOption.getAttribute('data-value');
+                    if (value !== null) {
+                        const text = lapOption.innerText;
+                        
+                        const lFilter = document.getElementById('lapanganFilter');
+                        if (lFilter) lFilter.value = value;
+                        
+                        const lText = document.getElementById('custom-lapangan-text');
+                        if (lText) lText.innerText = text;
+                        
+                        document.querySelectorAll('#custom-lapangan-options li').forEach(opt => {
+                            if (opt.id === 'custom-lapangan-empty') return;
+                            opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
+                            opt.classList.add('text-slate-700');
+                        });
+                        
+                        lapOption.classList.remove('text-slate-700');
+                        lapOption.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        
+                        if (lapMenu) lapMenu.classList.add('hidden');
+                        document.getElementById('custom-lapangan-icon')?.classList.remove('rotate-180');
+                        
+                        const lapSearch = document.getElementById('custom-lapangan-search');
+                        if (lapSearch) {
+                            lapSearch.value = '';
+                            lapSearch.dispatchEvent(new Event('input'));
+                        }
+                        
+                        const lapForm = document.getElementById('filterFormTop');
+                        if (lapForm) {
+                            const url = new URL(lapForm.action);
+                            const formData = new FormData(lapForm);
+                            formData.forEach((v, key) => {
+                                if (v) url.searchParams.append(key, v);
+                            });
+                            if (typeof fetchTimeData === 'function') {
+                                fetchTimeData(url.toString());
+                            } else {
+                                lapForm.submit();
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Lapangan Search Input
+            document.addEventListener('input', function(e) {
+                if (e.target.id === 'custom-lapangan-search') {
+                    const filter = e.target.value.toLowerCase();
+                    let hasVisible = false;
+                    const lapOptions = document.querySelectorAll('#custom-lapangan-options li');
+                    lapOptions.forEach(option => {
+                        if (option.id === 'custom-lapangan-empty') return;
+                        const text = option.innerText.toLowerCase();
+                        if (text.includes(filter)) {
+                            option.style.display = '';
+                            hasVisible = true;
+                        } else {
+                            option.style.display = 'none';
+                        }
+                    });
+                    const emptyState = document.getElementById('custom-lapangan-empty');
+                    if (emptyState) {
+                        emptyState.style.display = hasVisible ? 'none' : 'block';
+                    }
+                }
+            });
+
             let deleteModal, deleteModalContent, deleteFeedback, confirmDeleteBtn, deleteItemName;
             let deleteUrl = '';
 

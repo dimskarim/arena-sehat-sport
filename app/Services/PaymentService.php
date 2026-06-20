@@ -19,6 +19,13 @@ class PaymentService
             });
         }
 
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            $pemilikId = auth()->id();
+            $query->whereHas('booking.lapangan', function ($q) use ($pemilikId) {
+                $q->where('pemilik_id', $pemilikId);
+            });
+        }
+
         return $query->latest()->paginate($perPage)->withQueryString();
     }
 

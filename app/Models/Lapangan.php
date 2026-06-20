@@ -5,16 +5,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lapangan extends Model {
     use HasFactory;
-    protected $fillable = ['kategori_id', 'name', 'deskripsi', 'harga', 'status'];
+    protected $fillable = ['kategori_id', 'pemilik_id', 'name', 'deskripsi', 'harga', 'status'];
 
     public function kategori() {
         return $this->belongsTo(Kategori::class);
+    }
+    public function pemilik() {
+        return $this->belongsTo(User::class, 'pemilik_id');
     }
     public function gambarLapangans() {
         return $this->hasMany(GambarLapangan::class);
     }
     public function waktuOperasionals() {
         return $this->hasMany(WaktuOperasional::class);
+    }
+    public function fasilitas() {
+        return $this->belongsToMany(Fasilitas::class, 'fasilitas_lapangan', 'lapangan_id', 'fasilitas_id');
+    }
+    public function bookings() {
+        return $this->hasMany(Booking::class);
     }
 
     // Scope for filtering & search

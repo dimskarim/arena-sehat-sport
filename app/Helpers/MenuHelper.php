@@ -48,19 +48,38 @@ class MenuHelper
                 'name' => 'Payments',
                 'path' => '/admin/payments',
             ],
+            [
+                'icon' => 'support-ticket',
+                'name' => 'Notifikasi',
+                'path' => '/admin/notifications',
+            ],
         ];
     }
 
     public static function getMenuGroups()
     {
+        $user = auth()->user();
+        $role = $user ? $user->role : 'user';
+
+        $othersItems = self::getOthersItems();
+
+        if ($role === 'pemilik') {
+            // Pemilik only sees Payments and Notifikasi from Others
+            $othersItems = array_filter($othersItems, function($item) {
+                return in_array($item['name'], ['Payments', 'Notifikasi']);
+            });
+            // Reset array keys
+            $othersItems = array_values($othersItems);
+        }
+
         return [
             [
                 'title' => 'Menu',
-                'items' => self::getMainNavItems()
+                'items' => self::getMainNavItems() // Dashboard, Lapangan, Booking, Waktu are in here
             ],
             [
                 'title' => 'Others',
-                'items' => self::getOthersItems()
+                'items' => $othersItems
             ]
         ];
     }

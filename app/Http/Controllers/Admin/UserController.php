@@ -20,7 +20,14 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $items = $this->service->getAll($request->query('search'), $request->query('role'), $request->query('per_page', 10));
-        return view('admin.user.index', compact('items'), ['title' => 'User']);
+        
+        $search = $request->query('search');
+        $role = $request->query('role');
+
+        $totalUsers = \App\Models\User::search($search)->filterRole($role)->where('role', 'user')->count();
+        $totalAdmins = \App\Models\User::search($search)->filterRole($role)->where('role', 'admin')->where('status', 'aktif')->count();
+
+        return view('admin.user.index', compact('items', 'totalUsers', 'totalAdmins'), ['title' => 'User']);
     }
 
     public function create()
@@ -62,8 +69,14 @@ class UserController extends Controller
     {
         try {
             $this->service->delete($id);
+            if (request()->expectsJson()) {
+                return response()->json(['message' => 'Data berhasil dihapus.']);
+            }
             return redirect()->route('admin.users.index')->with('success', 'Data berhasil dihapus.');
         } catch (Exception $e) {
+            if (request()->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], 400);
+            }
             return back()->with('error', $e->getMessage());
         }
     }

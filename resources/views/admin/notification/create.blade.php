@@ -1,25 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-[1280px] mx-auto font-['Inter'] text-[#1b1c1c]">
+<div class="max-w-[1280px] mx-auto font-['Inter'] text-slate-900 dark:text-white">
 
     {{-- Header --}}
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <div class="flex items-center gap-2 text-sm text-[#5b403d] mb-2">
-                <a href="{{ route('admin.notifications.index') }}" class="hover:text-[#af101a] transition-colors flex items-center gap-1">
+            <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-gray-400 mb-2">
+                <a href="{{ route('admin.notifications.index') }}" class="hover:text-red-700 dark:text-red-400 transition-colors flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                     </svg>
                     Kembali ke Notifikasi
                 </a>
-                <span class="text-[#e4beba]">/</span>
-                <span class="font-semibold text-[#1b1c1c]">Tambah Notifikasi</span>
+                <span class="text-slate-300 dark:text-gray-600">/</span>
+                <span class="font-semibold text-slate-900 dark:text-white">Tambah Notifikasi</span>
             </div>
-            <h1 class="font-['Lexend'] text-3xl font-bold text-[#1b1c1c] tracking-tight">Buat Notifikasi Baru</h1>
-            <p class="text-[#5b403d] mt-1 text-sm">Kirim pesan pemberitahuan ke pengguna tertentu.</p>
+            <h1 class="font-['Lexend'] text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Buat Notifikasi Baru</h1>
+            <p class="text-slate-500 dark:text-gray-400 mt-1 text-sm">Kirim pesan pemberitahuan ke pengguna tertentu.</p>
         </div>
-        <button type="submit" form="notifForm" class="flex items-center gap-2 px-6 py-2.5 bg-[#af101a] text-white text-sm font-semibold rounded-xl hover:opacity-90 shadow-lg shadow-red-900/20 active:scale-95 transition-all">
+        <button type="submit" form="notifForm" class="flex items-center gap-2 px-6 py-2.5 bg-red-700 dark:bg-red-600 text-white text-sm font-semibold rounded-xl hover:opacity-90 shadow-lg shadow-red-900/20 active:scale-95 transition-all">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
@@ -30,7 +30,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {{-- Form --}}
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-8">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 dark:border-gray-700 shadow-sm p-8">
                 <form id="notifForm" action="{{ route('admin.notifications.store') }}" method="POST">
                     @csrf
 
@@ -45,20 +45,20 @@
 
                     {{-- Penerima --}}
                     <div class="mb-6">
-                        <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Penerima (Pengguna) <span class="text-[#ba1a1a]">*</span></label>
-                        <select name="user_id" required class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
+                        <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Penerima (Pengguna) <span class="text-red-600 dark:text-red-400">*</span></label>
+                        <select name="user_id" required class="w-full px-4 py-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-red-600 dark:border-red-500 outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Pilih Pengguna —</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }} ({{ $user->email }})</option>
                             @endforeach
                         </select>
-                        @error('user_id') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('user_id') <p class="text-red-600 dark:text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Booking terkait --}}
                     <div class="mb-6">
-                        <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Booking Terkait <span class="text-[10px] normal-case font-normal text-[#8f6f6c] ml-1">(opsional)</span></label>
-                        <select name="booking_id" class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all appearance-none cursor-pointer">
+                        <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Booking Terkait <span class="text-[10px] normal-case font-normal text-[#8f6f6c] ml-1">(opsional)</span></label>
+                        <select name="booking_id" class="w-full px-4 py-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-red-600 dark:border-red-500 outline-none transition-all appearance-none cursor-pointer">
                             <option value="">— Tidak terkait booking tertentu —</option>
                             @foreach($bookings as $booking)
                             <option value="{{ $booking->id }}" {{ old('booking_id') == $booking->id ? 'selected' : '' }}>
@@ -66,28 +66,28 @@
                             </option>
                             @endforeach
                         </select>
-                        @error('booking_id') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('booking_id') <p class="text-red-600 dark:text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Judul / Deskripsi --}}
                     <div class="mb-6">
-                        <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Judul / Deskripsi</label>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Judul / Deskripsi</label>
                         <input type="text" name="deskripsi" value="{{ old('deskripsi') }}" placeholder="Contoh: Konfirmasi Pembayaran"
-                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all">
-                        @error('deskripsi') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
+                            class="w-full px-4 py-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-red-600 dark:border-red-500 outline-none transition-all">
+                        @error('deskripsi') <p class="text-red-600 dark:text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Pesan --}}
                     <div class="mb-6">
-                        <label class="block text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-2">Isi Pesan <span class="text-[#ba1a1a]">*</span></label>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Isi Pesan <span class="text-red-600 dark:text-red-400">*</span></label>
                         <textarea name="pesan" required rows="5" placeholder="Tulis pesan notifikasi di sini..."
-                            class="w-full px-4 py-3 bg-[#f6f3f2] border border-[#e4beba] dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-[#af101a] outline-none transition-all resize-none">{{ old('pesan') }}</textarea>
-                        @error('pesan') <p class="text-[#ba1a1a] text-xs mt-1">{{ $message }}</p> @enderror
+                            class="w-full px-4 py-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 dark:border-gray-700 rounded-xl text-sm focus:ring-2 focus:ring-red-100 focus:border-red-600 dark:border-red-500 outline-none transition-all resize-none">{{ old('pesan') }}</textarea>
+                        @error('pesan') <p class="text-red-600 dark:text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Template Cepat --}}
                     <div>
-                        <p class="text-xs font-bold text-[#5b403d] uppercase tracking-widest mb-3">Template Cepat</p>
+                        <p class="text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-3">Template Cepat</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <button type="button" onclick="setTemplate('Pembayaran Diverifikasi', 'Selamat! Pembayaran Anda telah kami verifikasi dan jadwal lapangan resmi terkunci. Silakan datang sesuai jadwal.')"
                                 class="text-left px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-xs font-semibold text-green-700 hover:bg-green-100 transition-colors">
@@ -113,23 +113,23 @@
 
         {{-- Sidebar Tips --}}
         <div class="space-y-6">
-            <div class="bg-white rounded-2xl border border-[#e4beba] dark:border-gray-700 shadow-sm p-6">
-                <h4 class="font-['Lexend'] font-bold text-[#1b1c1c] mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-[#d32f2f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-slate-200 dark:border-gray-700 dark:border-gray-700 shadow-sm p-6">
+                <h4 class="font-['Lexend'] font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Tips Notifikasi
                 </h4>
-                <ul class="space-y-3 text-sm text-[#5b403d]">
-                    <li class="flex items-start gap-2"><span class="text-[#d32f2f] font-bold mt-0.5">•</span><span>Gunakan pesan yang singkat, jelas, dan informatif.</span></li>
-                    <li class="flex items-start gap-2"><span class="text-[#d32f2f] font-bold mt-0.5">•</span><span>Sertakan booking terkait agar user langsung mengerti konteksnya.</span></li>
-                    <li class="flex items-start gap-2"><span class="text-[#d32f2f] font-bold mt-0.5">•</span><span>Untuk pesan massal, gunakan fitur "Kirim Pengumuman Massal" di halaman daftar.</span></li>
+                <ul class="space-y-3 text-sm text-slate-500 dark:text-gray-400">
+                    <li class="flex items-start gap-2"><span class="text-red-600 dark:text-red-400 font-bold mt-0.5">•</span><span>Gunakan pesan yang singkat, jelas, dan informatif.</span></li>
+                    <li class="flex items-start gap-2"><span class="text-red-600 dark:text-red-400 font-bold mt-0.5">•</span><span>Sertakan booking terkait agar user langsung mengerti konteksnya.</span></li>
+                    <li class="flex items-start gap-2"><span class="text-red-600 dark:text-red-400 font-bold mt-0.5">•</span><span>Untuk pesan massal, gunakan fitur "Kirim Pengumuman Massal" di halaman daftar.</span></li>
                 </ul>
             </div>
-            <div class="bg-[#d32f2f] text-white p-6 rounded-2xl shadow-lg shadow-[#af101a]/20">
+            <div class="bg-red-600 dark:bg-red-700 text-white p-6 rounded-2xl shadow-lg shadow-red-900/20">
                 <h4 class="font-['Lexend'] font-bold mb-2">Pengumuman Massal?</h4>
                 <p class="text-sm opacity-80 mb-4">Kirim satu pesan ke semua penyewa sekaligus dengan fitur Broadcast.</p>
-                <a href="{{ route('admin.notifications.index') }}" class="inline-block px-4 py-2 bg-white text-[#d32f2f] rounded-lg text-sm font-bold hover:bg-red-50 transition-colors">Ke Halaman Siaran</a>
+                <a href="{{ route('admin.notifications.index') }}" class="inline-block px-4 py-2 bg-white dark:bg-gray-800 text-red-600 dark:text-red-400 rounded-lg text-sm font-bold hover:bg-red-50 transition-colors">Ke Halaman Siaran</a>
             </div>
         </div>
     </div>
@@ -142,3 +142,4 @@
     }
 </script>
 @endsection
+

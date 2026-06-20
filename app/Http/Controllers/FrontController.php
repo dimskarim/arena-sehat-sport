@@ -42,6 +42,10 @@ class FrontController extends Controller
                 $query->orderBy('harga', 'asc');
             } elseif ($request->sort == 'harga_desc') {
                 $query->orderBy('harga', 'desc');
+            } elseif ($request->sort == 'nama_asc') {
+                $query->orderBy('name', 'asc');
+            } elseif ($request->sort == 'nama_desc') {
+                $query->orderBy('name', 'desc');
             } elseif ($request->sort == 'terbaru') {
                 $query->orderBy('created_at', 'desc');
             }
@@ -57,7 +61,7 @@ class FrontController extends Controller
 
     public function lapanganShow($id)
     {
-        $lapangan = Lapangan::with(['kategori', 'gambarLapangans', 'waktuOperasionals.slotWaktus'])->findOrFail($id);
+        $lapangan = Lapangan::with(['kategori', 'gambarLapangans', 'waktuOperasionals.slotWaktus', 'fasilitas'])->findOrFail($id);
         return view('front.lapangan.show', compact('lapangan'));
     }
 
@@ -66,23 +70,41 @@ class FrontController extends Controller
         $tanggal = $request->tanggal;
         $lapangan = Lapangan::with(['waktuOperasionals.slotWaktus'])->findOrFail($id);
         
+        $carbonDate = \Carbon\Carbon::parse($tanggal);
+        $hariInggris = $carbonDate->format('l');
+        $mapHari = [
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+            'Sunday' => 'Minggu'
+        ];
+        $hariIndo = $mapHari[$hariInggris];
+
+        // Temukan jadwal operasional untuk hari ini
+        $waktuOperasional = $lapangan->waktuOperasionals->where('hari', $hariIndo)->first();
+
+        if (!$waktuOperasional || $waktuOperasional->is_libur) {
+            return response()->json([]); // Tutup/Libur
+        }
+        
         // Find booked slots for this date
         $bookedSlots = \App\Models\BookingDetail::whereHas('booking', function($q) use ($tanggal, $id) {
             $q->where('tanggal_booking', $tanggal)
               ->where('lapangan_id', $id)
-              ->whereIn('status', ['pending', 'paid', 'success', 'approved']);
+              ->whereNotIn('status', ['cancelled', 'canceled', 'failed', 'rejected']);
         })->pluck('slot_waktu_id')->toArray();
 
         $slots = [];
-        foreach($lapangan->waktuOperasionals as $waktuOperasional) {
-            foreach($waktuOperasional->slotWaktus as $slot) {
-                $slots[] = [
-                    'id' => $slot->id,
-                    'waktu_mulai' => $slot->waktu_mulai,
-                    'waktu_selesai' => $slot->waktu_selesai,
-                    'is_booked' => in_array($slot->id, $bookedSlots) || $slot->status == 'nonaktif'
-                ];
-            }
+        foreach($waktuOperasional->slotWaktus as $slot) {
+            $slots[] = [
+                'id' => $slot->id,
+                'waktu_mulai' => $slot->waktu_mulai,
+                'waktu_selesai' => $slot->waktu_selesai,
+                'is_booked' => in_array($slot->id, $bookedSlots) || $slot->status == 'nonaktif'
+            ];
         }
         
         // Sort by start time
@@ -231,5 +253,22 @@ class FrontController extends Controller
     public function support()
     {
         return view('front.support');
+    }
+
+    public function readNotification($id)
+    {
+        try {
+            $notification = \App\Models\Notifikasi::where('user_id', \Illuminate\Support\Facades\Auth::id())
+                ->findOrFail($id);
+            $notification->update(['is_read' => true]);
+            
+            if ($notification->booking_id) {
+                return redirect()->route('booking.riwayat');
+            }
+            
+            return redirect()->back();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Notifikasi tidak ditemukan.');
+        }
     }
 }

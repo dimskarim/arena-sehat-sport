@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.web' => \App\Http\Middleware\AdminWebMiddleware::class,
             'admin.api' => \App\Http\Middleware\CheckAdminRole::class,
+            'admin.only' => \App\Http\Middleware\AdminOnly::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

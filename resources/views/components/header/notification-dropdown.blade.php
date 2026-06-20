@@ -1,8 +1,27 @@
 @php
-    $userId = auth()->id();
-    $notifications = $userId ? \App\Models\Notifikasi::where('user_id', $userId)->latest()->take(4)->get() : collect([]);
-    $unreadCount = $userId ? \App\Models\Notifikasi::where('user_id', $userId)->where('is_read', false)->count() : 0;
+    $user = auth()->user();
+    $userId = $user ? $user->id : null;
+    $role = $user ? $user->role : 'pengguna';
+    
+    if ($userId) {
+        if ($role === 'pemilik') {
+            $query = \App\Models\Notifikasi::where(function($q) use ($userId) {
+                $q->whereHas('booking.lapangan', function ($q2) use ($userId) {
+                    $q2->where('pemilik_id', $userId);
+                })->orWhere('user_id', $userId);
+            });
+        } else {
+            $query = \App\Models\Notifikasi::where('user_id', $userId);
+        }
+        $notifications = (clone $query)->latest()->take(4)->get();
+        $unreadCount = (clone $query)->where('is_read', false)->count();
+    } else {
+        $notifications = collect([]);
+        $unreadCount = 0;
+    }
+    
     $hasUnread = $unreadCount > 0;
+    $readRouteName = in_array($role, ['admin', 'pemilik']) ? 'admin.notifications.read' : 'front.notifications.read';
 @endphp
 {{-- Notification Dropdown Component --}}
 <div class="relative" x-data="{
@@ -98,8 +117,8 @@
             @forelse ($notifications as $notification)
                 <li @click="handleItemClick()">
                     <a
-                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5 {{ !$notification->is_read ? 'bg-green-50/50' : '' }}"
-                        href="{{ route('admin.notifications.read', $notification->id) }}"
+                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5 {{ !$notification->is_read ? 'bg-green-50/50 dark:bg-green-900/20' : '' }}"
+                        href="{{ route($readRouteName, $notification->id) }}"
                     >
                         <span class="relative block w-full h-10 rounded-full z-1 max-w-10">
                             <div class="flex items-center justify-center w-10 h-10 bg-[#d32f2f]/10 rounded-full text-[#d32f2f]">
@@ -130,6 +149,7 @@
         </ul>
 
         <!-- View All Button -->
+        @if(in_array($role, ['admin', 'pemilik']))
         <a
             href="{{ route('admin.notifications.index') }}"
             class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
@@ -137,6 +157,7 @@
         >
             View All Notification
         </a>
+        @endif
     </div>
     <!-- Dropdown End -->
 </div>

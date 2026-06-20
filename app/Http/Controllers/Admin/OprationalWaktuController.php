@@ -24,7 +24,11 @@ class OprationalWaktuController extends Controller
 
     public function create()
     {
-        $lapangans = \App\Models\Lapangan::all();
+        $lapanganQuery = \App\Models\Lapangan::query();
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            $lapanganQuery->where('pemilik_id', auth()->id());
+        }
+        $lapangans = $lapanganQuery->get();
         return view('admin.oprational_waktu.create', compact('lapangans'), ['title' => 'Tambah Jam Operasional']);
     }
 
@@ -32,7 +36,7 @@ class OprationalWaktuController extends Controller
     {
         try {
             $this->service->create($request->validated());
-            return redirect()->route('admin.time.index')->with('success', 'Jam Operasional berhasil ditambahkan.');
+            return redirect()->route('admin.time.index', ['lapangan_id' => $request->lapangan_id])->with('success', 'Jam Operasional berhasil ditambahkan.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
@@ -42,7 +46,11 @@ class OprationalWaktuController extends Controller
     {
         try {
             $item = $this->service->getById($id);
-            $lapangans = \App\Models\Lapangan::all();
+            $lapanganQuery = \App\Models\Lapangan::query();
+            if (auth()->check() && auth()->user()->role === 'pemilik') {
+                $lapanganQuery->where('pemilik_id', auth()->id());
+            }
+            $lapangans = $lapanganQuery->get();
             return view('admin.oprational_waktu.edit', compact('item', 'lapangans'), ['title' => 'Edit Jam Operasional']);
         } catch (Exception $e) {
             return redirect()->route('admin.time.index')->with('error', 'Data tidak ditemukan.');
@@ -53,18 +61,24 @@ class OprationalWaktuController extends Controller
     {
         try {
             $this->service->update($id, $request->validated());
-            return redirect()->route('admin.time.index')->with('success', 'Jam Operasional berhasil diperbarui.');
+            return redirect()->route('admin.time.index', ['lapangan_id' => $request->lapangan_id])->with('success', 'Jam Operasional berhasil diperbarui.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $this->service->delete($id);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Data berhasil dihapus.']);
+            }
             return redirect()->route('admin.time.index')->with('success', 'Data berhasil dihapus.');
         } catch (Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], 500);
+            }
             return back()->with('error', $e->getMessage());
         }
     }

@@ -26,7 +26,12 @@ class LapanganController extends Controller
     public function create()
     {
         $kategoris = \App\Models\Kategori::all();
-        return view('admin.lapangan.create', compact('kategoris'), ['title' => 'Tambah Lapangan']);
+        $fasilitas = \App\Models\Fasilitas::all();
+        $pemiliks = [];
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            $pemiliks = \App\Models\User::where('role', 'pemilik')->get();
+        }
+        return view('admin.lapangan.create', compact('kategoris', 'fasilitas', 'pemiliks'), ['title' => 'Tambah Lapangan']);
     }
 
     public function store(LapanganRequest $request)
@@ -44,7 +49,12 @@ class LapanganController extends Controller
         try {
             $item = $this->service->getLapanganById($id);
             $kategoris = \App\Models\Kategori::all();
-            return view('admin.lapangan.detail', compact('item', 'kategoris'), ['title' => 'Edit Lapangan']);
+            $fasilitas = \App\Models\Fasilitas::all();
+            $pemiliks = [];
+            if (auth()->check() && auth()->user()->role === 'admin') {
+                $pemiliks = \App\Models\User::where('role', 'pemilik')->get();
+            }
+            return view('admin.lapangan.detail', compact('item', 'kategoris', 'fasilitas', 'pemiliks'), ['title' => 'Edit Lapangan']);
         } catch (Exception $e) {
             return redirect()->route('admin.lapangans.index')->with('error', 'Data tidak ditemukan.');
         }

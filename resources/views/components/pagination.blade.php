@@ -15,28 +15,45 @@
             </a>
         @endif
 
-        {{-- Pagination Elements --}}
-        @foreach ($elements as $element)
-            {{-- "Three Dots" Separator --}}
-            @if (is_string($element))
-                <span class="px-3 py-1.5 text-sm font-medium text-[#8f6f6c] cursor-default">{{ $element }}</span>
-            @endif
+        {{-- Custom Pagination Elements --}}
+        @php
+            $currentPage = $paginator->currentPage();
+            $lastPage = $paginator->lastPage();
+            
+            $start = $currentPage - 1;
+            $end = $currentPage + 1;
+            
+            if ($start < 1) {
+                $start = 1;
+                $end = min(3, $lastPage);
+            }
+            
+            if ($end > $lastPage) {
+                $end = $lastPage;
+                $start = max(1, $lastPage - 2);
+            }
+        @endphp
 
-            {{-- Array Of Links --}}
-            @if (is_array($element))
-                @foreach ($element as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <span class="px-3.5 py-1.5 text-sm font-bold text-white bg-[#af101a] rounded-lg shadow-md cursor-default" aria-current="page">
-                            {{ $page }}
-                        </span>
-                    @else
-                        <a href="{{ $url }}" class="px-3.5 py-1.5 text-sm font-medium text-[#5b403d] bg-white border border-[#e4beba] rounded-lg hover:bg-[#f6f3f2] transition-colors focus:outline-none focus:ring-2 focus:ring-[#af101a]/20 shadow-sm">
-                            {{ $page }}
-                        </a>
-                    @endif
-                @endforeach
+        @if ($start > 1)
+            <span class="px-3 py-1.5 text-sm font-medium text-[#8f6f6c] cursor-default">...</span>
+        @endif
+
+        @for ($page = $start; $page <= $end; $page++)
+            @if ($page == $currentPage)
+                <span class="px-3.5 py-1.5 text-sm font-bold text-white bg-[#af101a] rounded-lg shadow-md cursor-default" aria-current="page">
+                    {{ $page }}
+                </span>
+            @else
+                <a href="{{ $paginator->url($page) }}" class="px-3.5 py-1.5 text-sm font-medium text-[#5b403d] bg-white border border-[#e4beba] rounded-lg hover:bg-[#f6f3f2] transition-colors focus:outline-none focus:ring-2 focus:ring-[#af101a]/20 shadow-sm">
+                    {{ $page }}
+                </a>
             @endif
-        @endforeach
+        @endfor
+
+        @if ($end < $lastPage)
+            <span class="px-3 py-1.5 text-sm font-medium text-[#8f6f6c] cursor-default">...</span>
+        @endif
+
 
         {{-- Next Page Link --}}
         @if ($paginator->hasMorePages())

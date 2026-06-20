@@ -120,9 +120,9 @@
 
                         {{-- Ikon / Thumbnail --}}
                         <td class="px-6 py-4">
-                            @if($item->icon ?? $item->gambar ?? null)
+                            @if($item->logo)
                             <div class="w-12 h-12 rounded-xl bg-[#f0eded] overflow-hidden border border-[#e4beba]/50 dark:border-gray-700">
-                                <img src="https://placehold.co/100x100/f3f4f6/a1a1aa?text=Image"
+                                <img src="{{ asset('storage/' . $item->logo) }}"
                                     alt="{{ $item->name }}" class="w-full h-full object-cover" />
                             </div>
                             @else

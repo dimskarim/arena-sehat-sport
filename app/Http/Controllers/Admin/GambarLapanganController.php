@@ -25,7 +25,11 @@ class GambarLapanganController extends Controller
 
     public function create()
     {
-        $lapangans = \App\Models\Lapangan::all();
+        $lapanganQuery = \App\Models\Lapangan::query();
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            $lapanganQuery->where('pemilik_id', auth()->id());
+        }
+        $lapangans = $lapanganQuery->get();
         return view('admin.gambar_lapangan.create', compact('lapangans'), ['title' => 'Tambah Gambar Lapangan']);
     }
 
@@ -43,7 +47,11 @@ class GambarLapanganController extends Controller
     {
         try {
             $item = $this->service->getById($id);
-            $lapangans = \App\Models\Lapangan::all();
+            $lapanganQuery = \App\Models\Lapangan::query();
+            if (auth()->check() && auth()->user()->role === 'pemilik') {
+                $lapanganQuery->where('pemilik_id', auth()->id());
+            }
+            $lapangans = $lapanganQuery->get();
             return view('admin.gambar_lapangan.edit', compact('item', 'lapangans'), ['title' => 'Edit Gambar Lapangan']);
         } catch (Exception $e) {
             return redirect()->route('admin.gambar-lapangans.index')->with('error', 'Data tidak ditemukan.');

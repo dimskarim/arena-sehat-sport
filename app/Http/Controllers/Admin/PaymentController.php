@@ -25,7 +25,14 @@ class PaymentController extends Controller
 
     public function create()
     {
-        $bookings = \App\Models\Booking::with('user', 'lapangan')->get();
+        $bookingQuery = \App\Models\Booking::with('user', 'lapangan');
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            $pemilikId = auth()->id();
+            $bookingQuery->whereHas('lapangan', function($q) use ($pemilikId) {
+                $q->where('pemilik_id', $pemilikId);
+            });
+        }
+        $bookings = $bookingQuery->get();
         return view('admin.payment.create', compact('bookings'), ['title' => 'Tambah Pembayaran']);
     }
 
@@ -43,7 +50,14 @@ class PaymentController extends Controller
     {
         try {
             $item = $this->service->getById($id);
-            $bookings = \App\Models\Booking::with('user', 'lapangan')->get();
+            $bookingQuery = \App\Models\Booking::with('user', 'lapangan');
+            if (auth()->check() && auth()->user()->role === 'pemilik') {
+                $pemilikId = auth()->id();
+                $bookingQuery->whereHas('lapangan', function($q) use ($pemilikId) {
+                    $q->where('pemilik_id', $pemilikId);
+                });
+            }
+            $bookings = $bookingQuery->get();
             return view('admin.payment.edit', compact('item', 'bookings'), ['title' => 'Edit Pembayaran']);
         } catch (Exception $e) {
             return redirect()->route('admin.payments.index')->with('error', 'Data tidak ditemukan.');

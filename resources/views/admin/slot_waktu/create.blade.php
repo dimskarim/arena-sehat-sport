@@ -27,10 +27,10 @@
                         <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                             Hari Operasional Lapangan <span class="text-red-600">*</span>
                         </label>
-                        <select name="waktu_operasional_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
+                        <select name="waktu_operasional_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 tom-select-custom">
                             <option value="">Pilih Hari Operasional Lapangan</option>
                             @foreach($waktuOperasionals as $wo)
-                            <option value="{{ $wo->id }}" {{ old('waktu_operasional_id') == $wo->id ? 'selected' : '' }}>
+                            <option value="{{ $wo->id }}" {{ old('waktu_operasional_id', $waktuOperasionals->count() == 1 ? $waktuOperasionals->first()->id : null) == $wo->id ? 'selected' : '' }}>
                                 {{ optional($wo->lapangan)->name }} - Hari {{ $wo->hari }} ({{ substr($wo->waktu_buka, 0, 5) }} - {{ substr($wo->waktu_tutup, 0, 5) }})
                             </option>
                             @endforeach
@@ -43,7 +43,7 @@
                             <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Jam Mulai <span class="text-red-600">*</span>
                             </label>
-                            <input type="time" name="waktu_mulai" value="{{ old('waktu_mulai') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
+                            <input type="time" name="waktu_mulai" value="{{ old('waktu_mulai') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 timepicker-custom" />
                             @error('waktu_mulai') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
                         </div>
 
@@ -51,7 +51,7 @@
                             <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Jam Selesai <span class="text-red-600">*</span>
                             </label>
-                            <input type="time" name="waktu_selesai" value="{{ old('waktu_selesai') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
+                            <input type="time" name="waktu_selesai" value="{{ old('waktu_selesai') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 timepicker-custom" />
                             @error('waktu_selesai') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
                         </div>
                     </div>

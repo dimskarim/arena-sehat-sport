@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [FrontController::class, 'profile'])->name('profile.index');
     Route::post('/profile', [FrontController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/password', [FrontController::class, 'updatePassword'])->name('profile.password');
+    Route::get('/notifications/{id}/read', [FrontController::class, 'readNotification'])->name('front.notifications.read');
 });
 
 Route::get('/login', [FrontController::class, 'login'])->name('login');
@@ -46,10 +47,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('admin.web')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::resource('kategoris', KategoriController::class);
-        Route::resource('users', UserController::class);
-        Route::patch('users/{id}/suspend', [UserController::class, 'suspend'])->name('users.suspend');
-        Route::patch('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+        
+        // Admin Only Routes
+        Route::middleware('admin.only')->group(function () {
+            Route::resource('kategoris', KategoriController::class);
+            Route::resource('users', UserController::class);
+            Route::patch('users/{id}/suspend', [UserController::class, 'suspend'])->name('users.suspend');
+            Route::patch('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+        });
+
         Route::resource('lapangans', LapanganController::class);
         Route::resource('gambar-lapangans', GambarLapanganController::class);
         Route::resource('payments', PaymentController::class);
@@ -60,5 +66,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('slot-waktus/{id}/toggle-status', [SlotWaktuController::class, 'toggleStatus'])->name('slot-waktus.toggle-status');
         Route::resource('oprational-waktus', OprationalWaktuController::class);
         Route::get('/time', [TimeController::class, 'index'])->name('time.index');
+        Route::post('fasilitas', [\App\Http\Controllers\Admin\FasilitasController::class, 'store'])->name('fasilitas.store');
     });
 });

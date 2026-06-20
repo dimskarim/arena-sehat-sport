@@ -24,7 +24,7 @@
                 <svg class="text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
-                Batal
+                Kembali
             </a>
             <button type="submit" form="userEditForm"
                 class="flex items-center gap-2 px-6 py-2.5 bg-[#af101a] dark:bg-red-600 text-white text-sm font-semibold rounded-xl hover:opacity-90 dark:hover:bg-red-700 transition-all shadow-lg shadow-red-900/20 active:scale-95">
@@ -60,12 +60,14 @@
                     </label>
                 </div>
 
-                <h3 class="text-xl font-bold text-[#1b1c1c] dark:text-white mb-1">{{ $item->name ?? '-' }}</h3>
+                <h3 class="text-xl font-bold text-[#1b1c1c] dark:text-white mb-1 w-full break-words px-2" id="previewName" title="{{ $item->name ?? '-' }}">{{ $item->name ?? '-' }}</h3>
                 <p class="text-sm text-[#5b403d] dark:text-gray-400 mb-3">{{ $item->email ?? '-' }}</p>
 
                 <div class="flex items-center gap-2 mb-4 flex-wrap justify-center">
                     @if(strtolower($item->role ?? '') === 'admin')
                     <span class="px-3 py-1 bg-[#af101a] dark:bg-red-600 text-white rounded-full text-xs font-bold uppercase tracking-wider">Admin</span>
+                    @elseif(strtolower($item->role ?? '') === 'pemilik')
+                    <span class="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 rounded-full text-xs font-bold uppercase tracking-wider">Pemilik</span>
                     @else
                     <span class="px-3 py-1 bg-[#fdcbd0] dark:bg-gray-700 text-[#795358] dark:text-gray-300 rounded-full text-xs font-bold uppercase tracking-wider">Anggota</span>
                     @endif
@@ -96,10 +98,9 @@
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-[#e4beba] dark:border-gray-700">
                 <h4 class="text-xs font-black text-[#1b1c1c] dark:text-white uppercase tracking-widest mb-4 border-b border-[#e4beba] dark:border-gray-700 pb-3">Aksi Cepat</h4>
                 <div class="space-y-3">
-                    <form action="{{ route('admin.users.reset-password', $item->id) }}" method="POST"
-                        class="w-full" onsubmit="return confirm('Anda yakin ingin mereset kata sandi pengguna ini menjadi \'arena123\'?');">
+                    <form id="resetPasswordForm" action="{{ route('admin.users.reset-password', $item->id) }}" method="POST" class="w-full">
                         @csrf @method('PATCH')
-                        <button type="submit"
+                        <button type="button" onclick="openResetModal()"
                             class="w-full flex items-center justify-between p-3 rounded-lg border border-[#e4beba] dark:border-gray-600 hover:bg-[#f6f3f2] dark:hover:bg-gray-700 transition-colors group">
                             <div class="flex items-center gap-3">
                                 <svg class="text-[#5b403d] dark:text-gray-400 group-hover:text-[#af101a] dark:group-hover:text-red-400 text-xl inline-block align-middle w-5 h-5 transition-all duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -112,10 +113,9 @@
                             </svg>
                         </button>
                     </form>
-                    <form action="{{ route('admin.users.suspend', $item->id) }}" method="POST"
-                        class="w-full" onsubmit="return confirm('{{ $item->status === 'suspended' ? 'Aktifkan kembali akun ini?' : 'Tangguhkan akun pengguna ini?' }}');">
+                    <form id="suspendForm" action="{{ route('admin.users.suspend', $item->id) }}" method="POST" class="w-full">
                         @csrf @method('PATCH')
-                        <button type="submit"
+                        <button type="button" onclick="openSuspendModal()"
                             class="w-full flex items-center justify-between p-3 rounded-lg border {{ $item->status === 'suspended' ? 'border-green-200 dark:border-green-800 bg-green-50/30 dark:bg-green-900/20 hover:bg-green-50/60 dark:hover:bg-green-900/40' : 'border-[#e4beba] dark:border-gray-600 hover:bg-[#f6f3f2] dark:hover:bg-gray-700' }} transition-colors group">
                             <div class="flex items-center gap-3">
                                 <svg class="{{ $item->status === 'suspended' ? 'text-green-600 dark:text-green-400' : 'text-[#5b403d] dark:text-gray-400 group-hover:text-[#af101a] dark:group-hover:text-red-400' }} w-5 h-5 transition-all duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -150,7 +150,7 @@
         <div class="col-span-12 lg:col-span-8 space-y-6">
 
             {{-- Form Card with Tabs --}}
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-[#e4beba] dark:border-gray-700 overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-[#e4beba] dark:border-gray-700 relative z-40">
                 {{-- Tab Header --}}
                 <div class="flex border-b border-[#e4beba] dark:border-gray-700">
                     <button class="px-8 py-4 text-sm font-bold border-b-2 border-[#af101a] dark:border-red-500 text-[#af101a] dark:text-red-400 bg-red-50/30 dark:bg-red-900/10">Informasi Pribadi</button>
@@ -185,7 +185,7 @@
                             {{-- Nama --}}
                             <div class="sm:col-span-2">
                                 <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">Nama Lengkap <span class="text-[#ba1a1a] dark:text-red-500">*</span></label>
-                                <input type="text" name="name" value="{{ old('name', $item->name) }}" required
+                                <input type="text" name="name" value="{{ old('name', $item->name) }}" required maxlength="50"
                                     class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all"
                                     placeholder="Nama lengkap" />
                                 @error('name') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
@@ -213,6 +213,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                                     </svg>
                                     <input type="text" name="phone" value="{{ old('phone', $item->phone ?? $item->no_telp ?? '') }}"
+                                        pattern="^(08|628|\+628)[0-9]{7,11}$" title="Nomor HP harus valid nomor Indonesia (diawali 08, 628, atau +628)"
                                         class="w-full pl-11 pr-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all"
                                         placeholder="+62 8xx xxxx xxxx" />
                                 </div>
@@ -222,11 +223,36 @@
                             {{-- Role --}}
                             <div>
                                 <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">Peran <span class="text-[#ba1a1a] dark:text-red-500">*</span></label>
-                                <select name="role" required
-                                    class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all appearance-none cursor-pointer">
-                                    <option value="user" {{ old('role', $item->role) == 'user' ? 'selected' : '' }}>👤 Pengguna</option>
-                                    <option value="admin" {{ old('role', $item->role) == 'admin' ? 'selected' : '' }}>🔑 Admin</option>
-                                </select>
+                                <div class="relative w-full z-40">
+                                    <select name="role" id="roleFilter" required class="hidden">
+                                        <option value="user" {{ old('role', $item->role) == 'user' ? 'selected' : '' }}>👤 Pengguna</option>
+                                        <option value="admin" {{ old('role', $item->role) == 'admin' ? 'selected' : '' }}>🔑 Admin</option>
+                                        <option value="pemilik" {{ old('role', $item->role) == 'pemilik' ? 'selected' : '' }}>👑 Pemilik</option>
+                                    </select>
+
+                                    <div id="custom-role-btn" class="flex items-center justify-between w-full px-4 py-3 bg-[#f6f3f2] hover:bg-white/[0.12] rounded-lg border border-[#e4beba] text-sm transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white">
+                                        <span class="text-slate-700 dark:text-white" id="custom-role-text">
+                                            @php
+                                                $roleText = [
+                                                    'user' => '👤 Pengguna',
+                                                    'admin' => '🔑 Admin',
+                                                    'pemilik' => '👑 Pemilik',
+                                                ];
+                                                echo $roleText[old('role', $item->role)] ?? '👤 Pengguna';
+                                            @endphp
+                                        </span>
+                                        <svg id="custom-role-icon" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+
+                                    <div id="custom-role-menu" class="absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50">
+                                        <div class="absolute -top-1.5 left-6 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
+                                        <ul class="relative z-10 py-1" id="custom-role-options">
+                                            <li data-value="user" class="px-4 py-3 text-sm cursor-pointer transition-colors {{ old('role', $item->role) == 'user' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">👤 Pengguna</li>
+                                            <li data-value="admin" class="px-4 py-3 text-sm cursor-pointer transition-colors {{ old('role', $item->role) == 'admin' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">🔑 Admin</li>
+                                            <li data-value="pemilik" class="px-4 py-3 text-sm cursor-pointer transition-colors {{ old('role', $item->role) == 'pemilik' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-b-lg">👑 Pemilik</li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 @error('role') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
 
@@ -247,12 +273,12 @@
                                 @error('password') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
 
-                            {{-- Billing Address (no_telp fallback shown as address placeholder) --}}
+                            {{-- Catatan --}}
                             <div class="sm:col-span-2">
-                                <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">Alamat / Catatan Tambahan</label>
-                                <textarea name="address" rows="3"
+                                <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">Catatan <span class="text-[10px] normal-case font-normal text-[#8f6f6c] dark:text-gray-500 ml-1">(opsional)</span></label>
+                                <textarea name="catatan" rows="3"
                                     class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all resize-none"
-                                    placeholder="Alamat lengkap...">{{ old('address', $item->address ?? '') }}</textarea>
+                                    placeholder="Tambahkan catatan khusus untuk pengguna ini...">{{ old('catatan', $item->catatan ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -356,6 +382,70 @@
                 </div>
             </div>
         </div>
+
+        {{-- Modal Konfirmasi Reset Password --}}
+        <div id="resetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 font-['Inter'] text-[#1b1c1c] dark:text-white"
+            :class="{
+            'xl:pl-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+            'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+            'pl-0': $store.sidebar.isMobileOpen
+        }">
+            <div class="w-fit transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all scale-95 opacity-0 border border-[#e4beba] dark:border-gray-700" id="resetModalContent">
+                <div class="flex items-center justify-center mb-5">
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                        <svg class="text-blue-600 dark:text-blue-400 text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-center text-xl font-bold text-[#1b1c1c] dark:text-white mb-2">Reset Kata Sandi?</h3>
+                <p class="text-center text-sm text-[#5b403d] dark:text-gray-400 mb-6">
+                    Apakah Anda yakin ingin mereset kata sandi pengguna ini menjadi <strong>'arena123'</strong>?
+                </p>
+                <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
+                    <button type="button" onclick="closeResetModal()"
+                        class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-2.5 text-sm font-semibold text-[#5b403d] dark:text-gray-300 hover:bg-[#f6f3f2] dark:hover:bg-gray-700 transition-colors">
+                        Batal
+                    </button>
+                    <button type="button" onclick="document.getElementById('resetPasswordForm').submit();"
+                        class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
+                        Ya, Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Konfirmasi Tangguhkan / Aktifkan --}}
+        <div id="suspendModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity duration-300 opacity-0 font-['Inter'] text-[#1b1c1c] dark:text-white"
+            :class="{
+            'xl:pl-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+            'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
+            'pl-0': $store.sidebar.isMobileOpen
+        }">
+            <div class="w-fit transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all scale-95 opacity-0 border border-[#e4beba] dark:border-gray-700" id="suspendModalContent">
+                <div class="flex items-center justify-center mb-5">
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full {{ $item->status === 'suspended' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-yellow-100 dark:bg-yellow-900/30' }}">
+                        <svg class="{{ $item->status === 'suspended' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-500' }} text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-center text-xl font-bold text-[#1b1c1c] dark:text-white mb-2">{{ $item->status === 'suspended' ? 'Aktifkan Akun?' : 'Tangguhkan Akun?' }}</h3>
+                <p class="text-center text-sm text-[#5b403d] dark:text-gray-400 mb-6">
+                    Apakah Anda yakin ingin {{ $item->status === 'suspended' ? 'mengaktifkan kembali' : 'menangguhkan' }} akun <strong>{{ $item->name }}</strong>?
+                </p>
+                <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
+                    <button type="button" onclick="closeSuspendModal()"
+                        class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-2.5 text-sm font-semibold text-[#5b403d] dark:text-gray-300 hover:bg-[#f6f3f2] dark:hover:bg-gray-700 transition-colors">
+                        Batal
+                    </button>
+                    <button type="button" onclick="document.getElementById('suspendForm').submit();"
+                        class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-lg {{ $item->status === 'suspended' ? 'bg-green-600 hover:bg-green-700' : 'bg-yellow-600 hover:bg-yellow-700' }} px-5 py-2.5 text-sm font-semibold text-white transition-colors">
+                        Ya, {{ $item->status === 'suspended' ? 'Aktifkan' : 'Tangguhkan' }}
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -383,6 +473,52 @@
         setTimeout(() => {
             deleteModal.classList.add('hidden');
             deleteModal.classList.remove('flex');
+        }, 300);
+    }
+
+    // Modal Reset Password
+    const resetModal = document.getElementById('resetModal');
+    const resetModalContent = document.getElementById('resetModalContent');
+
+    function openResetModal() {
+        resetModal.classList.remove('hidden');
+        resetModal.classList.add('flex');
+        void resetModal.offsetWidth;
+        resetModal.classList.remove('opacity-0');
+        resetModalContent.classList.remove('scale-95', 'opacity-0');
+        resetModalContent.classList.add('scale-100', 'opacity-100');
+    }
+
+    function closeResetModal() {
+        resetModal.classList.add('opacity-0');
+        resetModalContent.classList.remove('scale-100', 'opacity-100');
+        resetModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            resetModal.classList.add('hidden');
+            resetModal.classList.remove('flex');
+        }, 300);
+    }
+
+    // Modal Suspend Account
+    const suspendModal = document.getElementById('suspendModal');
+    const suspendModalContent = document.getElementById('suspendModalContent');
+
+    function openSuspendModal() {
+        suspendModal.classList.remove('hidden');
+        suspendModal.classList.add('flex');
+        void suspendModal.offsetWidth;
+        suspendModal.classList.remove('opacity-0');
+        suspendModalContent.classList.remove('scale-95', 'opacity-0');
+        suspendModalContent.classList.add('scale-100', 'opacity-100');
+    }
+
+    function closeSuspendModal() {
+        suspendModal.classList.add('opacity-0');
+        suspendModalContent.classList.remove('scale-100', 'opacity-100');
+        suspendModalContent.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            suspendModal.classList.add('hidden');
+            suspendModal.classList.remove('flex');
         }, 300);
     }
 
@@ -416,6 +552,56 @@
             deleteFeedback.innerHTML = `<p class="flex items-center gap-2">❌ ${error.message}</p>`;
             confirmDeleteBtn.disabled = false;
             confirmDeleteBtn.innerHTML = originalBtnText;
+        }
+    }
+
+    // Custom Role Dropdown Logic
+    const roleBtn = document.getElementById('custom-role-btn');
+    const roleMenu = document.getElementById('custom-role-menu');
+    const roleIcon = document.getElementById('custom-role-icon');
+    const roleSelect = document.getElementById('roleFilter');
+    const roleText = document.getElementById('custom-role-text');
+    const roleOptions = document.getElementById('custom-role-options')?.querySelectorAll('li');
+
+    if (roleBtn && roleMenu) {
+        roleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            roleMenu.classList.toggle('hidden');
+            if (roleMenu.classList.contains('hidden')) {
+                roleIcon.classList.remove('rotate-180');
+            } else {
+                roleIcon.classList.add('rotate-180');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!roleBtn.contains(e.target) && !roleMenu.contains(e.target)) {
+                roleMenu.classList.add('hidden');
+                roleIcon.classList.remove('rotate-180');
+            }
+        });
+
+        if (roleOptions) {
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.innerText;
+                    
+                    roleSelect.value = value;
+                    roleText.innerText = text;
+                    
+                    roleOptions.forEach(opt => {
+                        opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        opt.classList.add('text-slate-700');
+                    });
+                    
+                    this.classList.remove('text-slate-700');
+                    this.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                    
+                    roleMenu.classList.add('hidden');
+                    roleIcon.classList.remove('rotate-180');
+                });
+            });
         }
     }
 

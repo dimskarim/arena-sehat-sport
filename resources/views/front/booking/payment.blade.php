@@ -18,155 +18,181 @@
 @section('content')
 <main class="pt-24 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
     <!-- Page Title & Progress -->
-    <div class="mb-lg motion-hidden">
-        <h1 class="font-h1 text-h1 text-on-background mb-sm">Pembayaran Aman</h1>
-        <div class="flex items-center gap-4 text-label-md font-label-md">
-            <div class="flex items-center gap-2 text-primary">
-                <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs">1</span>
-                <span>Tinjau</span>
+    <div class="mb-12 motion-hidden flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h1 class="text-4xl md:text-5xl font-black font-['Lexend'] text-gray-900 dark:text-white tracking-tight mb-2">Pembayaran <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400">Aman</span></h1>
+            <p class="text-gray-500 dark:text-gray-400 text-lg">Selesaikan pembayaran untuk mengamankan jadwal Anda.</p>
+        </div>
+        
+        <!-- Progress Stepper -->
+        <div class="flex items-center gap-4 text-sm font-bold">
+            <div class="flex items-center gap-2 text-red-600 dark:text-red-500">
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                <span class="uppercase tracking-wider">Tinjau</span>
             </div>
-            <div class="h-px w-8 bg-outline-variant"></div>
-            <div class="flex items-center gap-2 text-primary">
-                <span class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs">2</span>
-                <span>Pembayaran</span>
+            <div class="h-px w-8 bg-red-200 dark:bg-red-900"></div>
+            <div class="flex items-center gap-2 text-red-600 dark:text-red-500">
+                <span class="w-6 h-6 rounded-full bg-red-600 dark:bg-red-500 text-white flex items-center justify-center text-xs shadow-[0_0_10px_rgba(220,38,38,0.5)]">2</span>
+                <span class="uppercase tracking-wider">Pembayaran</span>
             </div>
-            <div class="h-px w-8 bg-outline-variant"></div>
-            <div class="flex items-center gap-2 text-on-surface-variant">
-                <span class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-xs">3</span>
-                <span>Konfirmasi</span>
+            <div class="h-px w-8 bg-gray-200 dark:bg-gray-800"></div>
+            <div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+                <span class="w-6 h-6 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-xs">3</span>
+                <span class="uppercase tracking-wider">Konfirmasi</span>
             </div>
         </div>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
         <!-- Left Column: Payment Methods & Status -->
-        <div class="lg:col-span-8 space-y-md">
-            <!-- Section 3: Status Display (Top Priority Informational) -->
-            <section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-red-50 motion-hidden delay-100">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
-                    <div class="flex items-center gap-md">
-                        <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+        <div class="lg:col-span-8 space-y-8">
+            <!-- Section: Status Display -->
+            <section class="bg-white dark:bg-gray-900 rounded-2xl p-6 md:p-8 shadow-xl shadow-red-900/5 dark:shadow-black/20 border-l-4 border-l-yellow-400 border border-gray-100 dark:border-gray-800 motion-hidden delay-100 relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-full bg-yellow-50 dark:bg-yellow-900/20 flex items-center justify-center text-yellow-600 dark:text-yellow-500 shrink-0">
+                            <span class="material-symbols-outlined text-[28px] animate-pulse">pending_actions</span>
                         </div>
                         <div>
-                            <h3 class="font-h3 text-h3 text-on-background">Status Pembayaran: <span class="text-primary">Tertunda</span></h3>
-                            <p class="text-body-md text-on-surface-variant">Menunggu bukti transfer Anda</p>
+                            <h3 class="text-xl font-bold font-['Lexend'] text-gray-900 dark:text-white mb-1">Status: <span class="text-yellow-500">Tertunda</span></h3>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Menunggu bukti transfer Anda</p>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-label-md text-on-surface-variant">Jumlah Tagihan</p>
-                        <p class="text-h3 font-h3 text-on-background">Rp 250.000</p>
+                    <div class="sm:text-right bg-gray-50 dark:bg-gray-800/50 p-4 sm:p-0 sm:bg-transparent rounded-xl">
+                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Jumlah Tagihan</p>
+                        <p class="text-3xl font-black font-['Lexend'] text-gray-900 dark:text-white">Rp 250.000</p>
                     </div>
                 </div>
             </section>
-            <!-- Section 1: Select Payment Method -->
-            <section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant motion-hidden delay-200">
-                <h3 class="font-h3 text-h3 mb-md">Pilih Metode Pembayaran</h3>
-                <div class="space-y-sm">
-                    <p class="text-label-md font-semibold text-on-surface-variant uppercase tracking-wider">Transfer Bank</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-sm">
-                        <label class="relative flex items-center p-md rounded-xl border border-outline-variant cursor-pointer hover:bg-surface-container-low transition-colors payment-card-active">
-                            <input checked="" class="hidden" name="payment" type="radio"/>
-                            <div class="w-10 h-10 bg-surface-container rounded-lg mr-md flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-label-md text-on-background">BCA Transfer</p>
-                                <p class="text-xs text-on-surface-variant">Verifikasi Manual (5-10 mnt)</p>
-                            </div>
-                            <span class="material-symbols-outlined text-primary" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                        </label>
-                        <label class="relative flex items-center p-md rounded-xl border border-outline-variant cursor-pointer hover:bg-surface-container-low transition-colors">
-                            <input class="hidden" name="payment" type="radio"/>
-                            <div class="w-10 h-10 bg-surface-container rounded-lg mr-md flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-label-md text-on-background">Mandiri Transfer</p>
-                                <p class="text-xs text-on-surface-variant">Verifikasi Manual (5-10 mnt)</p>
-                            </div>
-                        </label>
+            
+            <!-- Section: Select Payment Method -->
+            <section class="bg-white dark:bg-gray-900 rounded-2xl p-6 md:p-8 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-gray-100 dark:border-gray-800 motion-hidden delay-200">
+                <h3 class="text-2xl font-black font-['Lexend'] text-gray-900 dark:text-white mb-6">Pilih Metode Pembayaran</h3>
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Transfer Bank</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="relative flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors payment-card-active group">
+                                <input checked class="hidden" name="payment" type="radio"/>
+                                <div class="w-12 h-12 bg-white dark:bg-gray-900 rounded-lg mr-4 flex items-center justify-center border border-gray-100 dark:border-gray-800 shadow-sm group-[.payment-card-active]:border-red-200 dark:group-[.payment-card-active]:border-red-900/50">
+                                    <span class="material-symbols-outlined text-[24px] text-gray-600 dark:text-gray-400 group-[.payment-card-active]:text-red-500">account_balance</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-bold text-gray-900 dark:text-white group-[.payment-card-active]:text-red-700 dark:group-[.payment-card-active]:text-red-400">BCA Transfer</p>
+                                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-0.5">Verifikasi Manual (5-10 mnt)</p>
+                                </div>
+                                <span class="material-symbols-outlined text-red-500 opacity-0 group-[.payment-card-active]:opacity-100 transition-opacity" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            </label>
+                            
+                            <label class="relative flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+                                <input class="hidden" name="payment" type="radio"/>
+                                <div class="w-12 h-12 bg-white dark:bg-gray-900 rounded-lg mr-4 flex items-center justify-center border border-gray-100 dark:border-gray-800 shadow-sm group-[.payment-card-active]:border-red-200 dark:group-[.payment-card-active]:border-red-900/50">
+                                    <span class="material-symbols-outlined text-[24px] text-gray-600 dark:text-gray-400 group-[.payment-card-active]:text-red-500">account_balance</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-bold text-gray-900 dark:text-white group-[.payment-card-active]:text-red-700 dark:group-[.payment-card-active]:text-red-400">Mandiri Transfer</p>
+                                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-0.5">Verifikasi Manual (5-10 mnt)</p>
+                                </div>
+                                <span class="material-symbols-outlined text-red-500 opacity-0 group-[.payment-card-active]:opacity-100 transition-opacity" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            </label>
+                        </div>
                     </div>
-                    <p class="text-label-md font-semibold text-on-surface-variant uppercase tracking-wider pt-sm">E-Wallets &amp; QRIS</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-sm">
-                        <label class="relative flex items-center p-md rounded-xl border border-outline-variant cursor-pointer hover:bg-surface-container-low transition-colors">
-                            <input class="hidden" name="payment" type="radio"/>
-                            <div class="w-10 h-10 bg-surface-container rounded-lg mr-md flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="qr_code_2">qr_code_2</span>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-label-md text-on-background">QRIS / GoPay</p>
-                                <p class="text-xs text-on-surface-variant">Verifikasi Instan</p>
-                            </div>
-                        </label>
-                        <label class="relative flex items-center p-md rounded-xl border border-outline-variant cursor-pointer hover:bg-surface-container-low transition-colors">
-                            <input class="hidden" name="payment" type="radio"/>
-                            <div class="w-10 h-10 bg-surface-container rounded-lg mr-md flex items-center justify-center">
-                                <span class="material-symbols-outlined" data-icon="wallet">wallet</span>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-label-md text-on-background">OVO / ShopeePay</p>
-                                <p class="text-xs text-on-surface-variant">Verifikasi Instan</p>
-                            </div>
-                        </label>
+                    
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">E-Wallets &amp; QRIS</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="relative flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+                                <input class="hidden" name="payment" type="radio"/>
+                                <div class="w-12 h-12 bg-white dark:bg-gray-900 rounded-lg mr-4 flex items-center justify-center border border-gray-100 dark:border-gray-800 shadow-sm group-[.payment-card-active]:border-red-200 dark:group-[.payment-card-active]:border-red-900/50">
+                                    <span class="material-symbols-outlined text-[24px] text-gray-600 dark:text-gray-400 group-[.payment-card-active]:text-red-500">qr_code_2</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-bold text-gray-900 dark:text-white group-[.payment-card-active]:text-red-700 dark:group-[.payment-card-active]:text-red-400">QRIS / GoPay</p>
+                                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-0.5">Verifikasi Instan</p>
+                                </div>
+                                <span class="material-symbols-outlined text-red-500 opacity-0 group-[.payment-card-active]:opacity-100 transition-opacity" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            </label>
+                            
+                            <label class="relative flex items-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
+                                <input class="hidden" name="payment" type="radio"/>
+                                <div class="w-12 h-12 bg-white dark:bg-gray-900 rounded-lg mr-4 flex items-center justify-center border border-gray-100 dark:border-gray-800 shadow-sm group-[.payment-card-active]:border-red-200 dark:group-[.payment-card-active]:border-red-900/50">
+                                    <span class="material-symbols-outlined text-[24px] text-gray-600 dark:text-gray-400 group-[.payment-card-active]:text-red-500">wallet</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-bold text-gray-900 dark:text-white group-[.payment-card-active]:text-red-700 dark:group-[.payment-card-active]:text-red-400">OVO / ShopeePay</p>
+                                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-0.5">Verifikasi Instan</p>
+                                </div>
+                                <span class="material-symbols-outlined text-red-500 opacity-0 group-[.payment-card-active]:opacity-100 transition-opacity" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </section>
         </div>
         <!-- Right Column: Verification & Summary -->
-        <div class="lg:col-span-4 space-y-md">
-            <!-- Section 2: Upload Proof -->
-            <section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant motion-hidden slide-right delay-200">
-                <h3 class="font-label-md text-on-background mb-sm">Unggah Bukti Pembayaran</h3>
-                <div class="border-2 border-dashed border-outline-variant rounded-xl p-md text-center bg-surface-container-low hover:border-primary transition-colors group">
+        <div class="lg:col-span-4 space-y-8">
+            <!-- Section: Upload Proof -->
+            <section class="bg-white dark:bg-gray-900 rounded-2xl p-6 md:p-8 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-gray-100 dark:border-gray-800 motion-hidden slide-right delay-200 relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 to-red-400"></div>
+                <h3 class="text-xl font-bold font-['Lexend'] text-gray-900 dark:text-white mb-6">Unggah Bukti</h3>
+                
+                <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-8 text-center bg-gray-50 dark:bg-gray-800/30 hover:bg-red-50 dark:hover:bg-red-900/10 hover:border-red-400 dark:hover:border-red-500/50 transition-all group cursor-pointer">
                     <input class="hidden" id="proof-upload" type="file"/>
                     <label class="cursor-pointer block" for="proof-upload">
-                        <span class="material-symbols-outlined text-outline text-4xl mb-sm group-hover:text-primary transition-colors" data-icon="cloud_upload">cloud_upload</span>
-                        <p class="text-body-md font-medium text-on-background">Klik atau seret untuk mengunggah</p>
-                        <p class="text-xs text-on-surface-variant mt-xs">PNG, JPG atau PDF (maks. 5MB)</p>
+                        <div class="w-16 h-16 mx-auto bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 group-hover:bg-red-100 dark:group-hover:bg-red-900/30 transition-all duration-300">
+                            <span class="material-symbols-outlined text-gray-400 group-hover:text-red-500 text-[32px]">cloud_upload</span>
+                        </div>
+                        <p class="text-sm font-bold text-gray-900 dark:text-white mb-1">Klik untuk mengunggah</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">PNG, JPG atau PDF (maks. 5MB)</p>
                     </label>
                 </div>
-                <div class="mt-md p-sm bg-red-50 rounded-lg flex gap-sm">
-                    <span class="material-symbols-outlined text-primary text-sm" data-icon="info">info</span>
-                    <p class="text-xs text-on-secondary-container leading-relaxed">
-                        Verifikasi diproses dalam waktu 15 menit selama jam kerja (08:00 - 22:00). Pastikan struk terlihat jelas dan menyertakan ID transaksi.
+                
+                <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/50 rounded-xl flex items-start gap-3">
+                    <span class="material-symbols-outlined text-blue-500 text-[20px] mt-0.5">info</span>
+                    <p class="text-xs font-medium text-blue-800 dark:text-blue-300 leading-relaxed">
+                        Verifikasi diproses dalam waktu 15 menit selama jam kerja (08:00 - 22:00). Pastikan struk terlihat jelas.
                     </p>
                 </div>
             </section>
+            
             <!-- Booking Summary -->
-            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-outline-variant overflow-hidden motion-hidden slide-right delay-300">
+            <section class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl shadow-red-900/5 dark:shadow-black/20 border border-gray-100 dark:border-gray-800 overflow-hidden motion-hidden slide-right delay-300">
                 <div class="h-32 bg-gray-200 overflow-hidden relative">
                     <img alt="Tennis court" class="w-full h-full object-cover" data-alt="professional indoor tennis court with bright blue surface and crisp white lines under soft artificial lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY15NAdb84C4nw2wGphPYnCY9N1AuJcfRFNDLMYq8zfQSdrnOYtGDqcQ-JkWLJOax8XwsFqGYh_UmNZdEuzHe3frln1NPPzvIBWI3imWLZV1DgMP2B7uNS96srtmJ0433U-Xye3D5uw7gb9LH6dAbFY7cnZSJJ-1dxqiwIsJEes1CAUm4sQJ76Wiigkz9EI4iYFTd7-pghrBSriW1eJaohv6yH96uHIJPqarQtaM_d2DAE8KcNzthdQyvi_zBE2tZZXLJBQSeu9BI"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-md">
-                        <span class="text-white font-h3 text-h3">Grand Slam Arena</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                        <span class="text-white font-black font-['Lexend'] text-xl">Grand Slam Arena</span>
                     </div>
                 </div>
-                <div class="p-md space-y-sm">
-                    <div class="flex justify-between text-body-md">
-                        <span class="text-on-surface-variant">Tanggal</span>
-                        <span class="font-medium text-on-background">Oct 24, 2023</span>
+                <div class="p-6 md:p-8 space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-xs">Tanggal</span>
+                        <span class="font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded-lg">Oct 24, 2023</span>
                     </div>
-                    <div class="flex justify-between text-body-md">
-                        <span class="text-on-surface-variant">Waktu</span>
-                        <span class="font-medium text-on-background">18:00 - 20:00</span>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-xs">Waktu</span>
+                        <span class="font-bold text-gray-900 dark:text-white">18:00 - 20:00</span>
                     </div>
-                    <div class="flex justify-between text-body-md">
-                        <span class="text-on-surface-variant">Olahraga</span>
-                        <span class="font-medium text-on-background">Tennis (Court 3)</span>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-xs">Olahraga</span>
+                        <span class="font-bold text-gray-900 dark:text-white">Tennis (Court 3)</span>
                     </div>
-                    <div class="pt-sm border-t border-outline-variant mt-sm">
-                        <div class="flex justify-between">
-                            <span class="font-h3 text-h3 text-on-background">Total</span>
-                            <span class="font-h3 text-h3 text-primary">Rp 250.000</span>
+                    <div class="pt-4 border-t border-dashed border-gray-200 dark:border-gray-700 mt-2">
+                        <div class="flex justify-between items-end">
+                            <span class="font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-xs mb-1">Total Harga</span>
+                            <span class="font-black font-['Lexend'] text-2xl text-red-600 dark:text-red-500 leading-none">Rp 250.000</span>
                         </div>
                     </div>
                 </div>
             </section>
-            <a href="{{ route('booking.riwayat') }}" class="block text-center w-full bg-primary-container text-on-primary-container font-lexend py-4 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all text-lg font-bold">
-                Kirim Bukti Pembayaran
-            </a>
-            <div class="flex items-center justify-center gap-2 text-xs text-on-surface-variant">
-                <span class="material-symbols-outlined text-xs" data-icon="lock">lock</span>
-                <span>Transaksi terenkripsi aman didukung oleh ArenaFlow Pay</span>
+            
+            <div>
+                <a href="{{ route('booking.riwayat') }}" class="block text-center w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-xl shadow-lg shadow-red-600/20 active:scale-95 transition-all text-lg font-bold group flex items-center justify-center gap-2">
+                    Kirim Bukti Pembayaran
+                    <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">send</span>
+                </a>
+                <div class="flex items-center justify-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400 mt-4">
+                    <span class="material-symbols-outlined text-[16px]">lock</span>
+                    <span>Transaksi terenkripsi aman didukung oleh ArenaFlow</span>
+                </div>
             </div>
         </div>
     </div>

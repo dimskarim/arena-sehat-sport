@@ -27,10 +27,10 @@
                         <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                             Venue Lapangan <span class="text-red-600">*</span>
                         </label>
-                        <select name="lapangan_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
+                        <select name="lapangan_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 tom-select-custom">
                             <option value="">Pilih Venue Lapangan</option>
                             @foreach($lapangans as $lap)
-                            <option value="{{ $lap->id }}" {{ old('lapangan_id') == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
+                            <option value="{{ $lap->id }}" {{ old('lapangan_id', request('lapangan_id')) == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
                             @endforeach
                         </select>
                         @error('lapangan_id') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
@@ -54,7 +54,7 @@
                             <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Jam Buka <span class="text-red-600">*</span>
                             </label>
-                            <input type="time" name="waktu_buka" value="{{ old('waktu_buka') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
+                            <input type="time" name="waktu_buka" value="{{ old('waktu_buka') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 timepicker-custom" />
                             @error('waktu_buka') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
                         </div>
 
@@ -62,7 +62,7 @@
                             <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Jam Tutup <span class="text-red-600">*</span>
                             </label>
-                            <input type="time" name="waktu_tutup" value="{{ old('waktu_tutup') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" />
+                            <input type="time" name="waktu_tutup" value="{{ old('waktu_tutup') }}" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 timepicker-custom" />
                             @error('waktu_tutup') <p class="text-red-600 text-xs mt-1.5">{{ $message }}</p> @enderror
                         </div>
                     </div>

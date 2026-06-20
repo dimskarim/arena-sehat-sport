@@ -68,7 +68,7 @@
                     <h2 class="font-['Lexend'] text-base font-semibold text-[#1b1c1c] dark:text-white">Informasi Kategori</h2>
                 </div>
 
-                <form id="kategoriCreateForm" action="{{ route('admin.kategoris.store') }}" method="POST">
+                <form id="kategoriCreateForm" action="{{ route('admin.kategoris.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="p-6 space-y-5">
 
@@ -89,16 +89,16 @@
                             @enderror
                         </div>
 
-                        {{-- Deskripsi (opsional) --}}
+                        {{-- Logo Kategori --}}
                         <div>
                             <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">
-                                Deskripsi
-                                <span class="text-[10px] normal-case font-normal text-[#8f6f6c] dark:text-gray-500 ml-1">(opsional)</span>
+                                Logo Kategori <span class="text-[10px] normal-case font-normal text-[#8f6f6c] dark:text-gray-500 ml-1">(opsional, maks 2MB)</span>
                             </label>
-                            <textarea name="description" rows="3"
-                                class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border {{ $errors->has('description') ? 'border-red-400 bg-red-50 dark:bg-red-900/20 dark:border-red-500' : 'border-[#e4beba] dark:border-gray-600' }} rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 dark:focus:ring-[#af101a]/30 focus:border-[#af101a] outline-none transition-all resize-none"
-                                placeholder="Deskripsi singkat tentang kategori ini...">{{ old('description') }}</textarea>
-                            @error('description')
+                            <div class="relative">
+                                <input type="file" name="logo" id="logoInput" accept="image/jpeg, image/png, image/jpg, image/webp"
+                                    class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border {{ $errors->has('logo') ? 'border-red-400 bg-red-50 dark:bg-red-900/20 dark:border-red-500' : 'border-[#e4beba] dark:border-gray-600' }} rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 dark:focus:ring-[#af101a]/30 focus:border-[#af101a] outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#af101a] file:text-white hover:file:bg-red-800" />
+                            </div>
+                            @error('logo')
                             <p class="text-[#ba1a1a] text-xs mt-1.5 flex items-center gap-1">
                                 <svg class="text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
@@ -136,8 +136,9 @@
                     <h2 class="font-['Lexend'] text-base font-semibold text-[#1b1c1c]">Preview Kategori</h2>
                 </div>
                 <div class="p-6 flex flex-col items-center text-center">
-                    <div class="w-16 h-16 rounded-2xl bg-[#fdcbd0] flex items-center justify-center mb-4 border border-[#e4beba] dark:border-gray-700">
-                        <svg class="text-[#af101a] text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    <div class="w-16 h-16 rounded-2xl bg-[#fdcbd0] flex items-center justify-center mb-4 border border-[#e4beba] dark:border-gray-700 overflow-hidden">
+                        <img id="previewLogo" src="" alt="Logo" class="w-full h-full object-cover hidden">
+                        <svg id="defaultLogoIcon" class="text-[#af101a] text-3xl inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             style="font-variation-settings: 'FILL' 1;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z" />
                         </svg>
@@ -189,6 +190,27 @@
         slugPreview.textContent = slug;
         previewName.textContent = this.value || 'Nama Kategori';
         previewSlug.textContent = slug;
+    });
+
+    const logoInput = document.getElementById('logoInput');
+    const previewLogo = document.getElementById('previewLogo');
+    const defaultLogoIcon = document.getElementById('defaultLogoIcon');
+
+    logoInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewLogo.src = e.target.result;
+                previewLogo.classList.remove('hidden');
+                defaultLogoIcon.classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            previewLogo.src = '';
+            previewLogo.classList.add('hidden');
+            defaultLogoIcon.classList.remove('hidden');
+        }
     });
 </script>
 @endsection

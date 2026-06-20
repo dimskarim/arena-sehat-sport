@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        if (Auth::check() && in_array(Auth::user()->role, ['admin', 'pemilik'])) {
             return redirect()->route('admin.dashboard');
         }
         return view('admin.auth.login', ['title' => 'Login Admin']);
@@ -26,7 +26,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            if (Auth::user()->role === 'admin') {
+            if (in_array(Auth::user()->role, ['admin', 'pemilik'])) {
                 return redirect()->intended(route('admin.dashboard'));
             }
 
@@ -36,7 +36,7 @@ class AuthController extends Controller
             $request->session()->regenerateToken();
 
             return back()->withErrors([
-                'email' => 'Anda tidak memiliki akses admin.',
+                'email' => 'Anda tidak memiliki akses admin atau pemilik.',
             ]);
         }
 

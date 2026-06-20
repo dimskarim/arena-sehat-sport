@@ -71,24 +71,19 @@
                             <div>
                                 <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-gray-400 mb-2 block">Pilih Lapangan</label>
                                 <div class="relative">
-                                    <select name="lapangan_id" required class="w-full border border-slate-200 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm appearance-none bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 transition-all">
+                                    <select name="lapangan_id" required class="w-full border border-slate-200 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 transition-all tom-select-custom">
                                         <option value="">Pilih Lapangan</option>
                                         @foreach($lapangans as $lap)
-                                        <option value="{{ $lap->id }}" {{ old('lapangan_id', $item->lapangan_id) == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
+                                        <option value="{{ $lap->id }}" data-harga="{{ $lap->harga }}" {{ old('lapangan_id', $item->lapangan_id) == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
                                         @endforeach
                                     </select>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </div>
                                 </div>
                                 @error('lapangan_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <div>
                                 <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-gray-400 mb-2 block">Tanggal Reservasi</label>
-                                <input type="date" name="tanggal_booking" value="{{ old('tanggal_booking', $item->tanggal_booking) }}" required class="w-full border border-slate-200 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 transition-all" />
+                                <input type="date" name="tanggal_booking" value="{{ old('tanggal_booking', \Carbon\Carbon::parse($item->tanggal_booking)->format('Y-m-d')) }}" required class="w-full border border-slate-200 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm bg-white dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 transition-all datepicker-custom" placeholder="Pilih tanggal" />
                                 @error('tanggal_booking') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -96,34 +91,17 @@
                         <div class="mt-6 pt-6 border-t border-slate-100 dark:border-gray-700">
                             <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-gray-400 mb-3 block">Waktu / Slot Reservasi</label>
 
-                            {{-- Simulated selected slots based on old relations if any. Assuming $item->bookingDetails has slotWaktu --}}
-                            @php
-                            $selectedSlots = [];
-                            if(isset($item->bookingDetails)) {
-                            foreach($item->bookingDetails as $bd) {
-                            if($bd->slotWaktu) {
-                            $selectedSlots[] = substr($bd->slotWaktu->waktu_mulai, 0, 5);
-                            }
-                            }
-                            }
-                            // Dummy fallback or old input
-                            $oldSlots = old('slot_waktu', $selectedSlots);
-                            @endphp
-
-                            <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3">
-                                @for($i = 6; $i <= 22; $i++)
-                                    @php
-                                    $time=sprintf('%02d:00', $i);
-                                    $isChecked=in_array($time, $oldSlots);
-                                    @endphp
-                                    <label class="cursor-pointer group">
-                                    <input type="checkbox" name="slot_waktu[]" value="{{ $time }}" class="peer sr-only" {{ $isChecked ? 'checked' : '' }} />
-                                    <div class="p-3 text-xs font-semibold rounded-lg border border-slate-200 bg-white group-hover:border-[#af101a] group-hover:text-[#af101a] peer-checked:border-[#af101a] peer-checked:bg-[#af101a] peer-checked:text-white transition-all text-center dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300">
-                                        {{ $time }}
-                                    </div>
-                                    </label>
-                                    @endfor
+                            <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3" id="slots-container">
+                                <div class="col-span-full text-center text-xs text-slate-500 py-4">
+                                    Silakan pilih Lapangan dan Tanggal terlebih dahulu untuk melihat slot tersedia.
+                                </div>
                             </div>
+                            @error('slot_waktu') 
+                                <div class="mt-3 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-xs font-semibold flex items-start gap-2">
+                                    <svg class="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                             <div class="mt-5 flex gap-6 items-center text-xs text-slate-500 dark:text-gray-400">
                                 <div class="flex items-center gap-2">
@@ -165,8 +143,8 @@
                                 <p class="text-xs text-slate-500 dark:text-gray-400 font-bold uppercase mb-4 tracking-wider">Ringkasan Harga</p>
 
                                 <div>
-                                    <label class="text-sm font-semibold text-slate-700 dark:text-gray-300 block mb-2">Ubah Total Harga (Rp)</label>
-                                    <input type="number" name="total_harga" value="{{ old('total_harga', $item->total_harga) }}" required min="0" class="w-full border border-slate-200 rounded-lg py-2.5 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] font-bold text-lg text-[#af101a] dark:text-red-400 transition-all bg-white dark:bg-gray-800/50 dark:border-gray-600" />
+                                    <label class="text-sm font-semibold text-slate-700 dark:text-gray-300 block mb-2">Total Harga (Rp)</label>
+                                    <input type="number" name="total_harga" value="{{ old('total_harga', $item->total_harga) }}" required min="0" readonly class="w-full border border-slate-200 rounded-lg py-2.5 px-4 font-bold text-lg text-[#af101a] bg-slate-100 cursor-not-allowed dark:bg-gray-800 dark:text-red-400 dark:border-gray-600" />
                                     @error('total_harga') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>
 
@@ -175,7 +153,7 @@
                                         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <span class="leading-relaxed text-xs">Pastikan nominal sesuai dengan bukti transfer. Jika tidak, Anda dapat mengedit harga di atas.</span>
+                                        <span class="leading-relaxed text-xs">Pastikan nominal sesuai dengan bukti transfer. Harga akan otomatis diperbarui apabila Anda mengubah pilihan lapangan atau jadwal.</span>
                                     </div>
                                 </div>
                             </div>
@@ -200,17 +178,8 @@
                     <div class="mb-5">
                         <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-gray-400 mb-2 block">Akun Pengguna</label>
                         <div class="relative">
-                            <select name="user_id" required class="w-full border border-slate-200 rounded-xl py-2.5 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm appearance-none bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white font-semibold transition-all">
-                                <option value="">Pilih User</option>
-                                @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('user_id', $item->user_id) == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </div>
+                            <input type="text" value="{{ optional($item->user)->name }}" readonly disabled class="w-full border border-slate-200 rounded-xl py-2.5 px-4 text-sm bg-slate-100 cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-white font-semibold transition-all">
+                            <input type="hidden" name="user_id" value="{{ $item->user_id }}">
                         </div>
                         @error('user_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
@@ -228,18 +197,45 @@
                 </div>
 
                 {{-- Action / Status Card --}}
-                <div class="bg-gradient-to-br from-[#af101a] to-[#7f0d13] p-1 rounded-2xl shadow-xl shadow-red-900/20 overflow-hidden">
+                <div class="bg-gradient-to-br from-[#af101a] to-[#7f0d13] p-1 rounded-2xl shadow-xl shadow-red-900/20 relative z-40">
                     <div class="bg-white dark:bg-gray-800 rounded-[14px] p-6">
                         <h3 class="text-center font-bold text-slate-900 dark:text-white mb-1">Aksi & Persetujuan</h3>
                         <p class="text-center text-xs text-slate-500 dark:text-gray-400 mb-6">Atur status reservasi ini</p>
 
-                        <div class="mb-6">
-                            <select name="status" required class="w-full border-2 border-slate-200 dark:border-gray-600 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm font-bold text-center appearance-none bg-slate-50 dark:bg-gray-700/50 dark:text-white transition-all cursor-pointer">
+                        <div class="mb-6 relative w-full z-40">
+                            <select name="status" id="statusFilter" required class="hidden">
                                 <option value="pending" {{ old('status', $item->status) == 'pending' ? 'selected' : '' }}>🟡 PENDING</option>
                                 <option value="confirmed" {{ old('status', $item->status) == 'confirmed' ? 'selected' : '' }}>🔵 CONFIRMED</option>
                                 <option value="completed" {{ old('status', $item->status) == 'completed' ? 'selected' : '' }}>🟢 COMPLETED</option>
                                 <option value="cancelled" {{ old('status', $item->status) == 'cancelled' ? 'selected' : '' }}>🔴 CANCELLED</option>
                             </select>
+
+                            <div id="custom-status-btn" class="flex items-center justify-between w-full px-4 py-3 border-2 border-slate-200 hover:border-[#af101a] rounded-xl text-sm font-bold text-center appearance-none bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:hover:border-red-500 dark:text-white transition-all cursor-pointer">
+                                <span id="custom-status-text" class="flex-1 text-center">
+                                    @php
+                                        $statusText = [
+                                            'pending' => '🟡 PENDING',
+                                            'confirmed' => '🔵 CONFIRMED',
+                                            'completed' => '🟢 COMPLETED',
+                                            'cancelled' => '🔴 CANCELLED',
+                                        ];
+                                        echo $statusText[old('status', $item->status)] ?? '🟡 PENDING';
+                                    @endphp
+                                </span>
+                                <svg id="custom-status-icon" class="w-4 h-4 text-[#5b403d] dark:text-gray-400 transition-transform duration-200 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+
+                            <div id="custom-status-menu" class="absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50">
+                                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
+                                <ul class="relative z-10 py-1" id="custom-status-options">
+                                    <li data-value="pending" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'pending' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">🟡 PENDING</li>
+                                    <li data-value="confirmed" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'confirmed' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">🔵 CONFIRMED</li>
+                                    <li data-value="completed" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'completed' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">🟢 COMPLETED</li>
+                                    <li data-value="cancelled" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'cancelled' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-b-lg">🔴 CANCELLED</li>
+                                </ul>
+                            </div>
                             @error('status') <span class="text-red-500 text-xs mt-1 block text-center">{{ $message }}</span> @enderror
                         </div>
 
@@ -263,6 +259,8 @@
             </div>
         </div>
     </form>
+    {{-- Safelist Tailwind Classes --}}
+    <div class="hidden peer-checked:border-[#af101a] peer-checked:bg-[#af101a] peer-checked:text-white dark:peer-checked:bg-red-600 dark:peer-checked:border-red-500"></div>
 </div>
 
 {{-- Modal Konfirmasi Hapus --}}
@@ -288,7 +286,7 @@
         <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center">
             <button type="button" onclick="closeDeleteModal()"
                 class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-[#e4beba] dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-2.5 text-sm font-semibold text-[#5b403d] dark:text-gray-300 hover:bg-[#f6f3f2] dark:hover:bg-gray-700 transition-colors">
-                Batal
+                Kembali
             </button>
             <button type="button" id="confirmDeleteBtn" onclick="executeDelete()"
                 class="w-full sm:w-auto inline-flex justify-center items-center gap-2 rounded-lg bg-[#af101a] dark:bg-red-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-800 dark:hover:bg-red-700 transition-colors">
@@ -372,4 +370,212 @@
         }
     }
 </script>
+
+@push('scripts')
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.tom-select-custom').forEach((el) => {
+            new TomSelect(el, {
+                create: false,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                },
+                onChange: function() { 
+                    if(typeof fetchSlots === 'function') fetchSlots(); 
+                }
+            });
+        });
+
+        flatpickr('.datepicker-custom', {
+            dateFormat: "Y-m-d",
+            onChange: function() { fetchSlots(); }
+        });
+
+        const originalLapanganId = "{{ $item->lapangan_id }}";
+        const originalTanggal = "{{ \Carbon\Carbon::parse($item->tanggal_booking)->format('Y-m-d') }}";
+        const currentBookingSlots = [{{ implode(',', $item->bookingDetails->pluck('slot_waktu_id')->toArray()) }}];
+        const oldSlots = {!! json_encode(old('slot_waktu', [])) !!}.map(id => parseInt(id));
+
+        async function fetchSlots() {
+            let lapanganId;
+            const selectEl = document.querySelector('select[name="lapangan_id"]');
+            if (selectEl && selectEl.tomselect) {
+                lapanganId = selectEl.tomselect.getValue();
+            } else if (selectEl) {
+                lapanganId = selectEl.value;
+            }
+            const tanggal = document.querySelector('input[name="tanggal_booking"]').value;
+            
+            const container = document.getElementById('slots-container');
+
+            if (!lapanganId || !tanggal) {
+                container.innerHTML = '<div class="col-span-full text-center text-xs text-slate-500 py-4">Silakan pilih Lapangan dan Tanggal terlebih dahulu untuk melihat slot tersedia.</div>';
+                calculateTotal();
+                return;
+            }
+
+            container.innerHTML = '<div class="col-span-full text-center text-xs text-slate-500 py-4"><svg class="animate-spin h-5 w-5 mx-auto text-[#af101a]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memuat slot...</div>';
+
+            try {
+                const response = await fetch(`/lapangan/${lapanganId}/slots?tanggal=${tanggal}`);
+                const slots = await response.json();
+                
+                container.innerHTML = '';
+                
+                if (slots.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center text-xs text-slate-500 py-4">Tidak ada slot tersedia untuk lapangan ini.</div>';
+                }
+
+                const isOriginalDateAndVenue = (lapanganId == originalLapanganId && tanggal == originalTanggal);
+
+                slots.forEach(slot => {
+                    const timeStr = slot.waktu_mulai.substring(0, 5);
+                    const isCurrentBookingSlot = isOriginalDateAndVenue && currentBookingSlots.includes(slot.id);
+                    const isBooked = slot.is_booked && !isCurrentBookingSlot; // disable only if it's booked by OTHERS
+                    
+                    // If validation failed, use old inputs, else if original, check if part of booking
+                    let isChecked = false;
+                    if (oldSlots.length > 0) {
+                        isChecked = oldSlots.includes(slot.id);
+                    } else {
+                        isChecked = isCurrentBookingSlot;
+                    }
+
+                    const isDisabled = isBooked ? 'disabled' : '';
+                    const bgClass = isBooked 
+                        ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500' 
+                        : 'bg-white border-slate-200 cursor-pointer hover:border-[#af101a] hover:text-[#af101a] dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300';
+                    const peerCheckedClass = isBooked 
+                        ? '' 
+                        : 'peer-checked:border-[#af101a] peer-checked:bg-[#af101a] peer-checked:text-white dark:peer-checked:bg-red-600 dark:peer-checked:border-red-500';
+                    
+                    const html = `
+                        <label class="${isBooked ? '' : 'cursor-pointer group'}">
+                            <input type="checkbox" name="slot_waktu[]" value="${slot.id}" class="peer sr-only" ${isDisabled} ${isChecked ? 'checked' : ''} onchange="calculateTotal()" />
+                            <div class="p-3 text-xs font-semibold rounded-lg border transition-all text-center ${bgClass} ${peerCheckedClass}">
+                                ${timeStr}
+                            </div>
+                        </label>
+                    `;
+                    container.insertAdjacentHTML('beforeend', html);
+                });
+                calculateTotal();
+            } catch (error) {
+                console.error('Error fetching slots:', error);
+                container.innerHTML = '<div class="col-span-full text-center text-xs text-red-500 py-4">Gagal memuat slot. Silakan coba lagi.</div>';
+            }
+        }
+
+        window.calculateTotal = function() {
+            const selectEl = document.querySelector('select[name="lapangan_id"]');
+            let harga = 0;
+            if(selectEl && selectEl.tomselect) {
+                const selectedValue = selectEl.tomselect.getValue();
+                const optionEl = selectEl.querySelector('option[value="'+selectedValue+'"]');
+                harga = optionEl ? parseInt(optionEl.getAttribute('data-harga')) || 0 : 0;
+            } else if (selectEl) {
+                // fallback if tomselect not initialized yet
+                const selectedOption = selectEl.options[selectEl.selectedIndex];
+                harga = selectedOption ? parseInt(selectedOption.getAttribute('data-harga')) || 0 : 0;
+            }
+            const checkedSlots = document.querySelectorAll('input[name="slot_waktu[]"]:checked').length;
+            document.querySelector('input[name="total_harga"]').value = harga * checkedSlots;
+        };
+
+        const lapanganSelect = document.querySelector('select[name="lapangan_id"]');
+        if(lapanganSelect) {
+            lapanganSelect.addEventListener('change', fetchSlots);
+        }
+        
+        fetchSlots();
+
+        // Custom Status Dropdown Logic
+        const statusBtn = document.getElementById('custom-status-btn');
+        const statusMenu = document.getElementById('custom-status-menu');
+        const statusIcon = document.getElementById('custom-status-icon');
+        const statusSelect = document.getElementById('statusFilter');
+        const statusText = document.getElementById('custom-status-text');
+        const statusOptions = document.getElementById('custom-status-options')?.querySelectorAll('li');
+
+        if (statusBtn && statusMenu) {
+            statusBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                statusMenu.classList.toggle('hidden');
+                if (statusMenu.classList.contains('hidden')) {
+                    statusIcon.classList.remove('rotate-180');
+                } else {
+                    statusIcon.classList.add('rotate-180');
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!statusBtn.contains(e.target) && !statusMenu.contains(e.target)) {
+                    statusMenu.classList.add('hidden');
+                    statusIcon.classList.remove('rotate-180');
+                }
+            });
+
+            if (statusOptions) {
+                statusOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const value = this.getAttribute('data-value');
+                        const text = this.innerText;
+                        
+                        statusSelect.value = value;
+                        statusText.innerText = text;
+                        
+                        statusOptions.forEach(opt => {
+                            opt.classList.remove('bg-red-100', 'text-[#af101a]');
+                            opt.classList.add('text-slate-700');
+                        });
+                        
+                        this.classList.remove('text-slate-700');
+                        this.classList.add('bg-red-100', 'text-[#af101a]');
+                        
+                        statusMenu.classList.add('hidden');
+                        statusIcon.classList.remove('rotate-180');
+                    });
+                });
+            }
+        }
+    });
+</script>
+<style>
+    .ts-wrapper.form-control {
+        border: none;
+        padding: 0;
+        background: transparent;
+    }
+    .ts-control {
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1rem !important;
+        border: 1px solid #e2e8f0 !important;
+        background-color: #f8fafc !important;
+        font-size: 0.875rem !important;
+        min-height: 46px !important;
+    }
+    .dark .ts-control {
+        border-color: #4b5563 !important;
+        background-color: rgba(55, 65, 81, 0.5) !important;
+        color: white !important;
+    }
+    .dark .ts-dropdown {
+        background-color: #1f2937 !important;
+        border-color: #374151 !important;
+        color: white !important;
+    }
+    .dark .ts-dropdown .option {
+        color: white !important;
+    }
+    .dark .ts-dropdown .option.active, .dark .ts-dropdown .option:hover {
+        background-color: #374151 !important;
+        color: white !important;
+    }
+</style>
+@endpush
 @endsection

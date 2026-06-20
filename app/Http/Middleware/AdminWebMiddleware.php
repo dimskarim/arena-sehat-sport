@@ -12,8 +12,8 @@ class AdminWebMiddleware
     {
         $user = auth()->user();
 
-        if (!$user || $user->role !== 'admin') {
-            return redirect()->route('admin.login')->with('error', 'Silakan login sebagai Admin terlebih dahulu.');
+        if (!$user || !in_array($user->role, ['admin', 'pemilik'])) {
+            return redirect()->route('admin.login')->with('error', 'Silakan login sebagai Admin atau Pemilik terlebih dahulu.');
         }
 
         return $next($request);

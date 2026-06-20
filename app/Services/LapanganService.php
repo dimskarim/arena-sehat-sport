@@ -12,19 +12,37 @@ class LapanganService
 {
     public function getAllLapangans($search = null, $kategori_id = null, $status = null, $perPage = 10)
     {
-        return Lapangan::with(['kategori', 'gambarLapangans'])
+        $query = Lapangan::with(['kategori', 'gambarLapangans'])
+            ->withCount(['bookings' => function($q) {
+                $q->whereNotIn('status', ['cancelled', 'canceled', 'failed']);
+            }])
             ->search($search)
             ->filterKategori($kategori_id)
-            ->when($status, fn($q) => $q->where('status', $status))
-            ->latest()
-            ->paginate($perPage);
+            ->when($status, fn($q) => $q->where('status', $status));
+
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            $query->where('pemilik_id', auth()->id());
+        }
+
+        return $query->latest()->paginate($perPage);
     }
 
     public function createLapangan(array $data, $gambarFile = null)
     {
         DB::beginTransaction();
         try {
+            $fasilitasIds = $data['fasilitas'] ?? [];
+            unset($data['fasilitas']);
+
+            if (auth()->check() && auth()->user()->role === 'pemilik') {
+                $data['pemilik_id'] = auth()->id();
+            }
+
             $lapangan = Lapangan::create($data);
+
+            if (!empty($fasilitasIds)) {
+                $lapangan->fasilitas()->sync($fasilitasIds);
+            }
 
             // File Upload logic
             if ($gambarFile) {
@@ -39,7 +57,7 @@ class LapanganService
             }
 
             DB::commit();
-            return $lapangan->load(['kategori', 'gambarLapangans']);
+            return $lapangan->load(['kategori', 'gambarLapangans', 'fasilitas']);
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -59,7 +77,17 @@ class LapanganService
             unset($data['gambar']);
         }
 
+        $fasilitasIds = $data['fasilitas'] ?? [];
+        if (isset($data['fasilitas'])) {
+            unset($data['fasilitas']);
+        }
+
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            unset($data['pemilik_id']);
+        }
+
         $lapangan->update($data);
+        $lapangan->fasilitas()->sync($fasilitasIds);
 
         if ($gambarFile) {
             foreach ($lapangan->gambarLapangans as $gambar) {
@@ -78,7 +106,7 @@ class LapanganService
             }
         }
 
-        return $lapangan->fresh()->load(['kategori', 'gambarLapangans']);
+        return $lapangan->fresh()->load(['kategori', 'gambarLapangans', 'fasilitas']);
     }
 
     public function deleteLapangan($id)

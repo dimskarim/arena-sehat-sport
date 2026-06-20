@@ -9,6 +9,8 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <!-- Alpine.js for interactive components -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -208,10 +210,10 @@
         <nav class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto font-['Lexend'] antialiased">
             <a href="{{ route('home') }}" class="text-2xl font-black text-red-700 dark:text-red-500 tracking-tighter">ArenaFlow</a>
             <div class="hidden md:flex items-center gap-8">
-                <a class="text-gray-600 dark:text-gray-400 font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('home') }}">Homes</a>
-                <a class="text-gray-600 dark:text-gray-400 font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('lapangan.index') }}">Venues</a>
-                <a class="text-gray-600 dark:text-gray-400 font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('booking.riwayat') }}">My Bookings</a>
-                <a class="text-gray-600 dark:text-gray-400 font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('support') }}">Support</a>
+                <a class="{{ request()->routeIs('home') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('home') }}">Homes</a>
+                <a class="{{ request()->routeIs('lapangan.*') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('lapangan.index') }}">Venues</a>
+                <a class="{{ request()->routeIs('booking.riwayat') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('booking.riwayat') }}">My Bookings</a>
+                <a class="{{ request()->routeIs('support') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('support') }}">Support</a>
             </div>
             <div class="flex items-center gap-2 sm:gap-4">
                 <!-- Theme Toggle Button -->
@@ -220,25 +222,42 @@
                     <span class="material-symbols-outlined hidden dark:block">light_mode</span>
                 </button>
                 @auth
+                    <!-- Notifications -->
+                    <x-header.notification-dropdown />
+                    
                     <div class="relative group">
-                        <button class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg font-label-md transition-all active:scale-95 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700">
+                        <button class="flex items-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 px-4 py-2 rounded-xl font-bold transition-all hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-100 dark:border-red-900/50 shadow-sm hover:shadow-md">
                             <span class="material-symbols-outlined text-[20px]">person</span>
                             {{ explode(' ', Auth::user()->name)[0] }}
+                            <span class="material-symbols-outlined text-[18px] transition-transform duration-300 group-hover:rotate-180">keyboard_arrow_down</span>
                         </button>
-                        <div class="absolute right-0 top-[120%] w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:top-full transition-all duration-200 z-50">
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute right-0 top-[110%] w-56 bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:top-full transition-all duration-300 z-50 overflow-hidden transform origin-top-right group-hover:scale-100 scale-95">
+                            
+                            <!-- Header / Welcome -->
+                            <div class="px-4 py-3 bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Selamat datang,</p>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white truncate">{{ Auth::user()->name }}</p>
+                            </div>
+
                             <div class="py-2">
-                                <a href="{{ route('profile.index') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600 dark:hover:text-red-400 transition-colors">
-                                    <span class="material-symbols-outlined text-[18px]">account_circle</span> Profil Saya
+                                <a href="{{ route('profile.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                                    <span class="material-symbols-outlined text-[20px] text-gray-400 group-hover:text-red-500">account_circle</span> 
+                                    Profil Saya
                                 </a>
-                                <a href="{{ route('booking.riwayat') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-red-600 dark:hover:text-red-400 transition-colors">
-                                    <span class="material-symbols-outlined text-[18px]">history</span> Riwayat Booking
+                                <a href="{{ route('booking.riwayat') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                                    <span class="material-symbols-outlined text-[20px] text-gray-400 group-hover:text-red-500">history</span> 
+                                    Riwayat Booking
                                 </a>
                             </div>
-                            <div class="border-t border-gray-100 dark:border-gray-800 py-2">
+                            
+                            <div class="border-t border-gray-100 dark:border-gray-800 py-2 bg-gray-50/30 dark:bg-gray-800/30">
                                 <form action="{{ route('front.logout') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="flex w-full items-center gap-2 text-left px-4 py-2.5 text-sm text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-400 transition-colors">
-                                        <span class="material-symbols-outlined text-[18px]">logout</span> Logout
+                                    <button type="submit" class="flex w-full items-center gap-3 text-left px-4 py-2.5 text-sm font-bold text-red-600 dark:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-700 dark:hover:text-red-400 transition-colors">
+                                        <span class="material-symbols-outlined text-[20px]">logout</span> 
+                                        Keluar
                                     </button>
                                 </form>
                             </div>
@@ -253,17 +272,59 @@
 
     @yield('content')
 
-    <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-950 w-full py-12 border-t border-gray-100 dark:border-gray-800">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="text-lg font-bold text-gray-900 dark:text-white">ArenaFlow</div>
-            <div class="flex flex-wrap justify-center gap-8 font-['Lexend'] text-xs uppercase tracking-widest">
-                <a class="text-gray-500 dark:text-gray-400 hover:text-red-600 underline decoration-2 underline-offset-4 transition-opacity" href="#">Privacy</a>
-                <a class="text-gray-500 dark:text-gray-400 hover:text-red-600 underline decoration-2 underline-offset-4 transition-opacity" href="#">Terms</a>
-                <a class="text-gray-500 dark:text-gray-400 hover:text-red-600 underline decoration-2 underline-offset-4 transition-opacity" href="#">Partner with Us</a>
-                <a class="text-gray-500 dark:text-gray-400 hover:text-red-600 underline decoration-2 underline-offset-4 transition-opacity" href="#">Contact</a>
+    <!-- Enhanced Modern Footer -->
+    <footer class="bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-black w-full border-t border-gray-100 dark:border-gray-900 pt-16 pb-8 mt-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="{{ route('home') }}" class="text-3xl font-black text-red-700 dark:text-red-500 tracking-tighter mb-4 inline-block">ArenaFlow<span class="text-gray-900 dark:text-white">.</span></a>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed max-w-md mb-6">
+                        Platform reservasi fasilitas olahraga premium terdepan. Kami menghubungkan atlet dengan lapangan berkualitas tinggi untuk performa maksimal Anda setiap saat.
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 hover:border-red-200 dark:hover:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all group shadow-sm">
+                            <span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">language</span>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 hover:border-red-200 dark:hover:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all group shadow-sm">
+                            <span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">alternate_email</span>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 hover:border-red-200 dark:hover:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all group shadow-sm">
+                            <span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">call</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-['Lexend'] font-bold text-gray-900 dark:text-white mb-6 uppercase text-sm tracking-wider">Eksplorasi</h4>
+                    <ul class="space-y-4">
+                        <li><a href="{{ route('lapangan.index') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:translate-x-1 inline-block transition-transform">Cari Venues</a></li>
+                        <li><a href="{{ route('booking.riwayat') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:translate-x-1 inline-block transition-transform">Riwayat Booking</a></li>
+                        <li><a href="{{ route('support') }}" class="text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:translate-x-1 inline-block transition-transform">Pusat Bantuan</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-['Lexend'] font-bold text-gray-900 dark:text-white mb-6 uppercase text-sm tracking-wider">Legalitas</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:translate-x-1 inline-block transition-transform">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:translate-x-1 inline-block transition-transform">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="text-sm text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:translate-x-1 inline-block transition-transform">Kemitraan</a></li>
+                    </ul>
+                </div>
             </div>
-            <p class="font-['Lexend'] text-xs uppercase tracking-widest text-gray-400">© 2024 ArenaFlow High-Performance Booking.</p>
+
+            <div class="border-t border-gray-200 dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="font-['Lexend'] text-xs uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                    © {{ date('Y') }} ArenaFlow. Hak Cipta Dilindungi.
+                </p>
+                <div class="flex items-center gap-2 bg-white dark:bg-gray-900 px-3 py-1.5 rounded-full border border-gray-100 dark:border-gray-800 shadow-sm">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Sistem Normal</span>
+                </div>
+            </div>
         </div>
     </footer>
     <script>

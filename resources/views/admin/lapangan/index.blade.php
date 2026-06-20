@@ -64,20 +64,61 @@
         </div>
     </div>
 
-    {{-- Search Bar --}}
-    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-wrap items-center justify-between gap-4 mb-6 dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex items-center gap-4 flex-1">
-            <div class="relative w-full md:w-80">
-                <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input id="searchInput" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-100 focus:border-red-500 text-sm outline-none dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" placeholder="Cari nama lapangan..." type="text" />
+    {{-- Search Bar & Filter --}}
+    {{-- Search Bar & Filter --}}
+    <form method="GET" action="{{ request()->url() }}" id="filterForm">
+        <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 mb-6 dark:bg-gray-800 dark:border-gray-700 relative z-40">
+            <div class="flex items-center gap-4 flex-1 w-full">
+                <div class="relative w-full md:w-80">
+                    <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input name="search" value="{{ request('search') }}" id="searchInput" class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-100 focus:border-red-500 text-sm outline-none dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" placeholder="Cari nama lapangan..." type="text" autocomplete="off" />
+                </div>
+            </div>
+            <div class="w-full md:w-auto shrink-0 flex items-center gap-2">
+                <div class="relative w-full md:w-56 z-40">
+                    <!-- Hidden Select -->
+                    <select name="status" id="statusFilter" class="hidden">
+                        <option value="">Semua Status</option>
+                        <option value="tersedia" {{ request('status') == 'tersedia' ? 'selected' : '' }}>Aktif (Tersedia)</option>
+                        <option value="nonaktif" {{ request('status') == 'nonaktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                    </select>
+
+                    <!-- Custom Dropdown Button -->
+                    <div id="custom-status-btn" class="flex items-center justify-between w-full px-4 py-2.5 bg-slate-50 hover:bg-white/[0.12] rounded-lg border border-slate-200 text-sm transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white">
+                        <span class="text-slate-700 dark:text-white font-medium" id="custom-status-text">
+                            @php
+                                $statusText = [
+                                    '' => 'Semua Status',
+                                    'tersedia' => 'Aktif (Tersedia)',
+                                    'nonaktif' => 'Tidak Aktif',
+                                ];
+                                echo $statusText[request('status')] ?? 'Semua Status';
+                            @endphp
+                        </span>
+                        <svg id="custom-status-icon" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+
+                    <!-- Custom Dropdown Menu -->
+                    <div id="custom-status-menu" class="absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50">
+                        <!-- Upward Pointer -->
+                        <div class="absolute -top-1.5 left-6 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
+
+                        <ul class="relative z-10 py-1" id="custom-status-options">
+                            <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == '' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">Semua Status</li>
+                            <li data-value="tersedia" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == 'tersedia' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">Aktif (Tersedia)</li>
+                            <li data-value="nonaktif" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == 'nonaktif' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-b-lg">Tidak Aktif</li>
+                        </ul>
+                    </div>
+                </div>
+                <button type="submit" class="px-5 py-2.5 bg-red-700 text-white font-bold rounded-lg hover:bg-red-800 transition-colors dark:bg-red-600 dark:hover:bg-red-700">Cari</button>
             </div>
         </div>
-    </div>
+    </form>
 
     {{-- Data Table --}}
-    <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden mb-8 dark:bg-gray-800 dark:border-gray-700">
+    <div id="lapangan-table-container" class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden mb-8 dark:bg-gray-800 dark:border-gray-700">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -85,6 +126,7 @@
                         <th class="px-6 py-4 text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-wider">Nama Lapangan</th>
                         <th class="px-6 py-4 text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-wider">Kategori</th>
                         <th class="px-6 py-4 text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center">Harga per Jam</th>
+                        <th class="px-6 py-4 text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-wider text-center">Total Booking</th>
                         <th class="px-6 py-4 text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-wider">Status Operasional</th>
                         <th class="px-6 py-4 text-xs font-black text-slate-500 dark:text-gray-400 uppercase tracking-wider text-right">Aksi</th>
                     </tr>
@@ -151,6 +193,13 @@
                             <span class="text-sm font-bold text-slate-900 dark:text-white">Rp {{ number_format($item->harga ?? 0, 0, ',', '.') }}</span>
                         </td>
 
+                        {{-- Total Booking --}}
+                        <td class="px-6 py-4 text-center">
+                            <span class="inline-flex items-center justify-center min-w-[2.5rem] px-2.5 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 rounded-lg text-sm font-bold border border-blue-100 dark:border-blue-800">
+                                {{ $item->bookings_count ?? 0 }}
+                            </span>
+                        </td>
+
                         {{-- Status --}}
                         <td class="px-6 py-4">
                             @if(strtolower($item->status ?? '') === 'tersedia')
@@ -197,7 +246,7 @@
             <p class="text-xs font-medium text-slate-500 dark:text-gray-400">Menampilkan {{ $items->firstItem() ?? 0 }} hingga {{ $items->lastItem() ?? 0 }} dari {{ $items->total() ?? 0 }} lapangan</p>
             @endif
             @if(method_exists($items, 'links'))
-            {{ $items->links('components.pagination') }}
+            {{ $items->appends(request()->query())->links('components.pagination') }}
             @endif
         </div>
     </div>
@@ -335,21 +384,136 @@
         }
     }
 
-    document.getElementById('searchInput').addEventListener('keyup', function() {
-        let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll('tbody tr');
+    // AJAX Filtering Logic
+    async function fetchLapanganData(url) {
+        const container = document.getElementById('lapangan-table-container');
+        if (!container) return;
 
-        rows.forEach(row => {
-            let nameElement = row.querySelector('td:nth-child(1) p.font-bold');
-            if (nameElement) {
-                let text = nameElement.textContent || nameElement.innerText;
-                if (text.toLowerCase().indexOf(filter) > -1) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
+        container.style.opacity = '0.5';
+        container.style.pointerEvents = 'none';
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
+            });
+            const html = await response.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            const newContainer = doc.getElementById('lapangan-table-container');
+            if (newContainer) {
+                container.innerHTML = newContainer.innerHTML;
+            }
+
+            window.history.pushState({}, '', url);
+        } catch (error) {
+            console.error('AJAX Error:', error);
+        } finally {
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'auto';
+        }
+    }
+
+    function triggerFilter() {
+        const form = document.getElementById('filterForm');
+        if (form) {
+            const url = new URL(form.action);
+            const formData = new FormData(form);
+            formData.forEach((value, key) => {
+                if (value) url.searchParams.append(key, value);
+            });
+            fetchLapanganData(url.toString());
+        }
+    }
+
+    const filterForm = document.getElementById('filterForm');
+    if (filterForm) {
+        filterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            triggerFilter();
+        });
+    }
+
+    let searchTimeout;
+    document.addEventListener('input', function(e) {
+        if (e.target.id === 'searchInput') {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                triggerFilter();
+            }, 300);
+        }
+    });
+
+    document.addEventListener('change', function(e) {
+        if (e.target.id === 'statusFilter') {
+            triggerFilter();
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('#lapangan-table-container nav a');
+        if (link) {
+            e.preventDefault();
+            fetchLapanganData(link.href);
+        }
+    });
+
+    // Custom Status Dropdown Logic
+    const statusBtn = document.getElementById('custom-status-btn');
+    const statusMenu = document.getElementById('custom-status-menu');
+    const statusIcon = document.getElementById('custom-status-icon');
+    const statusSelect = document.getElementById('statusFilter');
+    const statusText = document.getElementById('custom-status-text');
+    const statusOptions = document.getElementById('custom-status-options')?.querySelectorAll('li');
+
+    if (statusBtn && statusMenu) {
+        statusBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            statusMenu.classList.toggle('hidden');
+            if (statusMenu.classList.contains('hidden')) {
+                statusIcon.classList.remove('rotate-180');
+            } else {
+                statusIcon.classList.add('rotate-180');
             }
         });
-    });
+
+        document.addEventListener('click', function(e) {
+            if (!statusBtn.contains(e.target) && !statusMenu.contains(e.target)) {
+                statusMenu.classList.add('hidden');
+                statusIcon.classList.remove('rotate-180');
+            }
+        });
+
+        if (statusOptions) {
+            statusOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.innerText;
+                    
+                    statusSelect.value = value;
+                    statusText.innerText = text;
+                    
+                    // Update active styles
+                    statusOptions.forEach(opt => {
+                        opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        opt.classList.add('text-slate-700');
+                    });
+                    
+                    this.classList.remove('text-slate-700');
+                    this.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                    
+                    // Dispatch change event to trigger AJAX filter
+                    statusSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                    
+                    statusMenu.classList.add('hidden');
+                    statusIcon.classList.remove('rotate-180');
+                });
+            });
+        }
+    }
+
 </script>
 @endsection

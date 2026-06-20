@@ -76,7 +76,7 @@
                     </button>
                 </div>
 
-                <h3 class="text-base font-bold text-[#1b1c1c] dark:text-white mb-1" id="previewName">Pengguna Baru</h3>
+                <h3 class="text-base font-bold text-[#1b1c1c] dark:text-white mb-1 w-full break-words px-2" id="previewName" title="Preview Nama">Pengguna baru</h3>
                 <p class="text-xs text-[#5b403d] dark:text-gray-400 mb-4">Pratinjau Foto</p>
 
                 <div class="w-full space-y-2 border-t border-[#e4beba] dark:border-gray-700 pt-5">
@@ -121,13 +121,17 @@
                         <span class="px-2 py-0.5 bg-[#af101a] dark:bg-red-600 text-white text-[10px] font-black uppercase rounded-full mt-0.5">Admin</span>
                         <p class="text-xs text-[#5b403d] dark:text-gray-400">Akses penuh untuk mengelola venue, pesanan, dan pengguna.</p>
                     </div>
+                    <div class="flex items-start gap-3">
+                        <span class="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-[10px] font-black uppercase rounded-full mt-0.5">Pemilik</span>
+                        <p class="text-xs text-[#5b403d] dark:text-gray-400">Akses mengelola dashboard, lapangan, booking, manajemen waktu dan pembayaran.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         {{-- RIGHT COLUMN: Form --}}
         <div class="col-span-12 lg:col-span-8">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-[#e4beba] dark:border-gray-700 overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.06)] border border-[#e4beba] dark:border-gray-700 relative z-40">
 
                 {{-- Card Header --}}
                 <div class="px-8 py-5 border-b border-[#e4beba] dark:border-gray-700 flex items-center gap-3">
@@ -148,8 +152,8 @@
                             <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Nama Lengkap <span class="text-[#ba1a1a] dark:text-red-500">*</span>
                             </label>
-                            <input type="text" name="name" value="{{ old('name') }}" required
-                                oninput="document.getElementById('previewName').textContent = this.value || 'Pengguna Baru'"
+                            <input type="text" name="name" value="{{ old('name') }}" required maxlength="50"
+                                oninput="document.getElementById('previewName').textContent = this.value || '-'"
                                 class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border {{ $errors->has('name') ? 'border-red-400' : 'border-[#e4beba] dark:border-gray-600' }} rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all"
                                 placeholder="Nama lengkap pengguna" />
                             @error('name') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1.5 flex items-center gap-1"><svg class="text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -170,7 +174,7 @@
                                     class="w-full pl-11 pr-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border {{ $errors->has('email') ? 'border-red-400' : 'border-[#e4beba] dark:border-gray-600' }} rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all"
                                     placeholder="email@example.com" />
                             </div>
-                            @error('email') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1.5 flex items-center gap-1"><svg class="text-sm inline-block align-middle" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            @error('email') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1.5 flex items-center gap-1"><svg class="text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                                 </svg>{{ $message }}</p> @enderror
                         </div>
@@ -183,6 +187,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                                 </svg>
                                 <input type="text" name="phone" value="{{ old('phone') }}"
+                                    pattern="^(08|628|\+628)[0-9]{7,11}$" title="Nomor HP harus valid nomor Indonesia (diawali 08, 628, atau +628)"
                                     class="w-full pl-11 pr-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all"
                                     placeholder="+62 8xx xxxx xxxx" />
                             </div>
@@ -194,12 +199,36 @@
                             <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Role <span class="text-[#ba1a1a] dark:text-red-500">*</span>
                             </label>
-                            <select name="role" required
-                                onchange="document.getElementById('previewRole').textContent = this.options[this.selectedIndex].text.replace(/[^a-zA-Z]/g, '')"
-                                class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all appearance-none cursor-pointer">
-                                <option value="user" {{ old('role', 'user') == 'user' ? 'selected' : '' }}>👤 Pengguna</option>
-                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>🔑 Admin</option>
-                            </select>
+                            <div class="relative w-full z-40">
+                                <select name="role" id="roleFilter" required class="hidden">
+                                    <option value="user" {{ old('role', 'user') == 'user' ? 'selected' : '' }}>👤 Pengguna</option>
+                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>🔑 Admin</option>
+                                    <option value="pemilik" {{ old('role') == 'pemilik' ? 'selected' : '' }}>👑 Pemilik</option>
+                                </select>
+
+                                <div id="custom-role-btn" class="flex items-center justify-between w-full px-4 py-3 bg-[#f6f3f2] hover:bg-white/[0.12] rounded-lg border border-[#e4beba] text-sm transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white">
+                                    <span class="text-slate-700 dark:text-white" id="custom-role-text">
+                                        @php
+                                            $roleText = [
+                                                'user' => '👤 Pengguna',
+                                                'admin' => '🔑 Admin',
+                                                'pemilik' => '👑 Pemilik',
+                                            ];
+                                            echo $roleText[old('role', 'user')] ?? '👤 Pengguna';
+                                        @endphp
+                                    </span>
+                                    <svg id="custom-role-icon" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+
+                                <div id="custom-role-menu" class="absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50">
+                                    <div class="absolute -top-1.5 left-6 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
+                                    <ul class="relative z-10 py-1" id="custom-role-options">
+                                        <li data-value="user" class="px-4 py-3 text-sm cursor-pointer transition-colors {{ old('role', 'user') == 'user' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">👤 Pengguna</li>
+                                        <li data-value="admin" class="px-4 py-3 text-sm cursor-pointer transition-colors {{ old('role') == 'admin' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">🔑 Admin</li>
+                                        <li data-value="pemilik" class="px-4 py-3 text-sm cursor-pointer transition-colors {{ old('role') == 'pemilik' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-b-lg">👑 Pemilik</li>
+                                    </ul>
+                                </div>
+                            </div>
                             @error('role') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1.5">{{ $message }}</p> @enderror
                         </div>
 
@@ -216,17 +245,17 @@
                                     class="w-full pl-11 pr-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border {{ $errors->has('password') ? 'border-red-400' : 'border-[#e4beba] dark:border-gray-600' }} rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all"
                                     placeholder="Min. 8 karakter" />
                             </div>
-                            @error('password') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1.5 flex items-center gap-1"><svg class="text-sm inline-block align-middle" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            @error('password') <p class="text-[#ba1a1a] dark:text-red-400 text-xs mt-1.5 flex items-center gap-1"><svg class="text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                                 </svg>{{ $message }}</p> @enderror
                         </div>
 
-                        {{-- Address --}}
+                        {{-- Catatan --}}
                         <div class="sm:col-span-2">
-                            <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">Alamat / Catatan Tambahan</label>
-                            <textarea name="address" rows="3"
+                            <label class="block text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-2">Catatan <span class="text-[10px] normal-case font-normal text-[#8f6f6c] dark:text-gray-500 ml-1">(opsional)</span></label>
+                            <textarea name="catatan" rows="3"
                                 class="w-full px-4 py-3 bg-[#f6f3f2] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm text-[#1b1c1c] dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none transition-all resize-none"
-                                placeholder="Alamat lengkap atau catatan tambahan...">{{ old('address') }}</textarea>
+                                placeholder="Tambahkan catatan khusus untuk pengguna ini...">{{ old('catatan') }}</textarea>
                         </div>
 
                         {{-- Divider --}}
@@ -268,6 +297,61 @@
             editBtn.classList.remove('hidden');
         };
         reader.readAsDataURL(file);
+    }
+
+    // Custom Role Dropdown Logic
+    const roleBtn = document.getElementById('custom-role-btn');
+    const roleMenu = document.getElementById('custom-role-menu');
+    const roleIcon = document.getElementById('custom-role-icon');
+    const roleSelect = document.getElementById('roleFilter');
+    const roleText = document.getElementById('custom-role-text');
+    const roleOptions = document.getElementById('custom-role-options')?.querySelectorAll('li');
+
+    if (roleBtn && roleMenu) {
+        roleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            roleMenu.classList.toggle('hidden');
+            if (roleMenu.classList.contains('hidden')) {
+                roleIcon.classList.remove('rotate-180');
+            } else {
+                roleIcon.classList.add('rotate-180');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!roleBtn.contains(e.target) && !roleMenu.contains(e.target)) {
+                roleMenu.classList.add('hidden');
+                roleIcon.classList.remove('rotate-180');
+            }
+        });
+
+        if (roleOptions) {
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.innerText;
+                    
+                    roleSelect.value = value;
+                    roleText.innerText = text;
+                    
+                    roleOptions.forEach(opt => {
+                        opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        opt.classList.add('text-slate-700');
+                    });
+                    
+                    this.classList.remove('text-slate-700');
+                    this.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                    
+                    roleMenu.classList.add('hidden');
+                    roleIcon.classList.remove('rotate-180');
+
+                    const previewRole = document.getElementById('previewRole');
+                    if(previewRole) {
+                        previewRole.textContent = text.replace(/[^a-zA-Z]/g, '');
+                    }
+                });
+            });
+        }
     }
 </script>
 @endsection

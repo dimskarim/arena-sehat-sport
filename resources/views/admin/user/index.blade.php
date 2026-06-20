@@ -38,7 +38,7 @@
             <div>
                 <p class="text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-wider">Total Pengguna</p>
                 <p class="text-2xl font-black font-['Lexend'] text-slate-900 dark:text-white">
-                    {{ method_exists($items, 'total') ? number_format($items->total()) : count($items) }}
+                    {{ number_format($totalUsers ?? 0) }}
                 </p>
             </div>
         </div>
@@ -53,7 +53,7 @@
             <div>
                 <p class="text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-wider">Admin Aktif</p>
                 <p class="text-2xl font-black font-['Lexend'] text-[#af101a] dark:text-red-400">
-                    {{ $items->where('role', 'admin')->count() }}
+                    {{ number_format($totalAdmins ?? 0) }}
                 </p>
             </div>
         </div>
@@ -61,13 +61,39 @@
         {{-- Filter Bar --}}
         <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-xl border border-[#e4beba] dark:border-gray-700 shadow-sm flex flex-wrap items-end gap-4">
             <form id="filterForm" method="GET" action="{{ route('admin.users.index') }}" onsubmit="event.preventDefault(); handleFilter();" class="flex flex-wrap items-end gap-4 w-full">
-                <div class="flex-1 min-w-[140px]">
+                <div class="flex-1 min-w-[140px] relative z-40">
                     <label class="block text-[10px] font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-1.5">Filter Peran</label>
-                    <select name="role" onchange="handleFilter()" class="w-full px-3 py-2 bg-[#fcf9f8] dark:bg-gray-700/50 border border-[#e4beba] dark:border-gray-600 rounded-lg text-sm dark:text-white focus:ring-2 focus:ring-red-100 focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none appearance-none cursor-pointer">
+                    <select name="role" id="roleFilter" class="hidden">
                         <option value="">Semua Peran</option>
                         <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="pemilik" {{ request('role') == 'pemilik' ? 'selected' : '' }}>Pemilik</option>
                         <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>Pengguna</option>
                     </select>
+
+                    <div id="custom-role-btn" class="flex items-center justify-between w-full px-3 py-2 bg-[#fcf9f8] hover:bg-white/[0.12] rounded-lg border border-[#e4beba] text-sm transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white">
+                        <span class="text-slate-700 dark:text-white" id="custom-role-text">
+                            @php
+                                $roleText = [
+                                    '' => 'Semua Peran',
+                                    'admin' => 'Admin',
+                                    'pemilik' => 'Pemilik',
+                                    'user' => 'Pengguna',
+                                ];
+                                echo $roleText[request('role')] ?? 'Semua Peran';
+                            @endphp
+                        </span>
+                        <svg id="custom-role-icon" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+
+                    <div id="custom-role-menu" class="absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50">
+                        <div class="absolute -top-1.5 left-6 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
+                        <ul class="relative z-10 py-1" id="custom-role-options">
+                            <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('role') == '' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">Semua Peran</li>
+                            <li data-value="admin" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('role') == 'admin' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">Admin</li>
+                            <li data-value="pemilik" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('role') == 'pemilik' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">Pemilik</li>
+                            <li data-value="user" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('role') == 'user' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-b-lg">Pengguna</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="flex-1 min-w-[140px]">
                     <label class="block text-[10px] font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest mb-1.5">Pencarian</label>
@@ -133,6 +159,8 @@
                         <td class="px-6 py-4">
                             @if(strtolower($item->role ?? '') === 'admin')
                             <span class="px-3 py-1 bg-[#af101a] dark:bg-red-600 text-white text-[10px] font-black uppercase rounded-full">Admin</span>
+                            @elseif(strtolower($item->role ?? '') === 'pemilik')
+                            <span class="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-[10px] font-black uppercase rounded-full">Pemilik</span>
                             @else
                             <span class="px-3 py-1 bg-[#fdcbd0] dark:bg-gray-700 text-[#795358] dark:text-gray-300 text-[10px] font-black uppercase rounded-full">User</span>
                             @endif
@@ -390,6 +418,60 @@
             deleteFeedback.innerHTML = `<p class="flex items-center gap-2">❌ ${error.message}</p>`;
             confirmDeleteBtn.disabled = false;
             confirmDeleteBtn.innerHTML = originalBtnText;
+        }
+    }
+
+    // Custom Role Dropdown Logic
+    const roleBtn = document.getElementById('custom-role-btn');
+    const roleMenu = document.getElementById('custom-role-menu');
+    const roleIcon = document.getElementById('custom-role-icon');
+    const roleSelect = document.getElementById('roleFilter');
+    const roleText = document.getElementById('custom-role-text');
+    const roleOptions = document.getElementById('custom-role-options')?.querySelectorAll('li');
+
+    if (roleBtn && roleMenu) {
+        roleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            roleMenu.classList.toggle('hidden');
+            if (roleMenu.classList.contains('hidden')) {
+                roleIcon.classList.remove('rotate-180');
+            } else {
+                roleIcon.classList.add('rotate-180');
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!roleBtn.contains(e.target) && !roleMenu.contains(e.target)) {
+                roleMenu.classList.add('hidden');
+                roleIcon.classList.remove('rotate-180');
+            }
+        });
+
+        if (roleOptions) {
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.innerText;
+                    
+                    roleSelect.value = value;
+                    roleText.innerText = text;
+                    
+                    roleOptions.forEach(opt => {
+                        opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        opt.classList.add('text-slate-700');
+                    });
+                    
+                    this.classList.remove('text-slate-700');
+                    this.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                    
+                    roleMenu.classList.add('hidden');
+                    roleIcon.classList.remove('rotate-180');
+                    
+                    if(typeof handleFilter === 'function') {
+                        handleFilter();
+                    }
+                });
+            });
         }
     }
 </script>

@@ -8,10 +8,20 @@ class NotifikasiService
 {
     public function getAll($userId = null, $perPage = 10)
     {
-        return Notifikasi::with(['user', 'booking'])
+        $query = Notifikasi::with(['user', 'booking'])
             ->filterUser($userId)
-            ->latest()
-            ->paginate($perPage);
+            ->latest();
+
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            $pemilikId = auth()->id();
+            $query->where(function ($q) use ($pemilikId) {
+                $q->whereHas('booking.lapangan', function ($q2) use ($pemilikId) {
+                    $q2->where('pemilik_id', $pemilikId);
+                })->orWhere('user_id', $pemilikId);
+            });
+        }
+
+        return $query->paginate($perPage);
     }
 
     public function create(array $data)

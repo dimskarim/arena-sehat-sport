@@ -2,16 +2,6 @@
 
 @section('title', 'Profil Pengguna - ArenaFlow')
 
-@push('styles')
-<style>
-    .bg-gradient-mesh {
-        background-color: #fcf9f8;
-        background-image:
-            radial-gradient(at 0% 0%, rgba(211, 47, 47, 0.05) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(211, 47, 47, 0.03) 0px, transparent 50%);
-    }
-</style>
-@endpush
 
 @section('content')
 <main class="max-w-7xl mx-auto px-6 py-12 md:py-16 bg-gradient-mesh min-h-screen">
@@ -62,9 +52,9 @@
         </aside>
 
         <!-- Right Column: Forms -->
-        <div class="lg:col-span-8 space-y-gutter">
+        <div class="lg:col-span-7 space-y-gutter">
             <!-- Section: Edit Profil -->
-            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden slide-right delay-100">
+            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden">
                 <div class="p-6 border-b border-zinc-100 flex items-center gap-3">
                     <span class="material-symbols-outlined text-primary-container">edit_square</span>
                     <h2 class="font-h3 text-h3 text-lg">Informasi Profil</h2>
@@ -96,7 +86,7 @@
             </section>
 
             <!-- Section: Ubah Password -->
-            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden slide-right delay-200">
+            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden">
                 <div class="p-6 border-b border-zinc-100 flex items-center gap-3">
                     <span class="material-symbols-outlined text-primary-container">lock</span>
                     <h2 class="font-h3 text-h3 text-lg">Ubah Password</h2>
@@ -136,7 +126,7 @@
             </section>
 
             <!-- Section: Account Settings (Extra) -->
-            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden slide-right delay-300">
+            <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden">
                 <div class="p-6 border-b border-zinc-100">
                     <h2 class="font-h3 text-h3 text-lg">Preferensi</h2>
                 </div>
