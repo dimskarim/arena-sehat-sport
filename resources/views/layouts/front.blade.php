@@ -158,6 +158,8 @@
             font-family: 'Lexend', sans-serif;
         }
 
+        [x-cloak] { display: none !important; }
+
         /* Global Animation Styles */
         .motion-hidden {
             opacity: 0;
@@ -205,30 +207,46 @@
 </head>
 
 <body class="bg-surface font-body-md text-on-surface transition-colors duration-300">
-    <!-- TopAppBar -->
-    <header class="fixed top-0 w-full z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-[0_4px_20px_rgba(211,47,47,0.08)]">
+    <header x-data="{ mobileMenuOpen: false }" @keydown.escape.window="mobileMenuOpen = false" class="fixed top-0 w-full z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-[0_4px_20px_rgba(211,47,47,0.08)]">
         <nav class="flex items-center justify-between px-6 h-16 w-full max-w-7xl mx-auto font-['Lexend'] antialiased">
-            <a href="{{ route('home') }}" class="text-2xl font-black text-red-700 dark:text-red-500 tracking-tighter">ArenaFlow</a>
-            <div class="hidden md:flex items-center gap-8">
+            <!-- Left Side: Hamburger & Logo -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="lg:hidden text-gray-600 dark:text-gray-400 hover:text-red-600 transition-all p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none flex items-center justify-center -ml-2">
+                    <span class="material-symbols-outlined" x-show="!mobileMenuOpen">menu</span>
+                    <span class="material-symbols-outlined" x-show="mobileMenuOpen" x-cloak>close</span>
+                </button>
+                
+                <!-- Logo (Hidden on mobile) -->
+                <a href="{{ route('home') }}" class="hidden sm:block text-2xl font-black text-red-700 dark:text-red-500 tracking-tighter">ArenaFlow</a>
+            </div>
+            
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center gap-8">
                 <a class="{{ request()->routeIs('home') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('home') }}">Homes</a>
                 <a class="{{ request()->routeIs('lapangan.*') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('lapangan.index') }}">Venues</a>
                 <a class="{{ request()->routeIs('booking.riwayat') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('booking.riwayat') }}">My Bookings</a>
                 <a class="{{ request()->routeIs('support') ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400' }} font-medium hover:text-red-600 dark:hover:text-red-400 transition-all" href="{{ route('support') }}">Support</a>
             </div>
+
+            <!-- Action Buttons Container -->
             <div class="flex items-center gap-2 sm:gap-4">
+                @auth
+                    <!-- Notifications -->
+                    <x-header.notification-dropdown variant="front" />
+                @endauth
+
                 <!-- Theme Toggle Button -->
                 <button onclick="toggleDarkMode()" class="text-gray-600 dark:text-gray-400 hover:text-red-600 transition-all flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" title="Toggle Theme">
                     <span class="material-symbols-outlined dark:hidden">dark_mode</span>
                     <span class="material-symbols-outlined hidden dark:block">light_mode</span>
                 </button>
+                
                 @auth
-                    <!-- Notifications -->
-                    <x-header.notification-dropdown />
-                    
                     <div class="relative group">
                         <button class="flex items-center gap-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 px-4 py-2 rounded-xl font-bold transition-all hover:bg-red-100 dark:hover:bg-red-900/40 border border-red-100 dark:border-red-900/50 shadow-sm hover:shadow-md">
                             <span class="material-symbols-outlined text-[20px]">person</span>
-                            {{ explode(' ', Auth::user()->name)[0] }}
+                            <span class="hidden sm:inline">{{ explode(' ', Auth::user()->name)[0] }}</span>
                             <span class="material-symbols-outlined text-[18px] transition-transform duration-300 group-hover:rotate-180">keyboard_arrow_down</span>
                         </button>
                         
@@ -264,10 +282,28 @@
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="bg-red-700 text-white px-6 py-2 rounded-lg font-label-md transition-transform active:scale-95 hover:bg-red-800">Sign In</a>
+                    <a href="{{ route('login') }}" class="bg-red-700 text-white px-4 py-2 sm:px-6 rounded-lg font-label-md transition-transform active:scale-95 hover:bg-red-800">Sign In</a>
                 @endauth
             </div>
         </nav>
+        
+        <!-- Mobile Dropdown Menu -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200" 
+             x-transition:enter-start="opacity-0 -translate-y-4" 
+             x-transition:enter-end="opacity-100 translate-y-0" 
+             x-transition:leave="transition ease-in duration-150" 
+             x-transition:leave-start="opacity-100 translate-y-0" 
+             x-transition:leave-end="opacity-0 -translate-y-4" 
+             class="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-xl z-40" 
+             x-cloak>
+            <div class="px-6 py-4 flex flex-col gap-4 font-['Lexend'] bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl">
+                <a class="{{ request()->routeIs('home') ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20' : 'text-gray-600 dark:text-gray-400' }} block font-bold hover:text-red-600 dark:hover:text-red-400 transition-all px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800" href="{{ route('home') }}">Homes</a>
+                <a class="{{ request()->routeIs('lapangan.*') ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20' : 'text-gray-600 dark:text-gray-400' }} block font-bold hover:text-red-600 dark:hover:text-red-400 transition-all px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800" href="{{ route('lapangan.index') }}">Venues</a>
+                <a class="{{ request()->routeIs('booking.riwayat') ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20' : 'text-gray-600 dark:text-gray-400' }} block font-bold hover:text-red-600 dark:hover:text-red-400 transition-all px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800" href="{{ route('booking.riwayat') }}">My Bookings</a>
+                <a class="{{ request()->routeIs('support') ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20' : 'text-gray-600 dark:text-gray-400' }} block font-bold hover:text-red-600 dark:hover:text-red-400 transition-all px-4 py-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800" href="{{ route('support') }}">Support</a>
+            </div>
+        </div>
     </header>
 
     @yield('content')

@@ -17,7 +17,7 @@
                 </div>
                 <h1 class="font-h2 text-h2 text-on-surface mb-1">{{ $user->name }}</h1>
                 <p class="font-body-md text-zinc-500 mb-6">Bergabung {{ $user->created_at->format('M Y') }}</p>
-                <div class="space-y-4 text-left border-t border-zinc-100 pt-6">
+                <div class="space-y-4 text-left border-t border-zinc-100 dark:border-gray-800 pt-6">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-primary-container">mail</span>
                         <div>
@@ -55,7 +55,7 @@
         <div class="lg:col-span-7 space-y-gutter">
             <!-- Section: Edit Profil -->
             <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden">
-                <div class="p-6 border-b border-zinc-100 flex items-center gap-3">
+                <div class="p-6 border-b border-zinc-100 dark:border-gray-800 flex items-center gap-3">
                     <span class="material-symbols-outlined text-primary-container">edit_square</span>
                     <h2 class="font-h3 text-h3 text-lg">Informasi Profil</h2>
                 </div>
@@ -69,8 +69,8 @@
                         @endif
                         <div class="grid grid-cols-1 gap-6">
                             <div class="space-y-2">
-                                <label class="font-label-md text-zinc-600 block">Nama Lengkap</label>
-                                <input name="name" class="w-full px-4 py-3 rounded-lg border border-zinc-200 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all hover:bg-secondary-container/10" type="text" value="{{ old('name', $user->name) }}" />
+                                <label class="font-label-md text-zinc-600 dark:text-gray-300 block">Nama Lengkap</label>
+                                <input name="name" class="w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-3 rounded-lg border border-zinc-200 dark:border-gray-700 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all hover:bg-secondary-container/10" type="text" value="{{ old('name', $user->name) }}" />
                                 @error('name')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                                 @enderror
@@ -87,7 +87,7 @@
 
             <!-- Section: Ubah Password -->
             <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden">
-                <div class="p-6 border-b border-zinc-100 flex items-center gap-3">
+                <div class="p-6 border-b border-zinc-100 dark:border-gray-800 flex items-center gap-3">
                     <span class="material-symbols-outlined text-primary-container">lock</span>
                     <h2 class="font-h3 text-h3 text-lg">Ubah Password</h2>
                 </div>
@@ -95,9 +95,9 @@
                     <form action="{{ route('profile.password') }}" method="POST" class="space-y-6">
                         @csrf
                         <div class="space-y-2 max-w-md">
-                            <label class="font-label-md text-zinc-600 block">Password Lama</label>
+                            <label class="font-label-md text-zinc-600 dark:text-gray-300 block">Password Lama</label>
                             <div class="relative">
-                                <input name="current_password" class="w-full px-4 py-3 rounded-lg border border-zinc-200 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="••••••••" type="password" />
+                                <input name="current_password" class="w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-3 rounded-lg border border-zinc-200 dark:border-gray-700 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="••••••••" type="password" />
                                 @error('current_password')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                                 @enderror
@@ -105,15 +105,15 @@
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="font-label-md text-zinc-600 block">Password Baru</label>
-                                <input name="password" class="w-full px-4 py-3 rounded-lg border border-zinc-200 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="Min. 8 characters" type="password" />
+                                <label class="font-label-md text-zinc-600 dark:text-gray-300 block">Password Baru</label>
+                                <input name="password" class="w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-3 rounded-lg border border-zinc-200 dark:border-gray-700 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="Min. 8 characters" type="password" />
                                 @error('password')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="space-y-2">
-                                <label class="font-label-md text-zinc-600 block">Konfirmasi Password Baru</label>
-                                <input name="password_confirmation" class="w-full px-4 py-3 rounded-lg border border-zinc-200 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="Repeat new password" type="password" />
+                                <label class="font-label-md text-zinc-600 dark:text-gray-300 block">Konfirmasi Password Baru</label>
+                                <input name="password_confirmation" class="w-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white px-4 py-3 rounded-lg border border-zinc-200 dark:border-gray-700 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" placeholder="Repeat new password" type="password" />
                             </div>
                         </div>
                         <div class="flex justify-end pt-4">
@@ -127,7 +127,7 @@
 
             <!-- Section: Account Settings (Extra) -->
             <section class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(211,47,47,0.08)] overflow-hidden motion-hidden">
-                <div class="p-6 border-b border-zinc-100">
+                <div class="p-6 border-b border-zinc-100 dark:border-gray-800">
                     <h2 class="font-h3 text-h3 text-lg">Preferensi</h2>
                 </div>
                 <div class="p-8 space-y-4">

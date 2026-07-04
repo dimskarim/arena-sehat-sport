@@ -186,14 +186,17 @@
                 </div>
             </div>
 
-            <div class="space-y-1.5">
+            <div class="space-y-1.5" x-data="{ show: false }">
                 <div class="flex justify-between items-center px-1">
                     <label class="text-xs font-bold text-on-surface-variant uppercase" for="password">Password</label>
                     <a class="text-xs font-bold text-primary hover:underline transition-all" href="#">Lupa Password?</a>
                 </div>
                 <div class="relative group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors text-xl">lock</span>
-                    <input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-4 text-sm transition-all outline-none" id="password" name="password" placeholder="••••••••" required type="password" />
+                    <input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg py-3 pl-11 pr-12 text-sm transition-all outline-none" id="password" name="password" placeholder="••••••••" required :type="show ? 'text' : 'password'" />
+                    <button type="button" @click="show = !show" class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors flex items-center justify-center">
+                        <span class="material-symbols-outlined text-xl" x-text="show ? 'visibility_off' : 'visibility'">visibility</span>
+                    </button>
                 </div>
             </div>
 
@@ -228,6 +231,7 @@
     <div class="hidden lg:flex fixed right-0 top-0 bottom-0 w-1/4 items-center justify-center p-12 pointer-events-none opacity-20">
         <img class="w-full h-auto object-contain transform rotate-12" data-alt="An artistic digital rendering of a basketball hoop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMO2bDj4HqmreiWKcg7rh6AEAx3l5hr4I2xuV4sQQBeKSqDggMcKoDGKLyJ7f4wHvuCBWldEV-9X5zdQ1-HOFwg43VMD8ohNY4eND-wR9X4KZmsARK4G718Upe5PvUnbGJHmFxBa2iVMWa0DlzUtqJo1R7QY0HMOc2y-CCrepBZVfoK-QshXttzO7i1OdWX8ziwQdChUGFPI8QF4sQyQengYZRI0gIXXYM4OofJIoq8VdFzmnYfxs4KaW2qKdau5OWm9cIHyoOAFc" />
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 
 </html>

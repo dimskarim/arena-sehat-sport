@@ -16,7 +16,7 @@
             <div class="absolute -inset-1 bg-gradient-to-r from-red-600 to-red-400 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
             <div class="relative bg-white dark:bg-gray-900 shadow-xl shadow-gray-200/50 dark:shadow-black/50 rounded-[2rem] flex items-center p-2 border border-gray-100 dark:border-gray-800">
                 <span class="material-symbols-outlined text-gray-400 text-3xl ml-4">search</span>
-                <input class="w-full bg-transparent py-4 px-4 focus:outline-none text-lg text-gray-900 dark:text-white placeholder-gray-400" placeholder="Cari artikel bantuan (mis. 'cara ganti jadwal')..." type="text"/>
+                <input class="w-full bg-transparent py-4 px-4 border-none outline-none focus:outline-none focus:ring-0 text-lg text-gray-900 dark:text-white placeholder-gray-400" placeholder="Cari artikel bantuan (mis. 'cara ganti jadwal')..." type="text"/>
                 <button class="bg-red-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-red-700 transition-colors active:scale-95 shadow-md shadow-red-600/20 whitespace-nowrap">Cari</button>
             </div>
         </div>

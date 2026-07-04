@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -14,6 +16,14 @@ class AuthController extends Controller
             return redirect()->route('admin.dashboard');
         }
         return view('admin.auth.login', ['title' => 'Login Admin']);
+    }
+
+    public function showRegisterForm()
+    {
+        if (Auth::check() && in_array(Auth::user()->role, ['admin', 'pemilik'])) {
+            return redirect()->route('admin.dashboard');
+        }
+        return view('admin.auth.register', ['title' => 'Daftar Pemilik']);
     }
 
     public function login(Request $request)
@@ -43,6 +53,26 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'pemilik', // Default to pemilik for this route
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('admin.dashboard');
     }
 
     public function logout(Request $request)

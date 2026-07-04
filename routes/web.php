@@ -43,10 +43,17 @@ use App\Http\Controllers\Admin\AuthController;
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::middleware('admin.web')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        
+        // Profile Routes
+        Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
+        Route::put('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+        Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
         
         // Admin Only Routes
         Route::middleware('admin.only')->group(function () {

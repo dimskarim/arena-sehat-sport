@@ -1,3 +1,4 @@
+@props(['variant' => 'admin'])
 @php
     $user = auth()->user();
     $userId = $user ? $user->id : null;
@@ -33,48 +34,30 @@
     },
     closeDropdown() {
         this.dropdownOpen = false;
-    },
-    handleItemClick() {
-        console.log('Notification item clicked');
-        this.closeDropdown();
-    },
-    handleViewAllClick() {
-        console.log('View All Notifications clicked');
-        this.closeDropdown();
     }
 }" @click.away="closeDropdown()">
     <!-- Notification Button -->
     <button
-        class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        class="{{ $variant === 'front' ? 'relative flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-red-600 transition-all p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none' : 'relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white' }}"
         @click="toggleDropdown()"
         type="button"
     >
         <!-- Notification Badge -->
         <span
             x-show="notifying"
-            class="absolute right-0 top-0.5 z-1 h-2 w-2 rounded-full bg-orange-400"
+            class="{{ $variant === 'front' ? 'absolute top-1.5 right-1.5 z-10 h-2.5 w-2.5 rounded-full bg-orange-500 border-2 border-white dark:border-gray-900' : 'absolute right-0 top-0.5 z-10 h-2 w-2 rounded-full bg-orange-400' }}"
         >
-            <span
-                class="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 -z-1 animate-ping"
-            ></span>
+            <span class="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 -z-10 animate-ping"></span>
         </span>
 
         <!-- Bell Icon -->
-        <svg
-            class="fill-current"
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z"
-                fill=""
-            />
-        </svg>
+        @if($variant === 'front')
+            <span class="material-symbols-outlined">notifications</span>
+        @else
+            <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.75 2.29248C10.75 1.87827 10.4143 1.54248 10 1.54248C9.58583 1.54248 9.25004 1.87827 9.25004 2.29248V2.83613C6.08266 3.20733 3.62504 5.9004 3.62504 9.16748V14.4591H3.33337C2.91916 14.4591 2.58337 14.7949 2.58337 15.2091C2.58337 15.6234 2.91916 15.9591 3.33337 15.9591H4.37504H15.625H16.6667C17.0809 15.9591 17.4167 15.6234 17.4167 15.2091C17.4167 14.7949 17.0809 14.4591 16.6667 14.4591H16.375V9.16748C16.375 5.9004 13.9174 3.20733 10.75 2.83613V2.29248ZM14.875 14.4591V9.16748C14.875 6.47509 12.6924 4.29248 10 4.29248C7.30765 4.29248 5.12504 6.47509 5.12504 9.16748V14.4591H14.875ZM8.00004 17.7085C8.00004 18.1228 8.33583 18.4585 8.75004 18.4585H11.25C11.6643 18.4585 12 18.1228 12 17.7085C12 17.2943 11.6643 16.9585 11.25 16.9585H8.75004C8.33583 16.9585 8.00004 17.2943 8.00004 17.7085Z" fill="" />
+            </svg>
+        @endif
     </button>
 
     <!-- Dropdown Start -->
@@ -86,7 +69,7 @@
         x-transition:leave="transition ease-in duration-75"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        class="absolute -right-[240px] mt-[17px] flex h-auto max-h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0"
+        class="fixed inset-x-4 top-[72px] sm:absolute sm:inset-auto sm:right-0 sm:mt-[17px] flex h-auto max-h-[480px] w-auto sm:w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-xl dark:border-gray-800 dark:bg-gray-900 z-50"
         style="display: none;"
     >
         <!-- Dropdown Header -->
@@ -115,30 +98,38 @@
         <!-- Notification List -->
         <ul class="flex flex-col h-auto overflow-y-auto custom-scrollbar">
             @forelse ($notifications as $notification)
-                <li @click="handleItemClick()">
+                <li>
                     <a
-                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5 {{ !$notification->is_read ? 'bg-green-50/50 dark:bg-green-900/20' : '' }}"
+                        class="flex gap-4 rounded-xl border border-transparent p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 {{ !$notification->is_read ? 'bg-red-50/50 dark:bg-red-900/10 border-red-100 dark:border-red-900/30' : '' }}"
                         href="{{ route($readRouteName, $notification->id) }}"
                     >
-                        <span class="relative block w-full h-10 rounded-full z-1 max-w-10">
-                            <div class="flex items-center justify-center w-10 h-10 bg-[#d32f2f]/10 rounded-full text-[#d32f2f]">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        <div class="flex-shrink-0 mt-1">
+                            <div class="flex items-center justify-center w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 dark:text-red-400">
+                                @if($variant === 'front')
+                                    <span class="material-symbols-outlined text-[20px]">notifications_active</span>
+                                @else
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                                @endif
                             </div>
-                        </span>
+                        </div>
 
-                        <span class="block">
-                            <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
-                                <span class="font-medium text-gray-800 dark:text-white/90">
+                        <div class="flex-1 min-w-0">
+                            <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                                <p class="font-bold text-gray-900 dark:text-white leading-snug mb-1">
                                     {{ $notification->pesan }}
-                                </span>
-                                <br>
-                                <span class="text-xs">{{ $notification->deskripsi }}</span>
-                            </span>
+                                </p>
+                                <p class="text-xs leading-relaxed line-clamp-2">{{ $notification->deskripsi }}</p>
+                            </div>
 
-                            <span class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
-                                <span>{{ $notification->created_at->diffForHumans() }}</span>
-                            </span>
-                        </span>
+                            <p class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500 font-medium mt-2">
+                                @if($variant === 'front')
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span>
+                                @else
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                @endif
+                                {{ $notification->created_at->diffForHumans() }}
+                            </p>
+                        </div>
                     </a>
                 </li>
             @empty
@@ -153,7 +144,6 @@
         <a
             href="{{ route('admin.notifications.index') }}"
             class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
-            @click="handleViewAllClick()"
         >
             View All Notification
         </a>

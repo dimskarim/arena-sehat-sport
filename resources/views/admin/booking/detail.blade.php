@@ -230,10 +230,10 @@
                             <div id="custom-status-menu" class="absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-lg shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-slate-200 dark:border-gray-700 hidden z-50">
                                 <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
                                 <ul class="relative z-10 py-1" id="custom-status-options">
-                                    <li data-value="pending" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'pending' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">🟡 PENDING</li>
-                                    <li data-value="confirmed" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'confirmed' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">🔵 CONFIRMED</li>
-                                    <li data-value="completed" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'completed' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">🟢 COMPLETED</li>
-                                    <li data-value="cancelled" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'cancelled' ? 'bg-red-100 text-[#af101a]' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-b-lg">🔴 CANCELLED</li>
+                                    <li data-value="pending" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'pending' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }} rounded-t-lg">🟡 PENDING</li>
+                                    <li data-value="confirmed" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'confirmed' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }}">🔵 CONFIRMED</li>
+                                    <li data-value="completed" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'completed' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }}">🟢 COMPLETED</li>
+                                    <li data-value="cancelled" class="px-4 py-2.5 text-sm font-bold cursor-pointer transition-colors {{ old('status', $item->status) == 'cancelled' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }} rounded-b-lg">🔴 CANCELLED</li>
                                 </ul>
                             </div>
                             @error('status') <span class="text-red-500 text-xs mt-1 block text-center">{{ $message }}</span> @enderror
@@ -530,12 +530,12 @@
                         statusText.innerText = text;
                         
                         statusOptions.forEach(opt => {
-                            opt.classList.remove('bg-red-100', 'text-[#af101a]');
-                            opt.classList.add('text-slate-700');
+                            opt.classList.remove('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400');
+                            opt.classList.add('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
                         });
                         
-                        this.classList.remove('text-slate-700');
-                        this.classList.add('bg-red-100', 'text-[#af101a]');
+                        this.classList.remove('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
+                        this.classList.add('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400');
                         
                         statusMenu.classList.add('hidden');
                         statusIcon.classList.remove('rotate-180');

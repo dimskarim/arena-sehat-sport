@@ -137,10 +137,9 @@
                         <span class="text-primary font-black text-2xl uppercase tracking-tighter">ArenaFlow</span>
                     </div>
                     
-                    <!-- Header -->
                     <div class="space-y-2">
-                        <h2 class="text-3xl font-bold tracking-tight text-on-surface">Buat Akun Baru</h2>
-                        <p class="text-on-surface-variant">Gabung dengan komunitas olahraga terbesar.</p>
+                        <h2 class="text-3xl font-bold tracking-tight text-on-surface">Buat Akun Pemilik</h2>
+                        <p class="text-on-surface-variant">Daftarkan arena Anda untuk mulai mengelola.</p>
                     </div>
                     
                     <!-- Registration Mode Toggle -->
@@ -160,7 +159,7 @@
                     </div>
                     
                     <!-- Form Content (Email Flow) -->
-                    <form x-show="mode === 'email'" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4" action="{{ route('front.register.submit') }}" method="POST">
+                    <form x-show="mode === 'email'" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="space-y-4" action="{{ route('admin.register.submit') }}" method="POST">
                         @csrf
                         @if ($errors->any())
                             <div class="bg-red-100 text-red-600 p-3 rounded-lg text-sm mb-4">
@@ -288,7 +287,7 @@
                     </button>
                     
                     <!-- Login Link -->
-                    <p class="text-on-surface-variant mt-sm font-body-md text-center">Sudah punya akun? <a class="text-primary font-bold hover:underline" href="{{ route('login') }}">Masuk</a></p>
+                    <p class="text-on-surface-variant mt-sm font-body-md text-center">Sudah punya akun? <a class="text-primary font-bold hover:underline" href="{{ route('admin.login') }}">Masuk</a></p>
                     <a href="{{ route('home') }}" class="text-center flex justify-center items-center gap-2 text-primary text-sm hover:underline">
                         <span class="material-symbols-outlined text-sm">arrow_back</span> Kembali ke Beranda
                     </a>

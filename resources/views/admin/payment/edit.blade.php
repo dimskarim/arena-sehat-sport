@@ -48,7 +48,7 @@
                     <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                         Booking <span class="text-red-600">*</span>
                     </label>
-                    <select name="booking_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
+                    <select name="booking_id" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 tom-select-custom">
                         <option value="">Pilih Booking</option>
                         @foreach($bookings as $booking)
                             <option value="{{ $booking->id }}" {{ old('booking_id', $item->booking_id) == $booking->id ? 'selected' : '' }}>Booking #{{ $booking->id }} - {{ $booking->user->name ?? 'Unknown' }} - {{ $booking->lapangan->name ?? 'Unknown' }}</option>
@@ -77,7 +77,7 @@
                     <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                         Status <span class="text-red-600">*</span>
                     </label>
-                    <select name="status" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30">
+                    <select name="status" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 tom-select-custom">
                         <option value="pending" {{ old('status', $item->status) == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="menunggu_verifikasi" {{ old('status', $item->status) == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
                         <option value="paid" {{ old('status', $item->status) == 'paid' ? 'selected' : '' }}>Paid</option>
@@ -103,4 +103,26 @@
         </div>
     </form>
 </div>
+
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<style>
+    .ts-wrapper.form-control { border: none; padding: 0; background: transparent; }
+    .ts-control { border-radius: 0.5rem !important; padding: 0.75rem 1rem !important; border: 1px solid #e2e8f0 !important; background-color: #f8fafc !important; font-size: 0.875rem !important; }
+    .dark .ts-control { border-color: #4b5563 !important; background-color: rgba(55, 65, 81, 0.5) !important; color: white !important; }
+    .dark .ts-dropdown { background-color: #1f2937 !important; border-color: #4b5563 !important; color: white !important; }
+    .dark .ts-dropdown .option:hover, .dark .ts-dropdown .active { background-color: rgba(75, 85, 99, 0.8) !important; color: white !important; }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.tom-select-custom').forEach((el) => {
+            if (!el.tomselect) {
+                new TomSelect(el, {
+                    create: false,
+                    sortField: { field: "text", direction: "asc" }
+                });
+            }
+        });
+    });
+</script>
 @endsection

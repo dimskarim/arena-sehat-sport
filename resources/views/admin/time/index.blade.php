@@ -163,9 +163,9 @@
                     </div>
 
                     <ul class="relative z-10 py-1 overflow-y-auto flex-1" id="custom-lapangan-options">
-                        <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('lapangan_id') == '' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">Semua Lapangan</li>
+                        <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('lapangan_id') == '' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }} rounded-t-lg">Semua Lapangan</li>
                         @foreach($lapangans as $lap)
-                        <li data-value="{{ $lap->id }}" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('lapangan_id') == $lap->id ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">{{ $lap->name }}</li>
+                        <li data-value="{{ $lap->id }}" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('lapangan_id') == $lap->id ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }}">{{ $lap->name }}</li>
                         @endforeach
                         <li id="custom-lapangan-empty" class="px-4 py-2.5 text-sm text-slate-500 text-center hidden dark:text-gray-400">Tidak ditemukan</li>
                     </ul>
@@ -395,9 +395,9 @@
                             <div class="absolute -top-1.5 right-6 sm:left-6 sm:right-auto w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-slate-200 dark:border-gray-700"></div>
 
                             <ul class="relative z-10 py-1" id="custom-hari-options">
-                                <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('hari') == '' ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded-t-lg">Semua Hari</li>
+                                <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('hari') == '' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }} rounded-t-lg">Semua Hari</li>
                                 @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $idx => $h)
-                                <li data-value="{{ $h }}" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('hari') == $h ? 'bg-red-100 text-[#af101a] font-bold' : 'text-slate-700 hover:bg-red-100 hover:text-[#af101a]' }} dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400 {{ $idx === 6 ? 'rounded-b-lg' : '' }}">{{ $h }}</li>
+                                <li data-value="{{ $h }}" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('hari') == $h ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }} {{ $idx === 6 ? 'rounded-b-lg' : '' }}">{{ $h }}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -917,12 +917,12 @@
                         if (hText) hText.innerText = text || 'Filter Hari';
                         
                         document.querySelectorAll('#custom-hari-options li').forEach(opt => {
-                            opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
-                            opt.classList.add('text-slate-700');
+                            opt.classList.remove('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
+                            opt.classList.add('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
                         });
                         
-                        hariOption.classList.remove('text-slate-700');
-                        hariOption.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        hariOption.classList.remove('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
+                        hariOption.classList.add('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
                         
                         if (hariMenu) hariMenu.classList.add('hidden');
                         document.getElementById('custom-hari-icon')?.classList.remove('rotate-180');
@@ -958,12 +958,12 @@
                         
                         document.querySelectorAll('#custom-lapangan-options li').forEach(opt => {
                             if (opt.id === 'custom-lapangan-empty') return;
-                            opt.classList.remove('bg-red-100', 'text-[#af101a]', 'font-bold');
-                            opt.classList.add('text-slate-700');
+                            opt.classList.remove('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
+                            opt.classList.add('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
                         });
                         
-                        lapOption.classList.remove('text-slate-700');
-                        lapOption.classList.add('bg-red-100', 'text-[#af101a]', 'font-bold');
+                        lapOption.classList.remove('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
+                        lapOption.classList.add('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
                         
                         if (lapMenu) lapMenu.classList.add('hidden');
                         document.getElementById('custom-lapangan-icon')?.classList.remove('rotate-180');

@@ -5,8 +5,8 @@
 
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-            <h1 class="font-['Lexend'] text-[32px] font-semibold tracking-tight text-[#1b1c1c] dark:text-white">Verifikasi Pembayaran</h1>
-            <p class="text-[16px] text-[#5b403d] dark:text-gray-400 mt-1">Tinjau bukti transfer dan verifikasi setiap pembayaran yang masuk.</p>
+            <h1 class="font-['Lexend'] text-[32px] font-semibold tracking-tight text-[#1b1c1c] dark:text-white">Daftar Pembayaran</h1>
+            <p class="text-[16px] text-[#5b403d] dark:text-gray-400 mt-1">Kelola data pembayaran, tinjau bukti transfer, dan verifikasi transaksi yang masuk.</p>
         </div>
     </div>
 
@@ -66,14 +66,47 @@
                 </button>
             </div>
 
-            <span class="text-xs font-bold text-[#5b403d] dark:text-gray-400 uppercase tracking-widest hidden sm:block">Status:</span>
-            <select name="status" id="statusFilter" class="min-w-[180px] px-4 py-2 bg-[#fcf9f8] dark:bg-gray-700/50 rounded-xl border border-[#e4beba] dark:border-gray-600 text-sm dark:text-white focus:border-[#af101a] dark:focus:ring-red-500/30 outline-none cursor-pointer transition-all">
-                <option value="">Semua Status</option>
-                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="menunggu_verifikasi" {{ request('status') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Paid</option>
-                <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Ditolak</option>
-            </select>
+            <div class="relative min-w-[200px] z-40">
+                <!-- Hidden Select -->
+                <select name="status" id="statusFilter" class="hidden">
+                    <option value="">Semua Status</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="menunggu_verifikasi" {{ request('status') == 'menunggu_verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                    <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>Ditolak</option>
+                </select>
+
+                <!-- Custom Dropdown Button -->
+                <div id="custom-status-btn" class="flex items-center justify-between w-full px-4 py-2.5 bg-[#fcf9f8] hover:bg-white/[0.12] rounded-xl border border-[#e4beba] text-sm transition-all cursor-pointer dark:bg-gray-700/50 dark:border-gray-600 dark:text-white">
+                    <span class="text-slate-700 dark:text-white font-medium truncate" id="custom-status-text">
+                        @php
+                            $statusText = [
+                                '' => 'Semua Status',
+                                'pending' => 'Pending',
+                                'menunggu_verifikasi' => 'Menunggu Verifikasi',
+                                'paid' => 'Paid',
+                                'failed' => 'Ditolak',
+                            ];
+                            echo $statusText[request('status')] ?? 'Semua Status';
+                        @endphp
+                    </span>
+                    <svg id="custom-status-icon" class="w-4 h-4 text-slate-500 transition-transform duration-200 ml-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+
+                <!-- Custom Dropdown Menu -->
+                <div id="custom-status-menu" class="absolute left-0 right-0 sm:right-auto top-[calc(100%+0.5rem)] sm:w-[220px] bg-white dark:bg-gray-800 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.1)] border border-[#e4beba] dark:border-gray-700 hidden z-50">
+                    <!-- Upward Pointer -->
+                    <div class="absolute -top-1.5 left-6 w-3 h-3 bg-white dark:bg-gray-800 transform rotate-45 border-t border-l border-[#e4beba] dark:border-gray-700"></div>
+
+                    <ul class="relative z-10 py-1" id="custom-status-options">
+                        <li data-value="" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == '' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }} rounded-t-xl">Semua Status</li>
+                        <li data-value="pending" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == 'pending' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }}">Pending</li>
+                        <li data-value="menunggu_verifikasi" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == 'menunggu_verifikasi' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }}">Menunggu Verifikasi</li>
+                        <li data-value="paid" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == 'paid' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }}">Paid</li>
+                        <li data-value="failed" class="px-4 py-2.5 text-sm cursor-pointer transition-colors {{ request('status') == 'failed' ? 'bg-red-100 dark:bg-red-900/20 text-[#af101a] dark:text-red-400 font-bold' : 'text-slate-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-[#af101a] dark:hover:text-red-400' }} rounded-b-xl">Ditolak</li>
+                    </ul>
+                </div>
+            </div>
             @if(request('status') || request('search'))
             <a href="{{ route('admin.payments.index') }}" class="text-xs text-slate-400 dark:text-gray-500 hover:text-red-700 dark:hover:text-red-400 flex items-center gap-1 transition-colors ml-auto font-bold shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +129,7 @@
                         <th class="px-6 py-4">Bukti Bayar</th>
                         <th class="px-6 py-4 text-right">Jumlah</th>
                         <th class="px-6 py-4">Status</th>
-                        <th class="px-6 py-4 text-center">Verifikasi</th>
+                        <th class="px-6 py-4 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[#e4beba] dark:divide-gray-700">
@@ -322,6 +355,60 @@ filterForm.querySelector('input[name="search"]').addEventListener('input', funct
         filterForm.dispatchEvent(new Event('submit'));
     }, 400); // 400ms typing delay
 });
+
+// Custom Status Dropdown Logic
+const statusBtn = document.getElementById('custom-status-btn');
+const statusMenu = document.getElementById('custom-status-menu');
+const statusIcon = document.getElementById('custom-status-icon');
+const statusSelect = document.getElementById('statusFilter');
+const statusText = document.getElementById('custom-status-text');
+const statusOptions = document.getElementById('custom-status-options')?.querySelectorAll('li');
+
+if (statusBtn && statusMenu) {
+    statusBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        statusMenu.classList.toggle('hidden');
+        if (statusMenu.classList.contains('hidden')) {
+            statusIcon.classList.remove('rotate-180');
+        } else {
+            statusIcon.classList.add('rotate-180');
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!statusBtn.contains(e.target) && !statusMenu.contains(e.target)) {
+            statusMenu.classList.add('hidden');
+            statusIcon.classList.remove('rotate-180');
+        }
+    });
+
+    if (statusOptions) {
+        statusOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                const text = this.innerText;
+                
+                statusSelect.value = value;
+                statusText.innerText = text;
+                
+                // Update active styles
+                statusOptions.forEach(opt => {
+                    opt.classList.remove('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
+                    opt.classList.add('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
+                });
+                
+                this.classList.remove('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
+                this.classList.add('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
+                
+                // Dispatch change event to trigger AJAX filter
+                statusSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                statusMenu.classList.add('hidden');
+                statusIcon.classList.remove('rotate-180');
+            });
+        });
+    }
+}
 
 </script>
 @endsection
