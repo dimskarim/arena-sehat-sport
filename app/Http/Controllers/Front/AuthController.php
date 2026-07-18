@@ -19,6 +19,11 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            
+            if (in_array(Auth::user()->role, ['admin', 'pemilik'])) {
+                return redirect()->route('admin.dashboard');
+            }
+
             // Check if user is trying to book, if so redirect to their intended route
             return redirect()->intended(route('home'));
         }

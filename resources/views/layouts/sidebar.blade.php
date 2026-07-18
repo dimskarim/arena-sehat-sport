@@ -46,7 +46,26 @@ $currentPath = request()->path();
             return this.openSubmenus[key] || false;
         },
         isActive(path) {
-            return window.location.pathname === path || '{{ $currentPath }}' === path.replace(/^\//, '');
+            const currentPath = '{{ $currentPath }}';
+            const targetPath = path.replace(/^\//, '');
+            
+            if (currentPath === targetPath || window.location.pathname === path) {
+                return true;
+            }
+            
+            if (targetPath !== 'admin' && targetPath !== '') {
+                if (currentPath.startsWith(targetPath + '/')) {
+                    return true;
+                }
+                
+                if (targetPath === 'admin/lapangans' && currentPath.startsWith('admin/gambar-lapangans')) {
+                    return true;
+                }
+                if (targetPath === 'admin/time' && (currentPath.startsWith('admin/slot-waktus') || currentPath.startsWith('admin/oprational-waktus'))) {
+                    return true;
+                }
+            }
+            return false;
         }
     }"
     :class="{

@@ -64,6 +64,7 @@ class BookingService
     public function update($id, array $data)
     {
         $item = Booking::findOrFail($id);
+        $oldStatus = $item->status;
         
         $slotWaktuIds = $data['slot_waktu'] ?? [];
         unset($data['slot_waktu']);
@@ -105,6 +106,29 @@ class BookingService
 
         // Also update details status
         $item->bookingDetails()->update(['status' => $data['status']]);
+
+        // Send Notification to User if Status Changed
+        if ($oldStatus !== $data['status']) {
+            $lapanganName = $lapangan ? $lapangan->name : 'Lapangan';
+            $tanggalBooking = \Carbon\Carbon::parse($item->tanggal_booking)->format('d M Y');
+            $newStatus = $data['status'];
+            
+            if (in_array($newStatus, ['confirmed', 'completed'])) {
+                \App\Models\Notifikasi::create([
+                    'user_id' => $item->user_id,
+                    'booking_id' => $item->id,
+                    'pesan' => 'Booking Dikonfirmasi! ✅',
+                    'deskripsi' => "Booking Anda untuk {$lapanganName} pada tanggal {$tanggalBooking} telah dikonfirmasi.",
+                ]);
+            } elseif (in_array($newStatus, ['cancelled', 'canceled', 'rejected'])) {
+                \App\Models\Notifikasi::create([
+                    'user_id' => $item->user_id,
+                    'booking_id' => $item->id,
+                    'pesan' => 'Booking Dibatalkan ❌',
+                    'deskripsi' => "Mohon maaf, booking Anda untuk {$lapanganName} pada tanggal {$tanggalBooking} telah dibatalkan.",
+                ]);
+            }
+        }
 
         return $item->fresh()->load(['user', 'lapangan', 'payment']);
     }

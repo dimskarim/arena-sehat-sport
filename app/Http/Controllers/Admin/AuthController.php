@@ -12,16 +12,22 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        if (Auth::check() && in_array(Auth::user()->role, ['admin', 'pemilik'])) {
-            return redirect()->route('admin.dashboard');
+        if (Auth::check()) {
+            if (in_array(Auth::user()->role, ['admin', 'pemilik'])) {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('home');
         }
         return view('admin.auth.login', ['title' => 'Login Admin']);
     }
 
     public function showRegisterForm()
     {
-        if (Auth::check() && in_array(Auth::user()->role, ['admin', 'pemilik'])) {
-            return redirect()->route('admin.dashboard');
+        if (Auth::check()) {
+            if (in_array(Auth::user()->role, ['admin', 'pemilik'])) {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('home');
         }
         return view('admin.auth.register', ['title' => 'Daftar Pemilik']);
     }

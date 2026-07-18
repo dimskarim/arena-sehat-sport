@@ -17,27 +17,39 @@ use App\Http\Controllers\Admin\TimeController;
 
 use App\Http\Controllers\FrontController;
 
-Route::get('/', [FrontController::class, 'index'])->name('home');
-Route::get('/lapangan', [FrontController::class, 'lapanganIndex'])->name('lapangan.index');
-Route::get('/lapangan/{id}', [FrontController::class, 'lapanganShow'])->name('lapangan.show');
-Route::middleware('auth')->group(function () {
-    Route::get('/booking/create', [FrontController::class, 'bookingCreate'])->name('booking.create');
-    Route::post('/booking/store', [FrontController::class, 'bookingStore'])->name('booking.store');
-    Route::get('/booking/payment', [FrontController::class, 'bookingPayment'])->name('booking.payment');
-    Route::get('/booking/riwayat', [FrontController::class, 'bookingRiwayat'])->name('booking.riwayat');
-    Route::get('/profile', [FrontController::class, 'profile'])->name('profile.index');
-    Route::post('/profile', [FrontController::class, 'updateProfile'])->name('profile.update');
-    Route::post('/profile/password', [FrontController::class, 'updatePassword'])->name('profile.password');
-    Route::get('/notifications/{id}/read', [FrontController::class, 'readNotification'])->name('front.notifications.read');
+Route::middleware('user.web')->group(function () {
+    Route::get('/', [FrontController::class, 'index'])->name('home');
+    Route::get('/lapangan', [FrontController::class, 'lapanganIndex'])->name('lapangan.index');
+    Route::get('/lapangan/{id}', [FrontController::class, 'lapanganShow'])->name('lapangan.show');
+    Route::middleware('auth')->group(function () {
+
+        Route::get('/booking/create', [FrontController::class, 'bookingCreate'])->name('booking.create');
+        Route::post('/booking/store', [FrontController::class, 'bookingStore'])->name('booking.store');
+        Route::get('/booking/payment', [FrontController::class, 'bookingPayment'])->name('booking.payment');
+        Route::get('/booking/riwayat', [FrontController::class, 'bookingRiwayat'])->name('booking.riwayat');
+        Route::get('/profile', [FrontController::class, 'profile'])->name('profile.index');
+        Route::post('/profile', [FrontController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/profile/password', [FrontController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/notifications/{id}/read', [FrontController::class, 'readNotification'])->name('front.notifications.read');
+    });
+
+    Route::get('/login', [FrontController::class, 'login'])->name('login');
+    Route::post('/login', [\App\Http\Controllers\Front\AuthController::class, 'login'])->name('login.submit');
+    Route::get('/register', [FrontController::class, 'register'])->name('front.register');
+    Route::post('/register', [\App\Http\Controllers\Front\AuthController::class, 'register'])->name('front.register.submit');
+    Route::post('/logout', [\App\Http\Controllers\Front\AuthController::class, 'logout'])->name('front.logout');
+    Route::get('/support', [FrontController::class, 'support'])->name('support');
 });
 
-Route::get('/login', [FrontController::class, 'login'])->name('login');
-Route::post('/login', [\App\Http\Controllers\Front\AuthController::class, 'login'])->name('login.submit');
-Route::get('/register', [FrontController::class, 'register'])->name('front.register');
-Route::post('/register', [\App\Http\Controllers\Front\AuthController::class, 'register'])->name('front.register.submit');
-Route::post('/logout', [\App\Http\Controllers\Front\AuthController::class, 'logout'])->name('front.logout');
 Route::get('/lapangan/{id}/slots', [FrontController::class, 'getSlotWaktu'])->name('lapangan.slots');
-Route::get('/support', [FrontController::class, 'support'])->name('support');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications/dropdown', function() {
+        $variant = auth()->user() && auth()->user()->role === 'pengguna' ? 'front' : 'admin';
+        return view('components.header.notification-dropdown', ['variant' => $variant]);
+    })->name('notifications.dropdown');
+});
+
 use App\Http\Controllers\Admin\AuthController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -49,12 +61,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('admin.web')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        
+
         // Profile Routes
         Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
         Route::put('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
         Route::put('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password');
-        
+
         // Admin Only Routes
         Route::middleware('admin.only')->group(function () {
             Route::resource('kategoris', KategoriController::class);

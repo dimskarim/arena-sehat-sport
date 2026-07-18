@@ -90,7 +90,7 @@
         {{-- Toolbar --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-6 py-4 border-b border-[#e4beba]/40 dark:border-gray-700">
             <div class="relative w-full md:w-80">
-                <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-[#5b403d] text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-[#5b403d] dark:text-gray-400 text-lg inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                 </svg>
                 <input type="text" id="searchInput" placeholder="Cari kategori olahraga..."

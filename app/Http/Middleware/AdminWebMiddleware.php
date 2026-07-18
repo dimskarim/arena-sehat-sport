@@ -12,8 +12,12 @@ class AdminWebMiddleware
     {
         $user = auth()->user();
 
-        if (!$user || !in_array($user->role, ['admin', 'pemilik'])) {
+        if (!$user) {
             return redirect()->route('admin.login')->with('error', 'Silakan login sebagai Admin atau Pemilik terlebih dahulu.');
+        }
+
+        if (!in_array($user->role, ['admin', 'pemilik'])) {
+            return redirect()->route('home')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
         }
 
         return $next($request);

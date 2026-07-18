@@ -142,7 +142,7 @@
                                 echo $statusText[request('status')] ?? 'Semua Status';
                                 @endphp
                             </span>
-                            <svg id="custom-status-icon" class="w-4 h-4 text-[#5b403d] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg id="custom-status-icon" class="w-4 h-4 text-[#5b403d] dark:text-white transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
@@ -163,12 +163,12 @@
                     </div>
                 </div>
                 <div class="lg:pt-6 flex gap-2">
-                    <button type="submit" class="px-6 py-2.5 bg-[#1b1c1c] text-[#fcf9f8] rounded-xl font-bold hover:bg-zinc-800 transition-colors active:scale-95 whitespace-nowrap hidden lg:block">
-                        Cari
-                    </button>
                     <a href="{{ route('admin.bookings.index') }}" class="px-4 py-2.5 bg-white border border-[#e4beba] text-[#5b403d] rounded-xl font-semibold text-sm hover:bg-[#f6f3f2] transition-colors whitespace-nowrap dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                         Reset
                     </a>
+                    <button type="submit" class="px-5 py-2.5 bg-red-700 text-white font-bold rounded-lg hover:bg-red-800 transition-colors dark:bg-red-600 dark:hover:bg-red-700">
+                        Cari
+                    </button>
                 </div>
             </div>
         </form>

@@ -233,7 +233,9 @@
             <div class="flex items-center gap-2 sm:gap-4">
                 @auth
                     <!-- Notifications -->
-                    <x-header.notification-dropdown variant="front" />
+                    <div id="notification-dropdown-wrapper" class="flex items-center">
+                        <x-header.notification-dropdown variant="front" />
+                    </div>
                 @endauth
 
                 <!-- Theme Toggle Button -->

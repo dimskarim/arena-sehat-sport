@@ -58,7 +58,7 @@
             <div class="lg:col-span-2 space-y-6">
 
                 {{-- Venue & Schedule Card --}}
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 dark:bg-gray-800 dark:border-gray-700 relative z-[60]">
                     <div class="p-6">
                         <h2 class="text-lg font-bold font-['Lexend'] mb-6 flex items-center gap-2 dark:text-white">
                             <svg class="w-5 h-5 text-[#af101a] dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,20 +70,40 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-gray-400 mb-2 block">Pilih Lapangan</label>
-                                <div class="relative">
-                                    <select name="lapangan_id" required class="w-full border border-slate-200 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 transition-all tom-select-custom">
-                                        <option value="">Pilih Lapangan</option>
+                                <div class="relative custom-search-select" data-target="lapangan_id">
+                                    <select name="lapangan_id" id="lapangan_id" required class="hidden">
+                                        <option value="">-- Pilih Lapangan --</option>
                                         @foreach($lapangans as $lap)
                                         <option value="{{ $lap->id }}" data-harga="{{ $lap->harga }}" {{ old('lapangan_id', $item->lapangan_id) == $lap->id ? 'selected' : '' }}>{{ $lap->name }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="select-btn flex items-center justify-between w-full border border-slate-200 rounded-xl py-3 px-4 text-sm bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white transition-all cursor-pointer hover:border-[#af101a] dark:hover:border-red-500">
+                                        <span class="select-text flex-1 text-left text-slate-500 dark:text-gray-400">-- Pilih Lapangan --</span>
+                                        <svg class="w-4 h-4 text-slate-400 dark:text-gray-400 transition-transform duration-200 select-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="select-menu absolute left-0 top-[calc(100%+0.5rem)] w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-slate-200 dark:border-gray-700 hidden z-50 overflow-hidden">
+                                        <div class="p-3 border-b border-slate-100 dark:border-gray-700">
+                                            <div class="relative">
+                                                <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                                <input type="text" class="search-input w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] dark:text-white transition-all" placeholder="Cari lapangan...">
+                                            </div>
+                                        </div>
+                                        <ul class="max-h-60 overflow-y-auto py-1 select-options">
+                                            <li data-value="" class="px-4 py-2.5 text-sm font-medium text-slate-500 dark:text-gray-400 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">-- Pilih Lapangan --</li>
+                                            @foreach($lapangans as $lap)
+                                            <li data-value="{{ $lap->id }}" class="px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-gray-200 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-[#af101a] dark:hover:text-red-400 transition-colors">{{ $lap->name }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                                 @error('lapangan_id') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <div>
                                 <label class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-gray-400 mb-2 block">Tanggal Reservasi</label>
-                                <input type="date" name="tanggal_booking" value="{{ old('tanggal_booking', \Carbon\Carbon::parse($item->tanggal_booking)->format('Y-m-d')) }}" required class="w-full border border-slate-200 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm bg-white dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 transition-all datepicker-custom" placeholder="Pilih tanggal" />
+                                <input type="text" name="tanggal_booking" value="{{ old('tanggal_booking', \Carbon\Carbon::parse($item->tanggal_booking)->format('Y-m-d')) }}" required class="w-full border border-slate-200 rounded-xl py-3 px-4 focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] text-sm bg-white dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30 transition-all datepicker-custom" placeholder="Pilih tanggal" />
                                 @error('tanggal_booking') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -96,11 +116,13 @@
                                     Silakan pilih Lapangan dan Tanggal terlebih dahulu untuk melihat slot tersedia.
                                 </div>
                             </div>
-                            @error('slot_waktu') 
-                                <div class="mt-3 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-xs font-semibold flex items-start gap-2">
-                                    <svg class="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                                    {{ $message }}
-                                </div>
+                            @error('slot_waktu')
+                            <div class="mt-3 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-xs font-semibold flex items-start gap-2">
+                                <svg class="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                {{ $message }}
+                            </div>
                             @enderror
 
                             <div class="mt-5 flex gap-6 items-center text-xs text-slate-500 dark:text-gray-400">
@@ -213,13 +235,13 @@
                             <div id="custom-status-btn" class="flex items-center justify-between w-full px-4 py-3 border-2 border-slate-200 hover:border-[#af101a] rounded-xl text-sm font-bold text-center appearance-none bg-slate-50 dark:bg-gray-700/50 dark:border-gray-600 dark:hover:border-red-500 dark:text-white transition-all cursor-pointer">
                                 <span id="custom-status-text" class="flex-1 text-center">
                                     @php
-                                        $statusText = [
-                                            'pending' => '🟡 PENDING',
-                                            'confirmed' => '🔵 CONFIRMED',
-                                            'completed' => '🟢 COMPLETED',
-                                            'cancelled' => '🔴 CANCELLED',
-                                        ];
-                                        echo $statusText[old('status', $item->status)] ?? '🟡 PENDING';
+                                    $statusText = [
+                                    'pending' => '🟡 PENDING',
+                                    'confirmed' => '🔵 CONFIRMED',
+                                    'completed' => '🟢 COMPLETED',
+                                    'cancelled' => '🔴 CANCELLED',
+                                    ];
+                                    echo $statusText[old('status', $item->status)] ?? '🟡 PENDING';
                                     @endphp
                                 </span>
                                 <svg id="custom-status-icon" class="w-4 h-4 text-[#5b403d] dark:text-gray-400 transition-transform duration-200 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -372,28 +394,141 @@
 </script>
 
 @push('scripts')
-<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll('.tom-select-custom').forEach((el) => {
-            new TomSelect(el, {
-                create: false,
-                sortField: {
-                    field: "text",
-                    direction: "asc"
-                },
-                onChange: function() { 
-                    if(typeof fetchSlots === 'function') fetchSlots(); 
+        // Robust Custom Searchable Select Logic
+        window.initCustomSearchSelect = function() {
+            document.querySelectorAll('.custom-search-select').forEach(container => {
+                if (container.dataset.initialized) return;
+                container.dataset.initialized = "true";
+                
+                const select = container.querySelector('select');
+                const btn = container.querySelector('.select-btn');
+                const text = container.querySelector('.select-text');
+                const icon = container.querySelector('.select-icon');
+                const menu = container.querySelector('.select-menu');
+                const searchInput = container.querySelector('.search-input');
+                const options = container.querySelectorAll('.select-options li');
+
+                if (!select || !btn || !menu) return;
+
+                const updateActiveOption = (val) => {
+                    options.forEach(opt => {
+                        if (opt.getAttribute('data-value') === val) {
+                            opt.classList.add('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400');
+                            opt.classList.remove('text-slate-700', 'dark:text-gray-200');
+                        } else {
+                            opt.classList.remove('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400');
+                            if (opt.getAttribute('data-value') !== "") {
+                                opt.classList.add('text-slate-700', 'dark:text-gray-200');
+                            }
+                        }
+                    });
+                };
+
+                // Initialize text
+                if (select.selectedIndex >= 0) {
+                    const selectedOption = select.options[select.selectedIndex];
+                    if (selectedOption && selectedOption.value) {
+                        text.innerText = selectedOption.innerText;
+                        text.classList.remove('text-slate-500', 'dark:text-gray-400');
+                        updateActiveOption(selectedOption.value);
+                    }
                 }
+
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const isHidden = menu.classList.contains('hidden');
+                    
+                    document.querySelectorAll('.select-menu').forEach(m => m.classList.add('hidden'));
+                    document.querySelectorAll('.select-icon').forEach(i => i.classList.remove('rotate-180'));
+                    
+                    if (isHidden) {
+                        menu.classList.remove('hidden');
+                        if (icon) icon.classList.add('rotate-180');
+                        setTimeout(() => searchInput.focus(), 50);
+                    }
+                });
+
+                menu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+
+                searchInput.addEventListener('input', (e) => {
+                    const val = e.target.value.toLowerCase();
+                    options.forEach(opt => {
+                        const valAttr = opt.getAttribute('data-value');
+                        if (valAttr === "") return;
+                        if(opt.innerText.toLowerCase().includes(val)) {
+                            opt.style.display = 'block';
+                        } else {
+                            opt.style.display = 'none';
+                        }
+                    });
+                });
+
+                options.forEach(opt => {
+                    opt.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const val = opt.getAttribute('data-value');
+                        select.value = val;
+                        text.innerText = opt.innerText;
+                        if(val) {
+                            text.classList.remove('text-slate-500', 'dark:text-gray-400');
+                        } else {
+                            text.classList.add('text-slate-500', 'dark:text-gray-400');
+                        }
+                        
+                        updateActiveOption(val);
+                        select.dispatchEvent(new Event('change'));
+
+                        menu.classList.add('hidden');
+                        if (icon) icon.classList.remove('rotate-180');
+                        searchInput.value = ''; 
+                        options.forEach(o => o.style.display = 'block');
+                    });
+                });
             });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', window.initCustomSearchSelect);
+        } else {
+            window.initCustomSearchSelect();
+        }
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.select-menu').forEach(m => m.classList.add('hidden'));
+            document.querySelectorAll('.select-icon').forEach(i => i.classList.remove('rotate-180'));
         });
 
+        const Indonesian = {
+            weekdays: {
+                shorthand: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+                longhand: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+            },
+            months: {
+                shorthand: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+                longhand: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+            },
+            firstDayOfWeek: 1,
+            time_24hr: true
+        };
+
         flatpickr('.datepicker-custom', {
+            locale: Indonesian,
             dateFormat: "Y-m-d",
-            onChange: function() { fetchSlots(); }
+            altInput: true,
+            altFormat: "j F Y",
+            disableMobile: "true",
+            onChange: function() {
+                fetchSlots();
+            }
         });
 
         const originalLapanganId = "{{ $item->lapangan_id }}";
@@ -410,7 +545,7 @@
                 lapanganId = selectEl.value;
             }
             const tanggal = document.querySelector('input[name="tanggal_booking"]').value;
-            
+
             const container = document.getElementById('slots-container');
 
             if (!lapanganId || !tanggal) {
@@ -424,9 +559,9 @@
             try {
                 const response = await fetch(`/lapangan/${lapanganId}/slots?tanggal=${tanggal}`);
                 const slots = await response.json();
-                
+
                 container.innerHTML = '';
-                
+
                 if (slots.length === 0) {
                     container.innerHTML = '<div class="col-span-full text-center text-xs text-slate-500 py-4">Tidak ada slot tersedia untuk lapangan ini.</div>';
                 }
@@ -437,7 +572,7 @@
                     const timeStr = slot.waktu_mulai.substring(0, 5);
                     const isCurrentBookingSlot = isOriginalDateAndVenue && currentBookingSlots.includes(slot.id);
                     const isBooked = slot.is_booked && !isCurrentBookingSlot; // disable only if it's booked by OTHERS
-                    
+
                     // If validation failed, use old inputs, else if original, check if part of booking
                     let isChecked = false;
                     if (oldSlots.length > 0) {
@@ -447,13 +582,13 @@
                     }
 
                     const isDisabled = isBooked ? 'disabled' : '';
-                    const bgClass = isBooked 
-                        ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500' 
-                        : 'bg-white border-slate-200 cursor-pointer hover:border-[#af101a] hover:text-[#af101a] dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300';
-                    const peerCheckedClass = isBooked 
-                        ? '' 
-                        : 'peer-checked:border-[#af101a] peer-checked:bg-[#af101a] peer-checked:text-white dark:peer-checked:bg-red-600 dark:peer-checked:border-red-500';
-                    
+                    const bgClass = isBooked ?
+                        'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500' :
+                        'bg-white border-slate-200 cursor-pointer hover:border-[#af101a] hover:text-[#af101a] dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300';
+                    const peerCheckedClass = isBooked ?
+                        '' :
+                        'peer-checked:border-[#af101a] peer-checked:bg-[#af101a] peer-checked:text-white dark:peer-checked:bg-red-600 dark:peer-checked:border-red-500';
+
                     const html = `
                         <label class="${isBooked ? '' : 'cursor-pointer group'}">
                             <input type="checkbox" name="slot_waktu[]" value="${slot.id}" class="peer sr-only" ${isDisabled} ${isChecked ? 'checked' : ''} onchange="calculateTotal()" />
@@ -474,9 +609,9 @@
         window.calculateTotal = function() {
             const selectEl = document.querySelector('select[name="lapangan_id"]');
             let harga = 0;
-            if(selectEl && selectEl.tomselect) {
+            if (selectEl && selectEl.tomselect) {
                 const selectedValue = selectEl.tomselect.getValue();
-                const optionEl = selectEl.querySelector('option[value="'+selectedValue+'"]');
+                const optionEl = selectEl.querySelector('option[value="' + selectedValue + '"]');
                 harga = optionEl ? parseInt(optionEl.getAttribute('data-harga')) || 0 : 0;
             } else if (selectEl) {
                 // fallback if tomselect not initialized yet
@@ -488,10 +623,10 @@
         };
 
         const lapanganSelect = document.querySelector('select[name="lapangan_id"]');
-        if(lapanganSelect) {
+        if (lapanganSelect) {
             lapanganSelect.addEventListener('change', fetchSlots);
         }
-        
+
         fetchSlots();
 
         // Custom Status Dropdown Logic
@@ -525,18 +660,18 @@
                     option.addEventListener('click', function() {
                         const value = this.getAttribute('data-value');
                         const text = this.innerText;
-                        
+
                         statusSelect.value = value;
                         statusText.innerText = text;
-                        
+
                         statusOptions.forEach(opt => {
                             opt.classList.remove('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400');
                             opt.classList.add('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
                         });
-                        
+
                         this.classList.remove('text-slate-700', 'dark:text-gray-300', 'hover:bg-red-100', 'dark:hover:bg-red-900/30', 'hover:text-[#af101a]', 'dark:hover:text-red-400');
                         this.classList.add('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400');
-                        
+
                         statusMenu.classList.add('hidden');
                         statusIcon.classList.remove('rotate-180');
                     });
@@ -545,37 +680,6 @@
         }
     });
 </script>
-<style>
-    .ts-wrapper.form-control {
-        border: none;
-        padding: 0;
-        background: transparent;
-    }
-    .ts-control {
-        border-radius: 0.75rem !important;
-        padding: 0.75rem 1rem !important;
-        border: 1px solid #e2e8f0 !important;
-        background-color: #f8fafc !important;
-        font-size: 0.875rem !important;
-        min-height: 46px !important;
-    }
-    .dark .ts-control {
-        border-color: #4b5563 !important;
-        background-color: rgba(55, 65, 81, 0.5) !important;
-        color: white !important;
-    }
-    .dark .ts-dropdown {
-        background-color: #1f2937 !important;
-        border-color: #374151 !important;
-        color: white !important;
-    }
-    .dark .ts-dropdown .option {
-        color: white !important;
-    }
-    .dark .ts-dropdown .option.active, .dark .ts-dropdown .option:hover {
-        background-color: #374151 !important;
-        color: white !important;
-    }
-</style>
+
 @endpush
 @endsection

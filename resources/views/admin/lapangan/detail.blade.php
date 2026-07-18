@@ -84,13 +84,33 @@
                         {{-- Kategori --}}
                         <div>
                             <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Jenis Lapangan <span class="text-red-600">*</span></label>
-                            <select name="kategori_id" required
-                                class="tom-select-custom w-full px-4 py-3 bg-slate-50 border {{ $errors->has('kategori_id') ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-slate-200 dark:border-gray-600' }} rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:text-white dark:focus:ring-red-500/30">
-                                <option value="">Pilih Kategori</option>
-                                @foreach($kategoris as $kat)
-                                <option value="{{ $kat->id }}" {{ old('kategori_id', $item->kategori_id) == $kat->id ? 'selected' : '' }}>{{ $kat->name }}</option>
-                                @endforeach
-                            </select>
+                            <div class="relative custom-search-select" data-target="kategori_id">
+                                <select name="kategori_id" required class="hidden">
+                                    <option value="">Pilih Kategori</option>
+                                    @foreach($kategoris as $kat)
+                                    <option value="{{ $kat->id }}" {{ old('kategori_id', $item->kategori_id) == $kat->id ? 'selected' : '' }}>{{ $kat->name }}</option>
+                                    @endforeach
+                                </select>
+                                
+                                <button type="button" class="select-btn flex items-center justify-between w-full px-4 py-3 bg-slate-50 border {{ $errors->has('kategori_id') ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-slate-200 dark:border-gray-600' }} rounded-lg text-sm transition-all focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none dark:bg-gray-700/50 dark:focus:ring-red-500/30">
+                                    <span class="select-text text-slate-500 dark:text-gray-400 truncate">Pilih Kategori</span>
+                                    <svg class="select-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                
+                                <div class="select-menu absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl shadow-lg hidden">
+                                    <div class="p-2 border-b border-slate-100 dark:border-gray-700">
+                                        <input type="text" class="search-input w-full px-3 py-2 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] dark:text-white" placeholder="Cari kategori..." autocomplete="off">
+                                    </div>
+                                    <ul class="select-options max-h-60 overflow-y-auto p-1">
+                                        <li class="px-3 py-2 text-sm text-slate-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors" data-value="">Pilih Kategori</li>
+                                        @foreach($kategoris as $kat)
+                                        <li class="px-3 py-2 text-sm text-slate-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors" data-value="{{ $kat->id }}" data-search="{{ strtolower($kat->name) }}">
+                                            {{ $kat->name }}
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                             @error('kategori_id') <p class="text-red-600 text-xs mt-1.5 flex items-center gap-1"><svg class="text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                                 </svg>{{ $message }}</p> @enderror
@@ -102,13 +122,33 @@
                             <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">
                                 Pemilik Lapangan <span class="text-slate-400">(Opsional)</span>
                             </label>
-                            <select name="pemilik_id"
-                                class="tom-select-custom w-full px-4 py-3 bg-slate-50 border {{ $errors->has('pemilik_id') ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-slate-200 dark:border-gray-600' }} rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all appearance-none cursor-pointer dark:bg-gray-700/50 dark:text-white dark:focus:ring-red-500/30">
-                                <option value="">Pilih Pemilik</option>
-                                @foreach($pemiliks as $pem)
-                                <option value="{{ $pem->id }}" {{ old('pemilik_id', $item->pemilik_id) == $pem->id ? 'selected' : '' }}>{{ $pem->name }}</option>
-                                @endforeach
-                            </select>
+                            <div class="relative custom-search-select" data-target="pemilik_id">
+                                <select name="pemilik_id" class="hidden">
+                                    <option value="">Pilih Pemilik</option>
+                                    @foreach($pemiliks as $pem)
+                                    <option value="{{ $pem->id }}" {{ old('pemilik_id', $item->pemilik_id) == $pem->id ? 'selected' : '' }}>{{ $pem->name }}</option>
+                                    @endforeach
+                                </select>
+                                
+                                <button type="button" class="select-btn flex items-center justify-between w-full px-4 py-3 bg-slate-50 border {{ $errors->has('pemilik_id') ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-slate-200 dark:border-gray-600' }} rounded-lg text-sm transition-all focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none dark:bg-gray-700/50 dark:focus:ring-red-500/30">
+                                    <span class="select-text text-slate-500 dark:text-gray-400 truncate">Pilih Pemilik</span>
+                                    <svg class="select-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                
+                                <div class="select-menu absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl shadow-lg hidden">
+                                    <div class="p-2 border-b border-slate-100 dark:border-gray-700">
+                                        <input type="text" class="search-input w-full px-3 py-2 bg-slate-50 dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-lg text-sm focus:outline-none focus:border-[#af101a] focus:ring-1 focus:ring-[#af101a] dark:text-white" placeholder="Cari pemilik..." autocomplete="off">
+                                    </div>
+                                    <ul class="select-options max-h-60 overflow-y-auto p-1">
+                                        <li class="px-3 py-2 text-sm text-slate-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors" data-value="">Pilih Pemilik</li>
+                                        @foreach($pemiliks as $pem)
+                                        <li class="px-3 py-2 text-sm text-slate-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors" data-value="{{ $pem->id }}" data-search="{{ strtolower($pem->name) }}">
+                                            {{ $pem->name }}
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                             @error('pemilik_id') <p class="text-red-600 text-xs mt-1.5 flex items-center gap-1"><svg class="text-sm inline-block align-middle w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                                 </svg>{{ $message }}</p> @enderror
@@ -334,10 +374,10 @@
             'xl:pl-[90px]': !$store.sidebar.isExpanded && !$store.sidebar.isHovered,
             'pl-0': $store.sidebar.isMobileOpen
         }">
-        <div class="w-fit transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all scale-95 opacity-0 dark:bg-gray-800 dark:border dark:border-gray-700" id="fasilitasModalContent">
+        <div class="w-[90%] sm:w-[400px] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all scale-95 opacity-0 dark:bg-gray-800 dark:border dark:border-gray-700" id="fasilitasModalContent">
             <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white">Tambah Fasilitas Baru</h3>
-                <button type="button" onclick="closeFasilitasModal()" class="text-slate-400 hover:text-red-500 transition-colors">
+                <button type="button" onclick="closeFasilitasModal()" class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-md hover:bg-slate-100 dark:hover:bg-gray-700">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -349,9 +389,9 @@
                     <label class="block text-xs font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mb-2">Nama Fasilitas <span class="text-red-600">*</span></label>
                     <input type="text" id="fasilitas_name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-900 focus:ring-2 focus:ring-red-100 focus:border-red-500 outline-none transition-all dark:bg-gray-700/50 dark:border-gray-600 dark:text-white dark:focus:ring-red-500/30" placeholder="Contoh: Toilet Bersih">
                 </div>
-                <div class="flex gap-3 justify-end">
-                    <button type="button" onclick="closeFasilitasModal()" class="px-5 py-2.5 rounded-lg border border-slate-200 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600">Batal</button>
-                    <button type="submit" id="btnSubmitFasilitas" class="px-5 py-2.5 rounded-lg bg-[#af101a] text-sm font-semibold text-white hover:bg-red-800 flex items-center gap-2">
+                <div class="flex gap-3 justify-end mt-2">
+                    <button type="button" onclick="closeFasilitasModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600 transition-colors">Batal</button>
+                    <button type="submit" id="btnSubmitFasilitas" class="px-5 py-2.5 rounded-xl bg-[#af101a] text-sm font-semibold text-white hover:bg-red-800 shadow-lg shadow-red-700/20 active:scale-95 transition-all flex items-center gap-2">
                         Simpan
                     </button>
                 </div>
@@ -647,58 +687,118 @@
     }
 </script>
 @push('scripts')
-<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll('.tom-select-custom').forEach((el) => {
-            new TomSelect(el, {
-                create: false,
-                sortField: {
-                    field: "text",
-                    direction: "asc"
+        // Robust Custom Searchable Select Logic
+        window.initCustomSearchSelect = function() {
+            document.querySelectorAll('.custom-search-select').forEach(container => {
+                if (container.dataset.initialized) return;
+                container.dataset.initialized = "true";
+                
+                const select = container.querySelector('select');
+                const btn = container.querySelector('.select-btn');
+                const text = container.querySelector('.select-text');
+                const icon = container.querySelector('.select-icon');
+                const menu = container.querySelector('.select-menu');
+                const searchInput = container.querySelector('.search-input');
+                const options = container.querySelectorAll('.select-options li');
+
+                if (!select || !btn || !menu) return;
+
+                const updateActiveOption = (val) => {
+                    options.forEach(opt => {
+                        if (opt.getAttribute('data-value') === val) {
+                            opt.classList.add('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
+                            opt.classList.remove('text-slate-700', 'dark:text-gray-200');
+                        } else {
+                            opt.classList.remove('bg-red-100', 'dark:bg-red-900/20', 'text-[#af101a]', 'dark:text-red-400', 'font-bold');
+                            if (opt.getAttribute('data-value') !== "") {
+                                opt.classList.add('text-slate-700', 'dark:text-gray-200');
+                            }
+                        }
+                    });
+                };
+
+                // Initialize text
+                if (select.selectedIndex >= 0) {
+                    const selectedOption = select.options[select.selectedIndex];
+                    if (selectedOption && selectedOption.value) {
+                        text.innerText = selectedOption.innerText;
+                        text.classList.remove('text-slate-500', 'dark:text-gray-400');
+                        updateActiveOption(selectedOption.value);
+                    }
                 }
+
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const isHidden = menu.classList.contains('hidden');
+                    
+                    document.querySelectorAll('.select-menu').forEach(m => m.classList.add('hidden'));
+                    document.querySelectorAll('.select-icon').forEach(i => i.classList.remove('rotate-180'));
+                    
+                    if (isHidden) {
+                        menu.classList.remove('hidden');
+                        icon.classList.add('rotate-180');
+                        if(searchInput) {
+                            setTimeout(() => searchInput.focus(), 50);
+                        }
+                    }
+                });
+
+                if(searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        const term = e.target.value.toLowerCase();
+                        options.forEach(opt => {
+                            if (!opt.getAttribute('data-value')) return; // skip placeholder
+                            const searchStr = opt.getAttribute('data-search') || '';
+                            if (searchStr.includes(term)) {
+                                opt.style.display = 'block';
+                            } else {
+                                opt.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+
+                options.forEach(opt => {
+                    opt.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const val = opt.getAttribute('data-value');
+                        const txt = opt.innerText;
+                        
+                        select.value = val;
+                        text.innerText = txt;
+                        if(val) {
+                            text.classList.remove('text-slate-500', 'dark:text-gray-400');
+                            text.classList.add('text-slate-900', 'dark:text-white');
+                        } else {
+                            text.classList.add('text-slate-500', 'dark:text-gray-400');
+                            text.classList.remove('text-slate-900', 'dark:text-white');
+                        }
+                        
+                        updateActiveOption(val);
+                        
+                        // Trigger change event
+                        select.dispatchEvent(new Event('change'));
+                        
+                        menu.classList.add('hidden');
+                        icon.classList.remove('rotate-180');
+                        if(searchInput) searchInput.value = '';
+                        options.forEach(o => o.style.display = 'block');
+                    });
+                });
             });
+        };
+
+        window.initCustomSearchSelect();
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.select-menu').forEach(m => m.classList.add('hidden'));
+            document.querySelectorAll('.select-icon').forEach(i => i.classList.remove('rotate-180'));
         });
     });
 </script>
-<style>
-    .ts-wrapper.form-control {
-        border: none;
-        padding: 0;
-        background: transparent;
-    }
-
-    .ts-control {
-        border-radius: 0.5rem !important;
-        padding: 0.75rem 1rem !important;
-        border: 1px solid #e2e8f0 !important;
-        background-color: #f8fafc !important;
-        font-size: 0.875rem !important;
-        min-height: 46px !important;
-    }
-
-    .dark .ts-control {
-        border-color: #4b5563 !important;
-        background-color: rgba(55, 65, 81, 0.5) !important;
-        color: white !important;
-    }
-
-    .dark .ts-dropdown {
-        background-color: #1f2937 !important;
-        border-color: #374151 !important;
-        color: white !important;
-    }
-
-    .dark .ts-dropdown .option {
-        color: white !important;
-    }
-
-    .dark .ts-dropdown .option.active,
-    .dark .ts-dropdown .option:hover {
-        background-color: #374151 !important;
-        color: white !important;
-    }
-</style>
 @endpush
 @endsection

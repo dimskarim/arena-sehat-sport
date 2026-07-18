@@ -151,3 +151,39 @@
     </div>
     <!-- Dropdown End -->
 </div>
+
+@if(!request()->routeIs('notifications.dropdown'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.notificationPollInterval) return;
+        window.notificationPollInterval = setInterval(function() {
+            const wrapper = document.getElementById('notification-dropdown-wrapper');
+            if (wrapper) {
+                const currentDropdown = wrapper.querySelector('[x-data]');
+                let isOpen = false;
+                if (currentDropdown && window.Alpine) {
+                    try {
+                        isOpen = Alpine.$data(currentDropdown).dropdownOpen;
+                    } catch (e) { }
+                }
+                if (!isOpen) {
+                    fetch('{{ route("notifications.dropdown") }}', {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(r => {
+                        if (r.redirected || r.url.includes('/login')) {
+                            window.location.reload();
+                            return Promise.reject('Session expired');
+                        }
+                        return r.ok ? r.text() : Promise.reject('Network Error');
+                    })
+                    .then(html => { 
+                        wrapper.innerHTML = html;
+                    })
+                    .catch(e => console.error('Error polling notifications:', e));
+                }
+            }
+        }, 10000); // Check every 10 seconds
+    });
+</script>
+@endif
