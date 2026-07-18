@@ -48,6 +48,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        // 1.5 Fasilitas
+        $this->call(FasilitasSeeder::class);
+
         // 2. Kategori
         $kategoriNames = ['Futsal', 'Badminton', 'Basket', 'Voli', 'Tenis Lapangan', 'Mini Soccer'];
         $kategoris = [];

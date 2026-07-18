@@ -17,10 +17,10 @@ class CheckAdminRole
     {
         $user = $request->user();
 
-        if (!$user || $user->role !== 'admin') {
+        if (!$user || !in_array($user->role, ['admin', 'pemilik'])) {
             return response()->json([
                 'status' => 'Error',
-                'message' => 'Unauthorized. Akses admin diperlukan.',
+                'message' => 'Unauthorized. Akses admin atau pemilik diperlukan.',
                 'data' => null,
             ], 403);
         }

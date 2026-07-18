@@ -86,35 +86,36 @@
 
         {{-- Bar Chart --}}
         @php
-        $bars = [
-        ['h' => 30, 'label' => 'JAN', 'val' => 'Rp4m', 'peak' => false],
-        ['h' => 45, 'label' => 'FEB', 'val' => 'Rp6m', 'peak' => false],
-        ['h' => 40, 'label' => 'MAR', 'val' => 'Rp5.5m', 'peak' => false],
-        ['h' => 60, 'label' => 'APR', 'val' => 'Rp8m', 'peak' => false],
-        ['h' => 55, 'label' => 'MAY', 'val' => 'Rp7.5m', 'peak' => true],
-        ['h' => 1, 'label' => 'JUN', 'val' => 'Rp0m', 'peak' => false],
-        ['h' => 1, 'label' => 'JUL', 'val' => 'Rp0m', 'peak' => false],
-        ['h' => 1, 'label' => 'AUG', 'val' => 'Rp0m','peak' => false ],
-        ['h' => 1, 'label' => 'SEP', 'val' => 'Rp0m', 'peak' => false],
-        ['h' => 1, 'label' => 'OCT', 'val' => 'Rp0m', 'peak' => false],
-        ['h' => 1, 'label' => 'NOV', 'val' => 'Rp0m', 'peak' => false],
-        ['h' => 1, 'label' => 'DEC', 'val' => 'Rp0m', 'peak' => false],
-        ];
+        $bars = $chartBars ?? [];
         @endphp
 
+        <style>
+            @keyframes growUp {
+                from { transform: scaleY(0); }
+                to { transform: scaleY(1); }
+            }
+            @keyframes fadeIn {
+                to { opacity: 1; }
+            }
+        </style>
         <div class="flex items-end gap-2 h-52 mb-3 px-1">
             @foreach($bars as $bar)
             <div class="flex-1 flex flex-col items-center gap-0 group">
                 <div class="relative w-full">
                     {{-- Tooltip --}}
-                    <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-semibold py-1 px-2 rounded
-                                    {{ $bar['peak'] ? 'flex' : 'hidden group-hover:flex' }} whitespace-nowrap pointer-events-none z-10">
+                    <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[11px] font-bold py-1.5 px-2.5 rounded-md
+                                whitespace-nowrap pointer-events-none z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg flex items-center justify-center">
                         {{ $bar['val'] }}
+                        <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45"></div>
                     </div>
                     {{-- Bar --}}
-                    <div class="w-full rounded-t-md transition-all duration-200 group-hover:opacity-80"
+                    <div class="w-full rounded-t-md transition-all duration-300 group-hover:brightness-95 group-hover:-translate-y-1 cursor-pointer relative"
                         style="height: {{ ($bar['h'] / 100) * 200 }}px;
-                                    background-color: {{ $bar['peak'] ? '#D32F2F' : '#FFCDD2' }};">
+                               background-color: {{ $bar['peak'] ? '#D32F2F' : '#FFCDD2' }};
+                               transform-origin: bottom;
+                               transform: scaleY(0);
+                               animation: growUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+                               animation-delay: {{ $loop->index * 0.08 }}s;">
                     </div>
                 </div>
             </div>
@@ -137,27 +138,35 @@
         </div>
 
         <div class="space-y-4 flex-1">
-            @php
-            $popularVenues = [
-            ['name' => 'Elite Arena Center', 'bookings' => '842 Reservasi', 'revenue' => 'Rp 12.450', 'img' => 'https://placehold.co/40x40/f3f4f6/a1a1aa?text=Img'],
-            ['name' => 'Skyline Tennis Club', 'bookings' => '651 Reservasi', 'revenue' => 'Rp 9.820', 'img' => 'https://placehold.co/40x40/e2e8f0/64748b?text=Img'],
-            ['name' => 'Victory Field Turf', 'bookings' => '598 Reservasi', 'revenue' => 'Rp 8.100', 'img' => 'https://placehold.co/40x40/fce7f3/db2777?text=Img'],
-            ['name' => 'Olympus Training Hub','bookings' => '412 Reservasi', 'revenue' => 'Rp 5.240', 'img' => 'https://placehold.co/40x40/fef3c7/d97706?text=Img'],
-            ];
-            @endphp
-
-            @foreach($popularVenues as $venue)
+            @forelse($popularVenues ?? [] as $venue)
             <div class="flex items-center gap-3">
-                <img src="{{ $venue['img'] }}"
-                    alt="{{ $venue['name'] }}"
+                @php
+                    $imgUrl = 'https://placehold.co/40x40/f3f4f6/a1a1aa?text=Img';
+                    if($venue->gambarLapangans && $venue->gambarLapangans->count() > 0) {
+                        $file = $venue->gambarLapangans->first()->gambar_file;
+                        $imgUrl = str_starts_with($file, 'http') ? $file : asset($file);
+                    }
+                    $revenue = $venue->completed_bookings_sum ?? 0;
+                    if ($revenue >= 1000000) {
+                        $revFormatted = 'Rp ' . number_format($revenue / 1000000, 1, ',', '.') . 'M';
+                    } elseif ($revenue >= 1000) {
+                        $revFormatted = 'Rp ' . number_format($revenue / 1000, 0, ',', '.') . 'k';
+                    } else {
+                        $revFormatted = 'Rp ' . number_format($revenue, 0, ',', '.');
+                    }
+                @endphp
+                <img src="{{ $imgUrl }}"
+                    alt="{{ $venue->name }}"
                     class="w-10 h-10 rounded-lg object-cover shrink-0 bg-gray-100 dark:bg-gray-700">
                 <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-gray-900 dark:text-white font-inter truncate">{{ $venue['name'] }}</p>
-                    <p class="text-xs text-gray-400 font-inter">{{ $venue['bookings'] }}</p>
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white font-inter truncate">{{ $venue->name }}</p>
+                    <p class="text-xs text-gray-400 font-inter">{{ $venue->completed_bookings_count ?? 0 }} Reservasi</p>
                 </div>
-                <span class="text-sm font-bold text-gray-900 dark:text-white font-inter shrink-0">{{ $venue['revenue'] }}</span>
+                <span class="text-sm font-bold text-gray-900 dark:text-white font-inter shrink-0">{{ $revFormatted }}</span>
             </div>
-            @endforeach
+            @empty
+            <div class="text-center text-gray-400 text-sm mt-4">Belum ada data venue.</div>
+            @endforelse
         </div>
     </div>
 </div>
@@ -227,7 +236,10 @@
                         {{ $booking->lapangan->name ?? '-' }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 font-inter">
-                        {{ \Carbon\Carbon::parse($booking->tanggal_booking)->format('M d, Y') }} • 08:00
+                        @php
+                            $slotStart = $booking->bookingDetails->first()?->slotWaktu?->waktu_mulai ?? '00:00';
+                        @endphp
+                        {{ \Carbon\Carbon::parse($booking->tanggal_booking)->format('M d, Y') }} • {{ substr($slotStart, 0, 5) }}
                     </td>
                     <td class="px-6 py-4 text-sm font-bold text-gray-900 dark:text-white font-inter">
                         Rp {{ number_format($booking->total_harga, 0, ',', '.') }}

@@ -70,7 +70,7 @@
 
     <div class="mt-4">
         @if(method_exists($items, 'links'))
-        {{ $items->links() }}
+        {{ $items->links('components.pagination') }}
         @endif
     </div>
 </div>

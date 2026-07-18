@@ -31,7 +31,11 @@ class KategoriController extends Controller
     public function store(KategoriRequest $request)
     {
         try {
-            $this->service->create($request->validated());
+            $data = $request->validated();
+            if ($request->hasFile('logo')) {
+                $data['logo'] = $request->file('logo')->store('kategori_logos', 'public');
+            }
+            $this->service->create($data);
             return redirect()->route('admin.kategoris.index')->with('success', 'Kategori berhasil ditambahkan.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
@@ -51,19 +55,37 @@ class KategoriController extends Controller
     public function update(KategoriRequest $request, $id)
     {
         try {
-            $this->service->update($id, $request->validated());
+            $data = $request->validated();
+            if ($request->hasFile('logo')) {
+                $item = $this->service->getById($id);
+                if ($item->logo && \Storage::disk('public')->exists($item->logo)) {
+                    \Storage::disk('public')->delete($item->logo);
+                }
+                $data['logo'] = $request->file('logo')->store('kategori_logos', 'public');
+            }
+            $this->service->update($id, $data);
             return redirect()->route('admin.kategoris.index')->with('success', 'Kategori berhasil diperbarui.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage())->withInput();
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
+            $item = $this->service->getById($id);
+            if ($item->logo && \Storage::disk('public')->exists($item->logo)) {
+                \Storage::disk('public')->delete($item->logo);
+            }
             $this->service->delete($id);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Kategori berhasil dihapus.']);
+            }
             return redirect()->route('admin.kategoris.index')->with('success', 'Kategori berhasil dihapus.');
         } catch (Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], 400);
+            }
             return back()->with('error', $e->getMessage());
         }
     }

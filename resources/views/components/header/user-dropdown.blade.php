@@ -13,8 +13,12 @@
         @click.prevent="toggleDropdown()"
         type="button"
     >
-        <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-            <img src="/images/user/owner.png" alt="User" />
+        <span class="mr-3 overflow-hidden rounded-full h-11 w-11 bg-gray-100 flex items-center justify-center shrink-0 border border-gray-200 dark:border-gray-800">
+            @if(auth()->check() && auth()->user()->foto_profile)
+                <img src="{{ asset(auth()->user()->foto_profile) }}" alt="{{ auth()->user()->name }}" class="object-cover w-full h-full" />
+            @else
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'User') }}&background=af101a&color=fff&bold=true" alt="{{ auth()->user()->name ?? 'User' }}" class="object-cover w-full h-full" />
+            @endif
         </span>
 
        <span class="block mr-1 font-medium text-theme-sm">{{ auth()->user()->name ?? 'Admin' }}</span>
@@ -62,7 +66,7 @@
                                 fill="currentColor"
                             />
                         </svg>',
-                        'path' => 'profile',
+                        'path' => route('admin.profile.index'),
                     ],
                     [
                         'text' => 'Account settings',
@@ -74,7 +78,7 @@
                             fill="currentColor"
                         />
                         </svg>',
-                        'path' => 'chat'
+                        'path' => route('admin.profile.index')
                     ],
                     [
                         'text' => 'Support',
@@ -86,7 +90,7 @@
                             fill="currentColor"
                           />
                         </svg>',
-                        'path' => 'profile'
+                        'path' => '#'
                     ],
                 ];
             @endphp

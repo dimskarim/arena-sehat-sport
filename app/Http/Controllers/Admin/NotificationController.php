@@ -25,8 +25,21 @@ class NotificationController extends Controller
 
     public function create()
     {
-        $users = \App\Models\User::all();
-        $bookings = \App\Models\Booking::all();
+        $usersQuery = \App\Models\User::query();
+        $bookingQuery = \App\Models\Booking::query();
+
+        if (auth()->check() && auth()->user()->role === 'pemilik') {
+            $pemilikId = auth()->id();
+            $usersQuery->whereHas('bookings.lapangan', function ($q) use ($pemilikId) {
+                $q->where('pemilik_id', $pemilikId);
+            });
+            $bookingQuery->whereHas('lapangan', function ($q) use ($pemilikId) {
+                $q->where('pemilik_id', $pemilikId);
+            });
+        }
+
+        $users = $usersQuery->get();
+        $bookings = $bookingQuery->get();
         return view('admin.notification.create', compact('users', 'bookings'), ['title' => 'Tambah Notifikasi']);
     }
 
@@ -44,8 +57,21 @@ class NotificationController extends Controller
     {
         try {
             $item = $this->service->getById($id);
-            $users = \App\Models\User::all();
-            $bookings = \App\Models\Booking::all();
+            $usersQuery = \App\Models\User::query();
+            $bookingQuery = \App\Models\Booking::query();
+
+            if (auth()->check() && auth()->user()->role === 'pemilik') {
+                $pemilikId = auth()->id();
+                $usersQuery->whereHas('bookings.lapangan', function ($q) use ($pemilikId) {
+                    $q->where('pemilik_id', $pemilikId);
+                });
+                $bookingQuery->whereHas('lapangan', function ($q) use ($pemilikId) {
+                    $q->where('pemilik_id', $pemilikId);
+                });
+            }
+
+            $users = $usersQuery->get();
+            $bookings = $bookingQuery->get();
             return view('admin.notification.edit', compact('item', 'users', 'bookings'), ['title' => 'Edit Notifikasi']);
         } catch (Exception $e) {
             return redirect()->route('admin.notifications.index')->with('error', 'Data tidak ditemukan.');
@@ -69,6 +95,22 @@ class NotificationController extends Controller
             return redirect()->route('admin.notifications.index')->with('success', 'Data berhasil dihapus.');
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function read($id)
+    {
+        try {
+            $notification = \App\Models\Notifikasi::findOrFail($id);
+            $notification->update(['is_read' => true]);
+            
+            if ($notification->booking_id) {
+                return redirect()->route('admin.bookings.edit', $notification->booking_id);
+            }
+            
+            return redirect()->route('admin.notifications.index');
+        } catch (Exception $e) {
+            return redirect()->route('admin.notifications.index')->with('error', 'Notifikasi tidak ditemukan.');
         }
     }
 }

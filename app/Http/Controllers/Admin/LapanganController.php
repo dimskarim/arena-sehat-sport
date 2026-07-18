@@ -26,7 +26,12 @@ class LapanganController extends Controller
     public function create()
     {
         $kategoris = \App\Models\Kategori::all();
-        return view('admin.lapangan.create', compact('kategoris'), ['title' => 'Tambah Lapangan']);
+        $fasilitas = \App\Models\Fasilitas::all();
+        $pemiliks = [];
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            $pemiliks = \App\Models\User::where('role', 'pemilik')->get();
+        }
+        return view('admin.lapangan.create', compact('kategoris', 'fasilitas', 'pemiliks'), ['title' => 'Tambah Lapangan']);
     }
 
     public function store(LapanganRequest $request)
@@ -44,7 +49,12 @@ class LapanganController extends Controller
         try {
             $item = $this->service->getLapanganById($id);
             $kategoris = \App\Models\Kategori::all();
-            return view('admin.lapangan.detail', compact('item', 'kategoris'), ['title' => 'Edit Lapangan']);
+            $fasilitas = \App\Models\Fasilitas::all();
+            $pemiliks = [];
+            if (auth()->check() && auth()->user()->role === 'admin') {
+                $pemiliks = \App\Models\User::where('role', 'pemilik')->get();
+            }
+            return view('admin.lapangan.detail', compact('item', 'kategoris', 'fasilitas', 'pemiliks'), ['title' => 'Edit Lapangan']);
         } catch (Exception $e) {
             return redirect()->route('admin.lapangans.index')->with('error', 'Data tidak ditemukan.');
         }
@@ -60,12 +70,18 @@ class LapanganController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $this->service->deleteLapangan($id);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Data berhasil dihapus.']);
+            }
             return redirect()->route('admin.lapangans.index')->with('success', 'Data berhasil dihapus.');
         } catch (Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $e->getMessage()], 400);
+            }
             return back()->with('error', $e->getMessage());
         }
     }

@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class Kategori extends Model {
     use HasFactory;
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name', 'slug', 'logo'];
 
     protected static function boot() {
         parent::boot();
